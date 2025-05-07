@@ -75,7 +75,7 @@ abstract class RequestGuard {
      * Add an error message
      */
     protected function addError($field, $message) {
-        $this->errors[$field][] = esc_html__($message, 'restaurant-menu-manage');
+        $this->errors[$field][] = esc_html__($message, 'ehx-directorist');
     }
 
     /**

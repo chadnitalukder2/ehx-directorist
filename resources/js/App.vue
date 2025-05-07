@@ -1,5 +1,5 @@
 <template>
-  <div id="restaurant-menu-mange-and-order-admin_app" class="ehxd-admin-page">
+  <div id="ehx-directorist_app" class="ehxd-admin-page">
     <div class="ehxd-main-menu">
       <div class="ehxd-menu-logo">
         <h3>EHX Directorist</h3>

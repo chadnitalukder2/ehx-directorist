@@ -1,7 +1,7 @@
 {
-    "name": "restaurant-menu-mange-and-order",
+    "name": "ehx-directorist",
     "version": "1.0.0",
-    "description": "restaurant-menu-mange-and-order WooCommerce Plugin",
+    "description": " Directorist Plugin",
     "scripts": {
         "dev": "npm run development",
         "development": "mix",

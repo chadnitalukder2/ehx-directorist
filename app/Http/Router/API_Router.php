@@ -85,7 +85,7 @@ class API_Router {
      */
     public static function register_routes() {
         foreach (self::$routes as $route) {
-            register_rest_route('easy-restaurant-manage/v1', $route['route'], [
+            register_rest_route('ehx-directorist/v1', $route['route'], [
                 'methods'  => $route['method'],
                 'callback' => $route['callback'],
                 'permission_callback' => '__return_true'

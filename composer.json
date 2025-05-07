@@ -1,6 +1,6 @@
 {
-    "name": "woocommerce/restaurant-menu-mange-and-order",
-    "description": "A comprehensive courier management system for WooCommerce",
+    "name": "ehx-directorist",
+    "description": "Directorist Plugin",
     "type": "wordpress-plugin",
     "license": "GPL-2.0-or-later",
     "require": {

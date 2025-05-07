@@ -4,8 +4,8 @@ import App from './App.vue';
 import Dashboard from './admin/components/Dashboard.vue';
 import Settings from './admin/components/Settings.vue';
 
-import Menu from './admin/modules/menu_page/all_menu.vue';
-import Category from './admin/modules/categories/all_category.vue';
+import Categories from './admin/modules/Categories/AllCategory.vue';
+import Tags from './admin/modules/Tags/AllTag.vue';
 
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
@@ -15,8 +15,8 @@ const router = createRouter({
     history: createWebHashHistory(),
     routes: [
         { path: '/', component: Dashboard },
-        { path: '/category', component: Category },
-        { path: '/menus', component: Menu },
+        { path: '/categories', component: Categories },
+        { path: '/tags', component: Tags },
         { path: '/settings', component: Settings }
     ]
 });
@@ -95,4 +95,4 @@ const router = createRouter({
 const app = createApp(App);
 app.use(ElementPlus);
 app.use(router);
-app.mount('#restaurant-menu-mange-and-order-app');
+app.mount('#ehx-directorist-app');

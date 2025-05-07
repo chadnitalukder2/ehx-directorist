@@ -1,6 +1,6 @@
 <?php return array(
     'root' => array(
-        'name' => 'woocommerce/restaurant-menu-mange-and-order',
+        'name' => 'woocommerce/ehx-directorist',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
         'reference' => '90b63d0dfd0bfe14191ce191d52cf1d043e703f9',
@@ -10,7 +10,7 @@
         'dev' => true,
     ),
     'versions' => array(
-        'woocommerce/restaurant-menu-mange-and-order' => array(
+        'woocommerce/ehx-directorist' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
             'reference' => '90b63d0dfd0bfe14191ce191d52cf1d043e703f9',
