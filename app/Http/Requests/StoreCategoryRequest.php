@@ -10,7 +10,7 @@ class StoreCategoryRequest extends RequestGuard {
         return [
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:500',
-            'branch_id' => 'required|string',
+            'slug' => 'required|string',
         ];
     }
 
@@ -19,13 +19,12 @@ class StoreCategoryRequest extends RequestGuard {
      */
     public function messages() {
         return [
-            'name.required' => esc_html__('Category name is required.', 'restaurant-menu-manage'),
-            'name.string' => esc_html__('Category name must be a string.', 'restaurant-menu-manage'),
-            'name.max' => esc_html__('Category name must not exceed 255 characters.', 'restaurant-menu-manage'),
-            'description.string' => esc_html__('Description must be a string.', 'restaurant-menu-manage'),
-            'description.max' => esc_html__('Description must not exceed 500 characters.', 'restaurant-menu-manage'),
-            'branch_id.required' => esc_html__('Branch id is required.', 'restaurant-menu-manage'),
-            'branch_id.string' => esc_html__('Branch id must be an string.', 'restaurant-menu-manage'),
+            'name.required' => esc_html__('Category name is required.', 'ehx-directorist'),
+            'name.string' => esc_html__('Category name must be a string.', 'ehx-directorist'),
+            'name.max' => esc_html__('Category name must not exceed 255 characters.', 'ehx-directorist'),
+            'description.string' => esc_html__('Description must be a string.', 'ehx-directorist'),
+            'description.max' => esc_html__('Description must not exceed 500 characters.', 'ehx-directorist'),
+            'slug.required' => esc_html__('Slug id is required.', 'ehx-directorist'),
         ];
     }
 
@@ -36,7 +35,7 @@ class StoreCategoryRequest extends RequestGuard {
         return [
             'name' => 'sanitize_text_field',
             'description' => 'wp_kses_post',
-            'branch_id' => 'sanitize_text_field'
+            'slug' => 'sanitize_text_field'
         ];
     }
 }

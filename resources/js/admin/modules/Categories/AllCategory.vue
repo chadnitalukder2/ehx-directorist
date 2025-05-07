@@ -7,7 +7,7 @@
             </template>
         </AppModal>
 
-        <AppTable :tableData="books" v-loading="loading">
+        <AppTable :tableData="categories" v-loading="loading">
             <template #header>
                 <h1 class="table-title">All Category</h1>
                 <el-button @click="openCategoryAddModal()" size="large" type="primary" icon="Plus" class="ltm_button">
@@ -61,10 +61,12 @@
 
 
 <script>
+import axios from "axios";
+
 import AppTable from "../../components/AppTable.vue";
 import Icon from "../../components/Icons/AppIcon.vue";
 import AppModal from "../../components/AppModal.vue";
-import AddCategory from "./add_category.vue";
+import AddCategory from "./AddCategory.vue";
 export default {
     components: {
         AppTable,
@@ -75,7 +77,7 @@ export default {
     data() {
         return {
             search: '',
-            books: [],
+            categories: [],
             book: {},
             total_book: 0,
             loading: false,
@@ -83,20 +85,46 @@ export default {
             pageSize: 10,
             active_id: null,
             add_category_modal: false,
+            nonce: window.EhxDirectoristData.nonce,
+            rest_api: window.EhxDirectoristData.rest_api,
         }
     },
 
     methods: {
         openCategoryAddModal() {
             if (this.$refs.add_category_modal) {
-                console.log('hello', this.$refs.add_category_modal.openModel());
                 this.$refs.add_category_modal.openModel();
             } else {
                 console.log("Modal ref not found! Ensure AppModal is rendered.");
             }
-        }
-    }
+        },
+        async getAllCategories() {
+            this.loading = true;
+            try {
+                const response = await axios.get(`${this.rest_api}/getAllCategories`, {
+                    headers: {
+                        'X-WP-Nonce': this.nonce
+                    }
+                });
+               // this.categories = categories_data?.data?.categories_data;
+               // console.log('categories',response.data);
+                this.loading = false;
+                this.$notify({
+                    title: 'Success',
+                    message: 'Category fetched successfully',
+                    type: 'success',
+                })
+            } catch (error) {
+                this.loading = false;
+                console.error('Error fetching couriers:',);
+            }
+        },
+    },
 
+    mounted() {
+        // console.log('window', window);
+        this.getAllCategories();
+    },
 
 }
 </script>

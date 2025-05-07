@@ -13,6 +13,7 @@ class CategoryController {
                 'message' => 'Failed to create category'
             ], 500);
         }
+       
         return rest_ensure_response([
             'message' => 'Category created successfully',
             'category_data' => $res
@@ -46,6 +47,7 @@ class CategoryController {
 
     public static function getCategory($id) {
         $res = CategoryResource::get($id);
+  
         if(!$res) {
             return rest_ensure_response([
                 'message' => 'Failed to get category'
@@ -59,14 +61,17 @@ class CategoryController {
 
     public static function getAllCategories() {
         $res = CategoryResource::getAll();
+
         if(!$res) {
             return rest_ensure_response([
                 'message' => 'Failed to get categories'
             ], 500);
         }
+
         return rest_ensure_response([
             'message' => 'Categories retrieved successfully',
-            'categories_data' => $res
+            'categories_data' => $res,
+          
         ]);
     }
 }

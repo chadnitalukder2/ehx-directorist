@@ -8,7 +8,7 @@ class Category extends Model {
      *
      * @var string
      */
-    protected $table = 'ehxd_menu_categories';
+    protected $table = 'ehxd_categories';
 
     /**
      * The primary key for the model.
@@ -23,8 +23,8 @@ class Category extends Model {
      * @var array
      */
     protected $fillable = [
-        'branch_id',
         'name',
+        'slug',
         'description',
         'created_at',
         'updated_at'

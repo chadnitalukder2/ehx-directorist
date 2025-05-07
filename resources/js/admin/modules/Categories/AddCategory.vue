@@ -9,14 +9,10 @@
         </div>
 
         <div class="input-wrapper">
-            <p class="form-label" for="name">Brunch Name *</p>
-
-            <el-select class="ehxd_input" v-model="categories.branch_id" placeholder="Brunch Name" size="large"
-                style="width: 100%">
-                <el-option value="sylhet" />
-                <el-option value="dhaka" />
-            </el-select>
-            <p class="error-message" style="margin: 0px 0px 10px 0px;">{{ branch_id_error }}</p>
+            <p class="form-label" for="name">Category Slug *</p>
+            <el-input class="ehxd_input" v-model="categories.slug" style="width: 100%"
+                placeholder="Please Input Category Slug" size="large" />
+            <p class="error-message" style="margin: 0px 0px 10px 0px;">{{ slug_error }}</p>
         </div>
 
         <div class="input-wrapper">
@@ -35,40 +31,55 @@
 <script>
 import axios from "axios"; // Import Axios
 
+
 export default {
+    components: {
+     
+    },
     data() {
         return {
             categories: {
                 name: "",
-                branch_id: "",
+                slug: "",
                 description: "",
             },
             name_error: "",
-            branch_id_error: "",
+            slug_error: "",
             rest_api: window.EhxDirectoristData.rest_api,
         };
+
     },
 
     methods: {
         async saveCategory() {
+            console.log("Category data:", this.categories);
             this.name_error = "";
-            this.branch_id_error = "";
+            this.slug_error = "";
             if (!this.categories.name) {
                 this.name_error = "Category name is required";
                 return;
             }
-            if (!this.categories.branch_id) {
-                this.branch_id_error = "Brunch name is required";
+            if (!this.categories.slug) {
+                this.slug_error = "slug name is required";
                 return;
             }
             try {
                 const response = await axios.post(`${this.rest_api}/postCategory`, this.categories);
-                console.log('Category:', response.data);
+                this.categories = {
+                    name: "",
+                    slug: "",
+                    description: "",
+                };
+                this.$notify({
+                    title: 'Success',
+                    message: 'Category Created successfully',
+                    type: 'success',
+                })
+               // console.log('Category:', response.data);
             } catch (error) {
                 console.error('Error fetching category:', error);
             }
         },
-
 
     }
 };

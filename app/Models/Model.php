@@ -144,7 +144,7 @@ abstract class Model {
         foreach ($results as $result) {
             $models[] = new static($result);
         }
-        
+        dd($models);
         return $models;
     }
 
