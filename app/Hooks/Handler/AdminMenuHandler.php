@@ -5,32 +5,23 @@ class AdminMenuHandler {
       public function add_admin_menu() {
         global $submenu;
         add_menu_page(
-            'easy-restaurant-manager',
-            'Easy Restaurant Manager',
+            'ehx-directorist',
+            'EHX Directorist',
             'manage_options',
-            'easy-restaurant-manager.php',
+            'ehx-directorist.php',
             array($this, 'render_admin_page'),
             'dashicons-editor-code',
             25
         );
 
-        $submenu['easy-restaurant-manager.php']['dashboard'] = array(
+        $submenu['ehx-directorist.php']['dashboard'] = array(
             'Dashboard',
             'manage_options',
-            'admin.php?page=easy-restaurant-manager.php#/',
+            'admin.php?page=ehx-directorist.php#/',
         );
 
-        $submenu['easy-restaurant-manager.php']['menus'] = array(
-            'Menus',
-            'manage_options',
-            'admin.php?page=easy-restaurant-manager.php#/menus',
-        );
-
-        $submenu['easy-restaurant-manager.php']['category'] = array(
-            'Category',
-            'manage_options',
-            'admin.php?page=easy-restaurant-manager.php#/category',
-        );
+    
+  
         $this->enqueue_admin_assets();
     }
 
