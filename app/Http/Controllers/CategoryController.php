@@ -98,8 +98,12 @@ class CategoryController
 
     public static function getAllCategories()
     {
+        $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+        $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 10;
+        $search = isset($_GET['search']) ? sanitize_text_field($_GET['search']) : null;
 
-        $res = CategoryResource::getAll();
+        $res = CategoryResource::getAll($limit, $page, $search);
+        $data = array_map(fn($cat) => $cat->toArray(), $res['data']);
 
         if (!$res) {
             return rest_ensure_response([
@@ -109,7 +113,12 @@ class CategoryController
 
         return rest_ensure_response([
             'message' => 'Categories retrieved successfully',
-            'categories_data' => $res,
+            'categories_data' => $data,
+            'total' => $res['total'],
+            'per_page' => $res['per_page'],
+            'current_page' => $res['current_page'],
+            'last_page' => $res['last_page'],
+        
 
         ]);
     }

@@ -129,7 +129,7 @@
   
   <style scoped>
   .ehxd_form_wrapper {
-    padding: 20px;
+    /* padding: 20px; */
   }
   .ehxd_input {
     width: 100%;

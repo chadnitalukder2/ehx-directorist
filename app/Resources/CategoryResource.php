@@ -39,10 +39,12 @@ class CategoryResource {
      //   return Category::find($id);
     }
 
-    public static function getAll() {
-        $categories = (new Category)->all();
-        $data = array_map(fn($cat) => $cat->toArray(), $categories);
-        return $data;
+    public static function getAll($perPage, $page, $search) {
+        $categories = (new Category)->paginate($perPage, $page, $search);
+
+        // $categories = (new Category)->all();
+        // $data = array_map(fn($cat) => $cat->toArray(), $categories);
+        return  $categories;
     }
 
 }

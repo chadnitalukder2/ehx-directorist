@@ -99,6 +99,41 @@ abstract class Model
         $results = $this->db->get_results("SELECT * FROM {$this->table} ORDER BY id DESC", ARRAY_A);
         return array_map(fn($row) => (new static())->fill($row), $results);
     }
+    public function paginate($perPage = 10, $page = 1, $search = '')
+    {
+        $offset = ($page - 1) * $perPage;
+        $search_sql = '';
+        $params = [];
+
+        if (!empty($search)) {
+            $search_sql = "WHERE name LIKE %s OR slug LIKE %s";
+            $params[] = '%' . $search . '%';
+            $params[] = '%' . $search . '%';
+        }
+
+        $query = "SELECT * FROM {$this->table} {$search_sql} ORDER BY id DESC LIMIT %d OFFSET %d";
+        $params[] = $perPage;
+        $params[] = $offset;
+
+        $results = $this->db->get_results($this->db->prepare($query, ...$params), ARRAY_A);
+
+        // Count total with search
+        if (!empty($search)) {
+            $count_query = "SELECT COUNT(*) FROM {$this->table} WHERE name LIKE %s OR slug LIKE %s";
+            $total = $this->db->get_var($this->db->prepare($count_query, '%' . $search . '%', '%' . $search . '%'));
+        } else {
+            $total = $this->db->get_var("SELECT COUNT(*) FROM {$this->table}");
+        }
+
+        return [
+            'data' => array_map(fn($row) => (new static())->fill($row), $results),
+            'total' => (int)$total,
+            'per_page' => $perPage,
+            'current_page' => $page,
+            'last_page' => ceil($total / $perPage),
+        ];
+    }
+
 
     public function find($id)
     {

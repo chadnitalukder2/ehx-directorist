@@ -124,6 +124,22 @@ export default {
             rest_api: window.EhxDirectoristData.rest_api,
         }
     },
+    watch: {
+        currentPage() {
+            this.getAllCategories();
+        },
+        pageSize() {
+            this.currentPage = 1;
+            this.getAllCategories();
+        },
+        search: {
+            handler() {
+                this.currentPage = 1; 
+                this.getAllCategories();
+            },
+            immediate: false
+        },
+    },
 
     methods: {
         openCategoryAddModal() {
@@ -144,12 +160,17 @@ export default {
             this.loading = true;
             try {
                 const response = await axios.get(`${this.rest_api}/getAllCategories`, {
+                    params: {
+                        page: this.currentPage,
+                        limit: this.pageSize,
+                        search: this.search || '',
+                    },
                     headers: {
                         'X-WP-Nonce': this.nonce
                     }
                 });
                 this.categories = response?.data?.categories_data;
-                //console.log('categories',response.data.categories_data);
+                this.total_category = response?.data?.total || 0;
                 this.loading = false;
             } catch (error) {
                 this.loading = false;
@@ -198,7 +219,7 @@ export default {
 
         handleAddedCategory(newCategory) {
             this.getAllCategories();
-           // this.$refs.add_category_modal.handleClose();
+            // this.$refs.add_category_modal.handleClose();
         }
 
     },

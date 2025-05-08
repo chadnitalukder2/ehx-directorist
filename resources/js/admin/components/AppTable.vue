@@ -1,5 +1,5 @@
 <template>
-    <div class="ehxd-table-wrapper">
+    <div class="ehxd-table-wrapper" style="padding: 0px 35px;">
 
         <div class="ehxd-table-header">
             <slot name="header"></slot>
