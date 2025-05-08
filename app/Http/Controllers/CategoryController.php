@@ -7,7 +7,9 @@ use EhxDirectorist\Resources\CategoryResource;
 
 class CategoryController {
     public static function storeCategory(StoreCategoryRequest $request) {
+  
         $res = CategoryResource::store($request->validated());
+       
         if(!$res) {
             return rest_ensure_response([
                 'message' => 'Failed to create category'
@@ -21,6 +23,7 @@ class CategoryController {
     }
 
     public static function updateCategory(StoreCategoryRequest $request, $id) {
+      
         $res = CategoryResource::update($request->validated(), $id);
         if(!$res) {
             return rest_ensure_response([
@@ -33,7 +36,13 @@ class CategoryController {
         ]);
     }
 
-    public static function deleteCategory($id) {
+    public static function deleteCategory(WP_REST_Request $request) {
+        $id = $request->get_param('id');
+        if(!$id) {
+            return rest_ensure_response([
+                'message' => 'Category ID is required'
+            ], 400);
+        }
         $res = CategoryResource::delete($id);
         if(!$res) {
             return rest_ensure_response([
@@ -60,6 +69,7 @@ class CategoryController {
     }
 
     public static function getAllCategories() {
+   
         $res = CategoryResource::getAll();
 
         if(!$res) {

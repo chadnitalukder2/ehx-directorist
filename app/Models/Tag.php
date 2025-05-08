@@ -2,13 +2,13 @@
 
 namespace EhxDirectorist\Models;
 
-class Category extends Model {
+class Tag extends Model {
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'ehxd_categories';
+    protected $table = 'ehxd_tag';
 
     /**
      * The primary key for the model.
@@ -22,14 +22,7 @@ class Category extends Model {
      *
      * @var array
      */
-    protected $fillable = [
-        'id',
-        'name',
-        'slug',
-        'description',
-        'created_at',
-        'updated_at'
-    ];
+    protected $guarded = [];
 
     /**
      * Get the branch associated with this category
@@ -41,7 +34,7 @@ class Category extends Model {
             return null;
         }
         
-      //  return Branch::find($this->branch_id);
+       // return Branch::find($this->branch_id);
     }
 
     /**
@@ -50,7 +43,7 @@ class Category extends Model {
      * @return array
      */
     public function products() {
-        //return Product::where(['category_id' => $this->id]);
+   //     return Product::where(['category_id' => $this->id]);
     }
 
     /**
@@ -59,10 +52,10 @@ class Category extends Model {
      * @param array $attributes
      * @return static
      */
-    public static function create(array $attributes) {
-        if (!isset($attributes['created_at'])) {
-            $attributes['created_at'] = date('Y-m-d H:i:s');
-        }
-        return parent::create($attributes);
-    }
+    // public static function create(array $attributes) {
+    //     if (!isset($attributes['created_at'])) {
+    //         $attributes['created_at'] = date('Y-m-d H:i:s');
+    //     }
+    //     return parent::create($attributes);
+    // }
 }

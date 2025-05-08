@@ -3,7 +3,7 @@
 
         <AppModal :title="'Add New Category'" :width="700" :showFooter="false" ref="add_category_modal">
             <template #body>
-                <AddCategory />
+                <AddCategory @updateDataAfterNewAdd="updateDataAfterNewAdd" />
             </template>
         </AppModal>
 
@@ -22,23 +22,23 @@
 
             <template #columns>
                 <el-table-column prop="id" label="ID" width="60" />
-                <el-table-column prop="branch_id" label="Branch Id" width="auto" />
                 <el-table-column prop="name" label="Name" width="auto" />
+                <el-table-column prop="slug" label="Slug" width="auto" />
                 <el-table-column prop="added_date" label="Add Date" width="auto">
                     <template #default="{ row }">
-                        <!-- {{ formatAddedDate(row.added_date) }} -->
+                        {{ formatAddedDate(row.created_at) }}
                     </template>
                 </el-table-column>
                 <el-table-column label="Operations" width="120">
                     <template #default="{ row }">
-                        <el-tooltip class="box-item" effect="dark" content="Click to view books" placement="top-start">
-                            <el-button class="ehxd_box_icon" link size="small">
+                        <el-tooltip class="box-item" effect="dark" content="Click to edit category" placement="top-start">
+                            <el-button @click="openUpdateCategoryModal(row)" class="ehxd_box_icon" link size="small">
                                 <Icon icon="ehxd-edit" />
                             </el-button>
                         </el-tooltip>
-                        <el-tooltip class="box-item" effect="dark" content="Click to delete books"
+                        <el-tooltip class="box-item" effect="dark" content="Click to delete category"
                             placement="top-start">
-                            <el-button class="ehxd_box_icon" link size="small">
+                            <el-button @click="openDeleteCategoryModal(row)" class="ehxd_box_icon" link size="small">
                                 <Icon icon="ehxd-delete" />
                             </el-button>
                         </el-tooltip>
@@ -48,11 +48,43 @@
 
             <template #footer>
                 <el-pagination v-model:current-page="currentPage" v-model:page-size="pageSize"
-                    :page-sizes="[10, 20, 30, 40]" large :disabled="total_book <= pageSize" background
-                    layout="total, sizes, prev, pager, next" :total="+total_book" />
+                    :page-sizes="[10, 20, 30, 40]" large :disabled="total_category <= pageSize" background
+                    layout="total, sizes, prev, pager, next" :total="+total_category" />
             </template>
 
         </AppTable>
+
+        <AppModal :title="'Update Category'" :width="800" :showFooter="false" ref="update_category_modal">
+            <template #body>
+                <div>
+                    <AddCategory ref="addCategory" :categories_data="category" />
+                    <div class="input-wrapper" @click="saveCategory()">
+                        <el-button size="large" type="primary">Save Category</el-button>
+                    </div>
+                </div>
+            </template>
+            <template #footer>
+   
+            </template>
+        </AppModal>
+
+
+        <AppModal :title="'Delete Category'" :width="500" :showFooter="false" ref="delete_category_modal">
+            <template #body>
+
+                <div class="delete-modal-body">
+                    <h1>Are you sure ?</h1>
+                    <p>You want to delete this category</p>
+                </div>
+            </template>
+            <template #footer>
+                <div class="exd-modal-footer" style="text-align: center;">
+                    <el-button @click="$refs.delete_category_modal.handleClose()" type="default"
+                        size="medium">Cancel</el-button>
+                    <el-button @click="deleteCategory" type="primary" size="medium">Delete</el-button>
+                </div>
+            </template>
+        </AppModal>
 
     </div>
 </template>
@@ -67,6 +99,7 @@ import AppTable from "../../components/AppTable.vue";
 import Icon from "../../components/Icons/AppIcon.vue";
 import AppModal from "../../components/AppModal.vue";
 import AddCategory from "./AddCategory.vue";
+import { id } from "element-plus/es/locale/index.mjs";
 export default {
     components: {
         AppTable,
@@ -78,8 +111,8 @@ export default {
         return {
             search: '',
             categories: [],
-            book: {},
-            total_book: 0,
+            category: {},
+            total_category: 0,
             loading: false,
             currentPage: 1,
             pageSize: 10,
@@ -98,6 +131,13 @@ export default {
                 console.log("Modal ref not found! Ensure AppModal is rendered.");
             }
         },
+
+        formatAddedDate(date) {
+            if (!date) return '';
+            const options = { day: 'numeric', month: 'long', year: 'numeric' };
+            return new Date(date).toLocaleDateString('en-GB', options);
+        },
+
         async getAllCategories() {
             this.loading = true;
             try {
@@ -106,8 +146,8 @@ export default {
                         'X-WP-Nonce': this.nonce
                     }
                 });
-               // this.categories = categories_data?.data?.categories_data;
-               // console.log('categories',response.data);
+                this.categories = response?.data?.categories_data;
+                //console.log('categories',response.data.categories_data);
                 this.loading = false;
                 this.$notify({
                     title: 'Success',
@@ -119,6 +159,48 @@ export default {
                 console.error('Error fetching couriers:',);
             }
         },
+
+        openDeleteCategoryModal(row) {
+            this.active_id = row.id;
+            this.$refs.delete_category_modal.openModel();
+        },
+        async deleteCategory() {
+            this.loading = true;
+            const id = this.active_id;
+            try {
+                const response = await axios.post(`${this.rest_api}/deleteCategory/${id}`, {
+                }, {
+                    headers: {
+                        'X-WP-Nonce': this.nonce
+                    }
+                });
+                this.loading = false;
+                this.$refs.delete_category_modal.handleClose();
+                this.getAllCategories();
+                this.$notify({
+                    title: 'Success',
+                    message: 'Category deleted successfully',
+                    type: 'success',
+                })
+            } catch (error) {
+                this.loading = false;
+                console.error('Error deleting category:', error);
+            }
+        },
+
+        openUpdateCategoryModal(row) {
+            this.category = row;
+            this.$refs.update_category_modal.openModel();
+        },
+
+        updateDataAfterNewAdd(new_category) {
+            console.log("hit")
+            this.$refs.add_category_modal.handleClose();
+            this.categories.unshift(new_category);
+        },
+
+
+
     },
 
     mounted() {

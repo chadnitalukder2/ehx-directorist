@@ -5,21 +5,33 @@ use EhxDirectorist\Models\Category;
 class CategoryResource {
     public static function store($category) {
         return Category::create($category);
+     
     }
 
     public static function update($category, $id) {
-        return Category::where('id', $id)->update($category);
+       // return Category::where('id', $id)->update($category);
     }
 
     public static function delete($id) {
-        return Category::where('id', $id)->delete();
+        $categoryModel = new Category();
+        $category = $categoryModel->find($id);
+    
+        if ($category) {
+            $category->delete($id);
+            return true; 
+        }
+    
+        return false;
     }
 
     public static function get($id) {
-        return Category::find($id);
+     //   return Category::find($id);
     }
 
     public static function getAll() {
-        return Category::all();
+        $categories = (new Category)->all();
+        $data = array_map(fn($cat) => $cat->toArray(), $categories);
+        return $data;
     }
+
 }

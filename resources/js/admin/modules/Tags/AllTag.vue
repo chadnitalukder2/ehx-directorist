@@ -1,17 +1,17 @@
 <template>
     <div class="ehxd_wrapper">
 
-        <AppModal :title="'Add New Category'" :width="700" :showFooter="false" ref="add_category_modal">
+        <AppModal :title="'Add New Tag'" :width="700" :showFooter="false" ref="add_Tag_modal">
             <template #body>
-                <AddCategory />
+                <AddTag />
             </template>
         </AppModal>
 
-        <AppTable :tableData="categories" v-loading="loading">
+        <AppTable :tableData="tags" v-loading="loading">
             <template #header>
-                <h1 class="table-title">All Category</h1>
-                <el-button @click="openCategoryAddModal()" size="large" type="primary" icon="Plus" class="ltm_button">
-                    Add New Category
+                <h1 class="table-title">All Tag</h1>
+                <el-button @click="openTagAddModal()" size="large" type="primary" icon="Plus" class="ltm_button">
+                    Add New Tag
                 </el-button>
             </template>
 
@@ -22,8 +22,8 @@
 
             <template #columns>
                 <el-table-column prop="id" label="ID" width="60" />
-                <el-table-column prop="branch_id" label="Branch Id" width="auto" />
                 <el-table-column prop="name" label="Name" width="auto" />
+                <el-table-column prop="slug" label="Slug" width="auto" />
                 <el-table-column prop="added_date" label="Add Date" width="auto">
                     <template #default="{ row }">
                         <!-- {{ formatAddedDate(row.added_date) }} -->
@@ -66,52 +66,52 @@ import axios from "axios";
 import AppTable from "../../components/AppTable.vue";
 import Icon from "../../components/Icons/AppIcon.vue";
 import AppModal from "../../components/AppModal.vue";
-import AddCategory from "./AddCategory.vue";
+import AddTag from "./AddTag.vue";
 export default {
     components: {
         AppTable,
         Icon,
         AppModal,
-        AddCategory
+        AddTag,
     },
     data() {
         return {
             search: '',
-            categories: [],
+            tags: [],
             book: {},
             total_book: 0,
             loading: false,
             currentPage: 1,
             pageSize: 10,
             active_id: null,
-            add_category_modal: false,
+            add_Tag_modal: false,
             nonce: window.EhxDirectoristData.nonce,
             rest_api: window.EhxDirectoristData.rest_api,
         }
     },
 
     methods: {
-        openCategoryAddModal() {
-            if (this.$refs.add_category_modal) {
-                this.$refs.add_category_modal.openModel();
+        openTagAddModal() {
+            if (this.$refs.add_Tag_modal) {
+                this.$refs.add_Tag_modal.openModel();
             } else {
                 console.log("Modal ref not found! Ensure AppModal is rendered.");
             }
         },
-        async getAllCategories() {
+        async getAlltags() {
             this.loading = true;
             try {
-                const response = await axios.get(`${this.rest_api}/getAllCategories`, {
+                const response = await axios.get(`${this.rest_api}/getAllTags`, {
                     headers: {
                         'X-WP-Nonce': this.nonce
                     }
                 });
-               // this.categories = categories_data?.data?.categories_data;
-               // console.log('categories',response.data);
+                this.tags = response?.data?.tags_data;
+               console.log('tags',response.data);
                 this.loading = false;
                 this.$notify({
                     title: 'Success',
-                    message: 'Category fetched successfully',
+                    message: 'Tag fetched successfully',
                     type: 'success',
                 })
             } catch (error) {
@@ -123,7 +123,7 @@ export default {
 
     mounted() {
         // console.log('window', window);
-        this.getAllCategories();
+        this.getAlltags();
     },
 
 }

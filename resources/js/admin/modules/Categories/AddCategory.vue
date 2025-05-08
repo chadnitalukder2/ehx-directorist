@@ -49,6 +49,19 @@ export default {
         };
 
     },
+    props: {
+        categories_data: {
+            type: Object,
+        }
+    },
+    watch: {
+        categories_data: {
+            handler: function (val) {
+                this.categories = val;
+            },
+            deep: true
+        }
+    },
 
     methods: {
         async saveCategory() {
@@ -65,6 +78,7 @@ export default {
             }
             try {
                 const response = await axios.post(`${this.rest_api}/postCategory`, this.categories);
+                this.$emit("updateDataAfterNewAdd", this.categories);
                 this.categories = {
                     name: "",
                     slug: "",
@@ -81,6 +95,12 @@ export default {
             }
         },
 
+    },
+    mounted() {
+        if (this.categories_data) {
+            console.log('Categories:', this.categories_data);
+            this.categories = this.categories_data;
+        }
     }
 };
 </script>

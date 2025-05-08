@@ -2,27 +2,21 @@
     <div class="ehxd_form_wrapper">
 
         <div class="input-wrapper">
-            <p class="form-label" for="name">Category Name *</p>
-            <el-input class="ehxd_input" v-model="categories.name" style="width: 100%"
-                placeholder="Please Input Category Name" size="large" />
+            <p class="form-label" for="name">Tag Name *</p>
+            <el-input class="ehxd_input" v-model="tags.name" style="width: 100%"
+                placeholder="Please Input Tag Name" size="large" />
             <p class="error-message" style="margin: 0px 0px 10px 0px;">{{ name_error }}</p>
         </div>
 
         <div class="input-wrapper">
-            <p class="form-label" for="name">Category Slug *</p>
-            <el-input class="ehxd_input" v-model="categories.slug" style="width: 100%"
-                placeholder="Please Input Category Slug" size="large" />
+            <p class="form-label" for="name">Tag Slug *</p>
+            <el-input class="ehxd_input" v-model="tags.slug" style="width: 100%"
+                placeholder="Please Input Tag Slug" size="large" />
             <p class="error-message" style="margin: 0px 0px 10px 0px;">{{ slug_error }}</p>
-        </div>
-
-        <div class="input-wrapper">
-            <p class="form-label" for="name">Description</p>
-            <el-input class="ehxd_input" v-model="categories.description" style="width: 100%"
-                placeholder="Please Input Description" size="large" type="textarea" />
         </div><br>
 
-        <div class="input-wrapper" @click="saveCategory()">
-            <el-button size="large" type="primary">Save Category</el-button>
+        <div class="input-wrapper" @click="saveTag()">
+            <el-button size="large" type="primary">Save Tag</el-button>
         </div>
 
     </div>
@@ -38,10 +32,9 @@ export default {
     },
     data() {
         return {
-            categories: {
+            tags: {
                 name: "",
                 slug: "",
-                description: "",
             },
             name_error: "",
             slug_error: "",
@@ -51,33 +44,32 @@ export default {
     },
 
     methods: {
-        async saveCategory() {
-            console.log("Category data:", this.categories);
+        async saveTag() {
             this.name_error = "";
             this.slug_error = "";
-            if (!this.categories.name) {
-                this.name_error = "Category name is required";
+            if (!this.tags.name) {
+                this.name_error = "Tag name is required";
                 return;
             }
-            if (!this.categories.slug) {
+            if (!this.tags.slug) {
                 this.slug_error = "slug name is required";
                 return;
             }
             try {
-                const response = await axios.post(`${this.rest_api}/postCategory`, this.categories);
-                this.categories = {
+                const response = await axios.post(`${this.rest_api}/postTag`, this.tags);
+                this.tags = {
                     name: "",
                     slug: "",
                     description: "",
                 };
                 this.$notify({
                     title: 'Success',
-                    message: 'Category Created successfully',
+                    message: 'Tag Created successfully',
                     type: 'success',
                 })
-               // console.log('Category:', response.data);
+               // console.log('Tag:', response.data);
             } catch (error) {
-                console.error('Error fetching category:', error);
+                console.error('Error fetching Tag:', error);
             }
         },
 
