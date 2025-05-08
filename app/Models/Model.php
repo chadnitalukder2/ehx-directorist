@@ -96,7 +96,7 @@ abstract class Model
 
     public function all()
     {
-        $results = $this->db->get_results("SELECT * FROM {$this->table}", ARRAY_A);
+        $results = $this->db->get_results("SELECT * FROM {$this->table} ORDER BY id DESC", ARRAY_A);
         return array_map(fn($row) => (new static())->fill($row), $results);
     }
 
@@ -140,8 +140,9 @@ abstract class Model
         return array_map(fn($row) => (new static())->fill($row), $results);
     }
 
-    public function update($id, array $data)
+    public function update(array $data, $id)
     {
+
         $filtered = !empty($this->fillable)
             ? array_filter($data, fn($key) => in_array($key, $this->fillable), ARRAY_FILTER_USE_KEY)
             : $data;

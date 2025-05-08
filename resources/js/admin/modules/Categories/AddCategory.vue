@@ -1,106 +1,138 @@
 <template>
     <div class="ehxd_form_wrapper">
-
-        <div class="input-wrapper">
-            <p class="form-label" for="name">Category Name *</p>
-            <el-input class="ehxd_input" v-model="categories.name" style="width: 100%"
-                placeholder="Please Input Category Name" size="large" />
-            <p class="error-message" style="margin: 0px 0px 10px 0px;">{{ name_error }}</p>
-        </div>
-
-        <div class="input-wrapper">
-            <p class="form-label" for="name">Category Slug *</p>
-            <el-input class="ehxd_input" v-model="categories.slug" style="width: 100%"
-                placeholder="Please Input Category Slug" size="large" />
-            <p class="error-message" style="margin: 0px 0px 10px 0px;">{{ slug_error }}</p>
-        </div>
-
-        <div class="input-wrapper">
-            <p class="form-label" for="name">Description</p>
-            <el-input class="ehxd_input" v-model="categories.description" style="width: 100%"
-                placeholder="Please Input Description" size="large" type="textarea" />
-        </div><br>
-
-        <div class="input-wrapper" @click="saveCategory()">
-            <el-button size="large" type="primary">Save Category</el-button>
-        </div>
-
+      <el-form
+        ref="categoryForm"
+        :model="localCategory"
+        :rules="rules"
+        label-position="top"
+        @submit.prevent
+      >
+        <el-form-item label="Category Name *" prop="name">
+          <el-input
+            class="ehxd_input"
+            v-model="localCategory.name"
+            placeholder="Please Input Category Name"
+            size="large"
+          />
+        </el-form-item>
+  
+        <el-form-item label="Category Slug *" prop="slug">
+          <el-input
+            class="ehxd_input"
+            v-model="localCategory.slug"
+            placeholder="Please Input Category Slug"
+            size="large"
+          />
+        </el-form-item>
+  
+        <el-form-item label="Description">
+          <el-input
+            class="ehxd_input"
+            v-model="localCategory.description"
+            placeholder="Please Input Description"
+            size="large"
+            type="textarea" row="5"
+          />
+        </el-form-item>
+  
+        <el-form-item>
+          <el-button   type="primary" size="large" @click="submitCategoryForm">
+            {{ localCategory.id ? "Update Category" : "Save Category" }} 
+        
+          </el-button>
+        </el-form-item>
+      </el-form>
     </div>
-</template>
-
-<script>
-import axios from "axios"; // Import Axios
-
-
-export default {
-    components: {
-     
+  </template>
+  
+  <script>
+  import axios from "axios";
+  
+  export default {
+    name: "AddCategory",
+    props: {
+      categories_data: {
+        type: Object,
+        default: () => ({}),
+      },
     },
     data() {
-        return {
-            categories: {
+      return {
+        localCategory: {
+          name: "",
+          slug: "",
+          description: "",
+        },
+        rules: {
+          name: [
+            { required: true, message: "Category name is required", trigger: "blur" },
+          ],
+          slug: [
+            { required: true, message: "Slug is required", trigger: "blur" },
+          ],
+        },
+        rest_api: window.EhxDirectoristData.rest_api,
+        nonce: window.EhxDirectoristData.nonce,
+      };
+    },
+    watch: {
+      categories_data: {
+        immediate: true,
+        deep: true,
+        handler(val) {
+          this.localCategory = { ...val }; // clone to avoid mutating parent directly
+        },
+      },
+    },
+    methods: {
+      async submitCategoryForm() {
+        this.$refs.categoryForm.validate(async (valid) => {
+          if (!valid) return;
+  
+          const isUpdate = !!this.localCategory.id;
+          const url = isUpdate
+            ? `${this.rest_api}/updateCategory/${this.localCategory.id}`
+            : `${this.rest_api}/postCategory`;
+  
+          try {
+            const response = await axios.post(url, this.localCategory, {
+              headers: {
+                "Content-Type": "application/json",
+                "X-WP-Nonce": this.nonce,
+              },
+            });
+  
+            this.$notify({
+              title: "Success",
+              message: `Category ${isUpdate ? "updated" : "created"} successfully`,
+              type: "success",
+            });
+  
+            if (!isUpdate) {
+              this.$emit("updateDataAfterNewAdd", response.data.category);
+              this.localCategory = {
                 name: "",
                 slug: "",
                 description: "",
-            },
-            name_error: "",
-            slug_error: "",
-            rest_api: window.EhxDirectoristData.rest_api,
-        };
-
-    },
-    props: {
-        categories_data: {
-            type: Object,
-        }
-    },
-    watch: {
-        categories_data: {
-            handler: function (val) {
-                this.categories = val;
-            },
-            deep: true
-        }
-    },
-
-    methods: {
-        async saveCategory() {
-            console.log("Category data:", this.categories);
-            this.name_error = "";
-            this.slug_error = "";
-            if (!this.categories.name) {
-                this.name_error = "Category name is required";
-                return;
+              };
+            } else {
+              this.$emit("updateDataAfterNewAdd", response.data.category);
             }
-            if (!this.categories.slug) {
-                this.slug_error = "slug name is required";
-                return;
-            }
-            try {
-                const response = await axios.post(`${this.rest_api}/postCategory`, this.categories);
-                this.$emit("updateDataAfterNewAdd", this.categories);
-                this.categories = {
-                    name: "",
-                    slug: "",
-                    description: "",
-                };
-                this.$notify({
-                    title: 'Success',
-                    message: 'Category Created successfully',
-                    type: 'success',
-                })
-               // console.log('Category:', response.data);
-            } catch (error) {
-                console.error('Error fetching category:', error);
-            }
-        },
-
+          } catch (error) {
+            console.error("Error saving category:", error);
+          }
+        });
+      },
     },
-    mounted() {
-        if (this.categories_data) {
-            console.log('Categories:', this.categories_data);
-            this.categories = this.categories_data;
-        }
-    }
-};
-</script>
+  };
+  </script>
+  
+  <style scoped>
+  .ehxd_form_wrapper {
+    padding: 20px;
+  }
+  .ehxd_input {
+    width: 100%;
+  }
+  </style>
+  

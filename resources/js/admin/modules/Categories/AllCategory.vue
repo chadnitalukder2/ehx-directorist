@@ -3,7 +3,7 @@
 
         <AppModal :title="'Add New Category'" :width="700" :showFooter="false" ref="add_category_modal">
             <template #body>
-                <AddCategory @updateDataAfterNewAdd="updateDataAfterNewAdd" />
+                <AddCategory @updateDataAfterNewAdd="handleAddedCategory" />
             </template>
         </AppModal>
 
@@ -31,7 +31,8 @@
                 </el-table-column>
                 <el-table-column label="Operations" width="120">
                     <template #default="{ row }">
-                        <el-tooltip class="box-item" effect="dark" content="Click to edit category" placement="top-start">
+                        <el-tooltip class="box-item" effect="dark" content="Click to edit category"
+                            placement="top-start">
                             <el-button @click="openUpdateCategoryModal(row)" class="ehxd_box_icon" link size="small">
                                 <Icon icon="ehxd-edit" />
                             </el-button>
@@ -57,14 +58,15 @@
         <AppModal :title="'Update Category'" :width="800" :showFooter="false" ref="update_category_modal">
             <template #body>
                 <div>
-                    <AddCategory ref="addCategory" :categories_data="category" />
-                    <div class="input-wrapper" @click="saveCategory()">
-                        <el-button size="large" type="primary">Save Category</el-button>
-                    </div>
+                    <AddCategory ref="addCategory" :categories_data="category"
+                        @updateDataAfterNewAdd="handleUpdatedCategory" />
+                    <!-- <div class="input-wrapper" @click="saveCategory()">
+                        <el-button size="large" type="primary">Update Category</el-button>
+                    </div> -->
                 </div>
             </template>
             <template #footer>
-   
+
             </template>
         </AppModal>
 
@@ -149,11 +151,6 @@ export default {
                 this.categories = response?.data?.categories_data;
                 //console.log('categories',response.data.categories_data);
                 this.loading = false;
-                this.$notify({
-                    title: 'Success',
-                    message: 'Category fetched successfully',
-                    type: 'success',
-                })
             } catch (error) {
                 this.loading = false;
                 console.error('Error fetching couriers:',);
@@ -171,6 +168,7 @@ export default {
                 const response = await axios.post(`${this.rest_api}/deleteCategory/${id}`, {
                 }, {
                     headers: {
+                        'Content-Type': 'application/json',
                         'X-WP-Nonce': this.nonce
                     }
                 });
@@ -193,13 +191,15 @@ export default {
             this.$refs.update_category_modal.openModel();
         },
 
-        updateDataAfterNewAdd(new_category) {
-            console.log("hit")
-            this.$refs.add_category_modal.handleClose();
-            this.categories.unshift(new_category);
+        handleUpdatedCategory(updated) {
+            this.getAllCategories(); // or update the array locally
+            this.$refs.update_category_modal.handleClose();
         },
 
-
+        handleAddedCategory(newCategory) {
+            this.getAllCategories();
+           // this.$refs.add_category_modal.handleClose();
+        }
 
     },
 

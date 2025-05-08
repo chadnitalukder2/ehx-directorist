@@ -1,31 +1,57 @@
 <?php
+
 namespace EhxDirectorist\Http\Controllers;
 
 use WP_REST_Request;
 use EhxDirectorist\Http\Requests\StoreCategoryRequest;
 use EhxDirectorist\Resources\CategoryResource;
 
-class CategoryController {
-    public static function storeCategory(StoreCategoryRequest $request) {
-  
-        $res = CategoryResource::store($request->validated());
-       
-        if(!$res) {
+class CategoryController
+{
+    public static function storeCategory(WP_REST_Request  $request)
+    {
+        $validatedRequest = new StoreCategoryRequest($request);
+        if ($validatedRequest->fails()) {
+            return rest_ensure_response([
+                'message' => 'Validation failed',
+                'errors'  => $validatedRequest->errors()
+            ], 400);
+        }
+
+        $res = CategoryResource::store($validatedRequest->validated());
+
+        if (!$res) {
             return rest_ensure_response([
                 'message' => 'Failed to create category'
             ], 500);
         }
-       
+
         return rest_ensure_response([
             'message' => 'Category created successfully',
             'category_data' => $res
         ]);
     }
 
-    public static function updateCategory(StoreCategoryRequest $request, $id) {
-      
-        $res = CategoryResource::update($request->validated(), $id);
-        if(!$res) {
+
+    public static function updateCategory(WP_REST_Request $request)
+    {
+        $id = $request->get_param('id');
+        if (!$id) {
+            return rest_ensure_response([
+                'message' => 'Category ID is required'
+            ], 400);
+        }
+
+        $validatedRequest = new StoreCategoryRequest($request);
+        if ($validatedRequest->fails()) {
+            return rest_ensure_response([
+                'message' => 'Validation failed',
+                'errors'  => $validatedRequest->errors()
+            ], 400);
+        }
+        $res = CategoryResource::update($validatedRequest->validated(), $id);
+
+        if (!$res) {
             return rest_ensure_response([
                 'message' => 'Failed to update category'
             ], 500);
@@ -36,15 +62,16 @@ class CategoryController {
         ]);
     }
 
-    public static function deleteCategory(WP_REST_Request $request) {
+    public static function deleteCategory(WP_REST_Request $request)
+    {
         $id = $request->get_param('id');
-        if(!$id) {
+        if (!$id) {
             return rest_ensure_response([
                 'message' => 'Category ID is required'
             ], 400);
         }
         $res = CategoryResource::delete($id);
-        if(!$res) {
+        if (!$res) {
             return rest_ensure_response([
                 'message' => 'Failed to delete category'
             ], 500);
@@ -54,10 +81,11 @@ class CategoryController {
         ]);
     }
 
-    public static function getCategory($id) {
+    public static function getCategory($id)
+    {
         $res = CategoryResource::get($id);
-  
-        if(!$res) {
+
+        if (!$res) {
             return rest_ensure_response([
                 'message' => 'Failed to get category'
             ], 500);
@@ -68,11 +96,12 @@ class CategoryController {
         ]);
     }
 
-    public static function getAllCategories() {
-   
+    public static function getAllCategories()
+    {
+
         $res = CategoryResource::getAll();
 
-        if(!$res) {
+        if (!$res) {
             return rest_ensure_response([
                 'message' => 'Failed to get categories'
             ], 500);
@@ -81,7 +110,7 @@ class CategoryController {
         return rest_ensure_response([
             'message' => 'Categories retrieved successfully',
             'categories_data' => $res,
-          
+
         ]);
     }
 }
