@@ -1,6 +1,8 @@
-.el-input__wrapper{
-    border-radius: 8px;
+.el-input__wrapper, .el-textarea__inner{
+    border-radius: 8px !important;
+    
     .el-input__inner {
+        height: 35px;
         border: none;
         &:focus {
             border: none;
@@ -12,7 +14,7 @@
     textarea,select, input{
         border: 1px solid $ehxd-neutral-500;
         border-radius: 8px;
-        background: #fff;
+        background: $ehxd_background_color_white;
         &:hover{
             box-shadow: 0 0 0 0.5px $ehxd-neutral-400 inset;
         }
@@ -27,3 +29,30 @@
     @include text($size: 14px, $weight: 500);
     margin-bottom: 5px;
 }
+
+
+.el-button--primary{
+    background-color: $ehx_primary_btn !important;
+    border: $ehx_primary_btn !important;
+    border-radius: 8px !important;
+}
+.el-button--primary:hover{
+    background-color: $ehx_primary_btn_hover !important;
+    border: $ehx_primary_btn_hover !important;
+}
+.is-active{
+    background-color: $ehx_primary_btn !important;
+    border: $ehx_primary_btn !important;
+}
+.number:hover, .btn-prev:hover, .btn-next:hover {
+    background-color: $ehx_primary_btn !important;
+    border: $ehx_primary_btn !important;
+    color: $ehxd_background_color_white !important;
+}
+
+// .el-input__wrapper, .el-textarea__inner ,
+//     .is-focus:focus {
+//         border: 0.5px solid  $ehx_primary_btn !important;
+//         box-shadow: 0 0 0 0px $ehx_primary_btn !important;
+//       }
+

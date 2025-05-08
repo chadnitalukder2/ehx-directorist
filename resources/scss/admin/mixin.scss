@@ -17,7 +17,7 @@
 }
 
 @mixin tm_btn_primary {
-    @include text($color: #fff, $size: 14px, $weight: 500, $lineHeight: 24px);
+    @include text($color: $ehxd_background_color_white, $size: 14px, $weight: 500, $lineHeight: 24px);
     padding: 10px 20px;
     border-radius: 6px;
     background-color: $tm-primary-500;

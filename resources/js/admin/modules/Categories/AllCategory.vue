@@ -9,7 +9,10 @@
 
         <AppTable :tableData="categories" v-loading="loading">
             <template #header>
-                <h1 class="table-title">All Category</h1>
+                <div class="ehxd_title">
+                    <h1 class="table-title">All Category</h1>
+                    <p class="table-short-dsc">Manage and view all your categories</p>
+                </div>
                 <el-button @click="openCategoryAddModal()" size="large" type="primary" icon="Plus" class="ltm_button">
                     Add New Category
                 </el-button>
@@ -48,6 +51,10 @@
             </template>
 
             <template #footer>
+                <div class="ehxd_footer_page">
+                    <p>Page {{ currentPage }} of {{ last_page}}</p>
+                </div>
+              
                 <el-pagination v-model:current-page="currentPage" v-model:page-size="pageSize"
                     :page-sizes="[10, 20, 30, 40]" large :disabled="total_category <= pageSize" background
                     layout="total, sizes, prev, pager, next" :total="+total_category" />
@@ -60,9 +67,6 @@
                 <div>
                     <AddCategory ref="addCategory" :categories_data="category"
                         @updateDataAfterNewAdd="handleUpdatedCategory" />
-                    <!-- <div class="input-wrapper" @click="saveCategory()">
-                        <el-button size="large" type="primary">Update Category</el-button>
-                    </div> -->
                 </div>
             </template>
             <template #footer>
@@ -117,6 +121,7 @@ export default {
             total_category: 0,
             loading: false,
             currentPage: 1,
+            last_page: 1,
             pageSize: 10,
             active_id: null,
             add_category_modal: false,
@@ -171,6 +176,7 @@ export default {
                 });
                 this.categories = response?.data?.categories_data;
                 this.total_category = response?.data?.total || 0;
+                this.last_page = response?.data?.last_page || 1;
                 this.loading = false;
             } catch (error) {
                 this.loading = false;
@@ -231,3 +237,7 @@ export default {
 
 }
 </script>
+
+<style lang="scss" scoped>
+
+</style>
