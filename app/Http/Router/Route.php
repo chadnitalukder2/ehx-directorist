@@ -3,6 +3,7 @@
 namespace EhxDirectorist\Http\Router;
 
 use EhxDirectorist\Http\Controllers\CategoryController;
+use EhxDirectorist\Http\Controllers\ListingController;
 use EhxDirectorist\Http\Controllers\TagController;
 use WP_REST_Request;
 
@@ -15,5 +16,7 @@ class Route {
 
         API_Router::get('/getAllTags', [TagController::class, 'getAllTags']);
         API_Router::post('/postTag', [TagController::class, 'storeTag']);
+
+        API_Router::get('/getAllListings', [ListingController::class, 'getAllListings']);
     } 
 }
