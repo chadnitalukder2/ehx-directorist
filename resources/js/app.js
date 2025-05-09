@@ -6,6 +6,7 @@ import Settings from './admin/components/Settings.vue';
 
 import Categories from './admin/modules/Categories/AllCategory.vue';
 import Tags from './admin/modules/Tags/AllTag.vue';
+import ListingDirectory from './admin/modules/ListingDirectory/AllListingDirectory.vue';
 
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
@@ -19,6 +20,7 @@ const router = createRouter({
         { path: '/', component: Dashboard },
         { path: '/categories', component: Categories },
         { path: '/tags', component: Tags },
+        { path: '/listing-directory', component: ListingDirectory },
         { path: '/settings', component: Settings }
     ]
 });

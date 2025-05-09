@@ -8,12 +8,9 @@
         <router-link class="ehxd-menu-item" to="/">
           Dashboard
         </router-link>
-        <!-- <router-link class="ehxd-menu-item" to="/menus">
-          Menus
-        </router-link> -->
-        <!-- <router-link class="ehxd-menu-item" to="/shipments">
-          Shipments
-        </router-link> -->
+        <router-link class="ehxd-menu-item" to="/listing-directory">
+           Listing Directory
+        </router-link>
         <router-link class="ehxd-menu-item" to="/settings">
           Settings
         </router-link>
