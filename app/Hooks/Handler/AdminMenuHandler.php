@@ -5,31 +5,31 @@ class AdminMenuHandler {
       public function add_admin_menu() {
         global $submenu;
         add_menu_page(
-            'ehx-directoristr',
-            'EHX Directoristr',
+            'ehx-directorist',
+            'EHX Directorist',
             'manage_options',
-            'ehx-directoristr.php',
+            'ehx-directorist.php',
             array($this, 'render_admin_page'),
             'dashicons-editor-code',
             25
         );
 
-        $submenu['ehx-directoristr.php']['dashboard'] = array(
+        $submenu['ehx-directorist.php']['dashboard'] = array(
             'Dashboard',
             'manage_options',
-            'admin.php?page=ehx-directoristr.php#/',
+            'admin.php?page=ehx-directorist.php#/',
         );
 
-        $submenu['ehx-directoristr.php']['tags'] = array(
+        $submenu['ehx-directorist.php']['tags'] = array(
             'Tags',
             'manage_options',
-            'admin.php?page=ehx-directoristr.php#/tags',
+            'admin.php?page=ehx-directorist.php#/tags',
         );
 
-        $submenu['ehx-directoristr.php']['categories'] = array(
+        $submenu['ehx-directorist.php']['categories'] = array(
             'Categories',
             'manage_options',
-            'admin.php?page=ehx-directoristr.php#/categories',
+            'admin.php?page=ehx-directorist.php#/categories',
         );
         $this->enqueue_admin_assets();
     }
