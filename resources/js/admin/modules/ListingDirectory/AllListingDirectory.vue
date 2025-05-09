@@ -1,11 +1,11 @@
 <template>
     <div class="ehxd_wrapper">
 
-        <AppModal :title="'Add New List'" :width="700" :showFooter="false" ref="add_List_modal">
+        <!-- <AppModal :title="'Add New List'" :width="700" :showFooter="false" ref="add_List_modal">
             <template #body>
                 <AddListingDirectory @updateDataAfterNewAdd="handleAddedList" />
             </template>
-        </AppModal>
+        </AppModal> -->
 
         <AppTable :tableData="listings" v-loading="loading">
             <template #header>
@@ -13,8 +13,8 @@
                     <h1 class="table-title">All List</h1>
                     <p class="table-short-dsc">Manage and view all your listings</p>
                 </div>
-                <el-button @click="openListAddModal()" size="large" type="primary" icon="Plus" class="ltm_button">
-                    Add New List
+                <el-button @click="createDirectory()" size="large" type="primary" icon="Plus" class="ltm_button">
+                    Add New Directory
                 </el-button>
             </template>
 
@@ -156,6 +156,9 @@ export default {
     },
 
     methods: {
+        createDirectory() {
+            this.$router.push({ name: 'add-listing-directory', params: { id: 1 } });    
+        },
         openListAddModal() {
             if (this.$refs.add_List_modal) {
                 this.$refs.add_List_modal.openModel();
