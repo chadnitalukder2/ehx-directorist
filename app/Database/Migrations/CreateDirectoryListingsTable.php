@@ -12,7 +12,7 @@ class CreateDirectoryListingsTable
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
         $charset_collate = $wpdb->get_charset_collate();
-        $table = "{$wpdb->prefix}ehxd_directory_listing_table";
+        $table = "{$wpdb->prefix}ehxd_directory_listing";
 
         $sql = "CREATE TABLE IF NOT EXISTS $table (
              id INT PRIMARY KEY AUTO_INCREMENT,
