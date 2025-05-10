@@ -1,18 +1,24 @@
 <template>
     <div>
-        <el-button type="primary" @click="openMediaUploader">{{ btnTitle }}</el-button>
-        <div v-if="selectedFile" class="fraise_image_wrapper">
+        <div v-if="selectedFile" class="fraise_image_wrapper" style="width: 100px; height: 100px;">
             <el-image :src="selectedFile" />
             <span @click="removeFile" class="file-del-btn"><el-icon><Delete /></el-icon></span>
         </div>
+        <el-button type="primary" @click="openMediaUploader">{{ btnTitle }}</el-button>
     </div>
 </template>
 
 <script>
 export default {
     props: {
-        selectedFile : '',
-        btnTitle: 'Upload File'
+        selectedFile: {
+            type: String,
+            default: ''
+        },
+        btnTitle: {
+            type: String,
+            default: 'Upload Image'
+        }
     },
     data() {
         return {
