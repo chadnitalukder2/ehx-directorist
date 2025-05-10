@@ -66,11 +66,9 @@
         <el-form-item label="Image " prop="short_description">
           <AppFileUpload v-model:selectedFile="localList.mediaUrl" btnTitle="Add Media" />
         </el-form-item>
+        {{ localList }}
         <el-form-item label="Short Description " prop="short_description">
-          <el-input type="textarea" v-model="localList.short_description" />
-        </el-form-item>
-        <el-form-item label="Short Description " prop="short_description">
-          <!-- <WpEditor v-model="localList.short_description" /> -->
+          <WpEditor @input-update="localList.short_description = $event" />
         </el-form-item>
         <div class="custom_field_list_wrapper">
           <div class="custom_field_list_item" v-for="(field, index) in customFields" :key="field.key">

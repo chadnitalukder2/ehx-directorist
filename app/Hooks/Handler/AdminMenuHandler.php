@@ -55,6 +55,8 @@ class AdminMenuHandler {
         if (strpos($hook, 'ehx-directorist') === false) {
             return;
         }
+        wp_enqueue_editor();
+
         
         wp_enqueue_style(
             'ehx-directorist-admin',
