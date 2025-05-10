@@ -51,12 +51,21 @@
         <div class="ehxd_input_warpper">
           <div class="ehxd_input_item">
             <el-form-item label="Category Name" prop="category_id">
-              <el-input v-model="localList.category_id" placeholder="Enter Listing name" />
+              <el-select class="erm_input" v-model="localList.category_id" placeholder="Category Name" size="large"
+                style="width: 100%">
+                <el-option v-for="category in categories" :key="category.value" :label="category.name"
+                    :value="category.id" />
+            </el-select>
+
             </el-form-item>
           </div>
           <div class="ehxd_input_item">
             <el-form-item label="Tag Name" prop="tag_id">
-              <el-input v-model="localList.tag_id" placeholder="Enter email" />
+              <el-select class="erm_input" multiple v-model="localList.tag_id" placeholder="Tag Name" size="large"
+                style="width: 100%">
+                <el-option v-for="tag in tags" :key="tag.value" :label="tag.name"
+                    :value="tag.id" />
+            </el-select>
             </el-form-item>
           </div>
 
@@ -110,16 +119,64 @@ export default {
         address: "",
         social_links: [],
         short_description: "",
+        category_id: '',
+        tag_id: '',
       },
+      tags: [],
+      categories: [],
+      nonce: window.EhxDirectoristData.nonce,
+      rest_api: window.EhxDirectoristData.rest_api,
     }
   },
 
 
   methods: {
+    async getAllCategories() {
+            this.loading = true;
+            try {
+                const response = await axios.get(`${this.rest_api}/getAllCategories`, {
+                    headers: {
+                        'X-WP-Nonce': this.nonce
+                    }
+                });
+                this.categories = response?.data?.categories_data;
+                this.total_category = response?.data?.total || 0;
+                this.last_page = response?.data?.last_page || 1;
+                this.loading = false;
+            } catch (error) {
+                this.loading = false;
+                console.error('Error fetching couriers:',);
+            }
+        },
+
+        async getAllTag() {
+            this.loading = true;
+            try {
+                const response = await axios.get(`${this.rest_api}/getAllTag`, {
+                    params: {
+                        page: this.currentPage,
+                        limit: this.pageSize,
+                        search: this.search || '',
+                    },
+                    headers: {
+                        'X-WP-Nonce': this.nonce
+                    }
+                });
+                this.tags = response?.data?.tags_data;
+                this.loading = false;
+            } catch (error) {
+                this.loading = false;
+                console.error('Error fetching couriers:',);
+            }
+        },
 
   },
 
-
+  mounted() {
+        // console.log('window', window);
+        this.getAllCategories();
+        this.getAllTag();
+    },
 
 }
 </script>
