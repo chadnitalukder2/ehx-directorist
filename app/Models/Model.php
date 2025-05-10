@@ -106,7 +106,8 @@ abstract class Model
         $params = [];
 
         if (!empty($search)) {
-            $search_sql = "WHERE name LIKE %s OR slug LIKE %s";
+            $search_sql = "WHERE name LIKE %s OR slug LIKE %s OR address LIKE %s"  ;
+            $params[] = '%' . $search . '%';
             $params[] = '%' . $search . '%';
             $params[] = '%' . $search . '%';
         }

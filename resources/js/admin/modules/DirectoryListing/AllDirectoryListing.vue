@@ -1,21 +1,18 @@
 <template>
     <div class="ehxd_wrapper">
 
-        <AppModal :title="'Add New List'" :width="700" :showFooter="false" ref="add_List_modal">
-            <template #body>
-                <AddDirectoryListing @updateDataAfterNewAdd="handleAddedList" />
-            </template>
-        </AppModal>
-
         <AppTable :tableData="listings" v-loading="loading">
             <template #header>
                 <div class="ehxd_title">
                     <h1 class="table-title">All List</h1>
                     <p class="table-short-dsc">Manage and view all your listings</p>
                 </div>
-                <el-button @click="openListAddModal()" size="large" type="primary" icon="Plus" class="ltm_button">
-                    Add New List
-                </el-button>
+                <router-link to="/add-directory-listing">
+                    <el-button size="large" type="primary" icon="Plus" class="ltm_button">
+                        Add New List
+                    </el-button>
+                </router-link>
+
             </template>
 
             <template #filter>
@@ -43,14 +40,12 @@
                                 <Icon icon="ehxd-eye" />
                             </el-button>
                         </el-tooltip>
-                        <el-tooltip class="box-item" effect="dark" content="Click to edit List"
-                            placement="top-start">
+                        <el-tooltip class="box-item" effect="dark" content="Click to edit List" placement="top-start">
                             <el-button @click="openUpdateListModal(row)" class="ehxd_box_icon" link size="small">
                                 <Icon icon="ehxd-edit" />
                             </el-button>
                         </el-tooltip>
-                        <el-tooltip class="box-item" effect="dark" content="Click to delete List"
-                            placement="top-start">
+                        <el-tooltip class="box-item" effect="dark" content="Click to delete List" placement="top-start">
                             <el-button @click="openDeleteListModal(row)" class="ehxd_box_icon" link size="small">
                                 <Icon icon="ehxd-delete" />
                             </el-button>
@@ -61,28 +56,15 @@
 
             <template #footer>
                 <div class="ehxd_footer_page">
-                    <p>Page {{ currentPage }} of {{ last_page}}</p>
+                    <p>Page {{ currentPage }} of {{ last_page }}</p>
                 </div>
-              
+
                 <el-pagination v-model:current-page="currentPage" v-model:page-size="pageSize"
                     :page-sizes="[10, 20, 30, 40]" large :disabled="total_List <= pageSize" background
                     layout="total, sizes, prev, pager, next" :total="+total_List" />
             </template>
 
         </AppTable>
-
-        <AppModal :title="'Update List'" :width="800" :showFooter="false" ref="update_List_modal">
-            <template #body>
-                <div>
-                    <AddDirectoryListing ref="AddDirectoryListing" :listings_data="List"
-                        @updateDataAfterNewAdd="handleUpdatedList" />
-                </div>
-            </template>
-            <template #footer>
-
-            </template>
-        </AppModal>
-
 
         <AppModal :title="'Delete List'" :width="500" :showFooter="false" ref="delete_List_modal">
             <template #body>
@@ -104,16 +86,12 @@
     </div>
 </template>
 
-
-
-
 <script>
 import axios from "axios";
 
 import AppTable from "../../components/AppTable.vue";
 import Icon from "../../components/Icons/AppIcon.vue";
 import AppModal from "../../components/AppModal.vue";
-import AddDirectoryListing from "./AddDirectoryListing.vue";
 
 import { id } from "element-plus/es/locale/index.mjs";
 export default {
@@ -121,13 +99,12 @@ export default {
         AppTable,
         Icon,
         AppModal,
-        AddDirectoryListing
     },
     data() {
         return {
             search: '',
             listings: [],
-            List: {},
+            list: {},
             total_List: 0,
             loading: false,
             currentPage: 1,
@@ -141,29 +118,22 @@ export default {
     },
     watch: {
         currentPage() {
-            this.getAlllistings();
+            this.getAllListings();
         },
         pageSize() {
             this.currentPage = 1;
-            this.getAlllistings();
+            this.getAllListings();
         },
         search: {
             handler() {
-                this.currentPage = 1; 
-                this.getAlllistings();
+                this.currentPage = 1;
+                this.getAllListings();
             },
             immediate: false
         },
     },
 
     methods: {
-        openListAddModal() {
-            if (this.$refs.add_List_modal) {
-                this.$refs.add_List_modal.openModel();
-            } else {
-                console.log("Modal ref not found! Ensure AppModal is rendered.");
-            }
-        },
 
         formatAddedDate(date) {
             if (!date) return '';
@@ -211,10 +181,10 @@ export default {
                 });
                 this.loading = false;
                 this.$refs.delete_List_modal.handleClose();
-                this.getAlllistings();
+                this.getAllListings();
                 this.$notify({
                     title: 'Success',
-                    message: 'List deleted successfully',
+                    message: 'Listing data deleted successfully',
                     type: 'success',
                 })
             } catch (error) {
@@ -222,21 +192,6 @@ export default {
                 console.error('Error deleting List:', error);
             }
         },
-
-        openUpdateListModal(row) {
-            this.List = row;
-            this.$refs.update_List_modal.openModel();
-        },
-
-        handleUpdatedList(updated) {
-            this.getAlllistings(); // or update the array locally
-            this.$refs.update_List_modal.handleClose();
-        },
-
-        handleAddedList(newList) {
-            this.getAlllistings();
-            // this.$refs.add_List_modal.handleClose();
-        }
 
     },
 
@@ -248,6 +203,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

@@ -6,7 +6,8 @@ import Settings from './admin/components/Settings.vue';
 
 import Categories from './admin/modules/Categories/AllCategory.vue';
 import Tags from './admin/modules/Tags/AllTag.vue';
-import DirectoryListing from './admin/modules/DirectoryListing/AllDirectoryListing.vue';
+import AllDirectoryListing from './admin/modules/DirectoryListing/AllDirectoryListing.vue';
+import AddDirectoryListing from './admin/modules/DirectoryListing/AddDirectoryListing.vue';
 
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
@@ -20,7 +21,8 @@ const router = createRouter({
         { path: '/', component: Dashboard },
         { path: '/categories', component: Categories },
         { path: '/tags', component: Tags },
-        { path: '/directory-listing', component: DirectoryListing },
+        { path: '/directory-listing', component: AllDirectoryListing },
+        { path: '/add-directory-listing', component: AddDirectoryListing },
         { path: '/settings', component: Settings }
     ]
 });
