@@ -1,22 +1,12 @@
 <template>
   <div class="ehxd_wrapper">
-    <div class="ehxd-header-section">
-      <div class="ehxd_title">
-        <h1 class="table-title">Add Directory Listing</h1>
-        <p class="table-short-dsc">Create and publish a new directory listing with essential details, links, and
-          location.</p>
-      </div>
-      <div class="ehxd_header_btn">
-        <router-link to="/directory-listing">
-          <el-button size="large" type="primary" class="ltm_button">
-            All Directory Listing
-            <el-icon style="margin-left: 8px;">
-              <Right />
-            </el-icon>
-          </el-button>
-        </router-link>
-      </div>
-
+    <div class="">
+      <el-breadcrumb separator="/">
+        <el-breadcrumb-item :to="{ path: '/directory-listing' }">Directory listing</el-breadcrumb-item>
+        <el-breadcrumb-item>
+          Add listings
+        </el-breadcrumb-item>
+      </el-breadcrumb>
     </div>
     <div class="ehxd_form_wrapper">
       <el-form ref="ListForm" :model="localList" :rules="rules" label-position="top" @submit.prevent>
@@ -54,8 +44,8 @@
               <el-select class="erm_input" v-model="localList.category_id" placeholder="Category Name" size="large"
                 style="width: 100%">
                 <el-option v-for="category in categories" :key="category.value" :label="category.name"
-                    :value="category.id" />
-            </el-select>
+                  :value="category.id" />
+              </el-select>
 
             </el-form-item>
           </div>
@@ -63,9 +53,8 @@
             <el-form-item label="Tag Name" prop="tag_id">
               <el-select class="erm_input" multiple v-model="localList.tag_id" placeholder="Tag Name" size="large"
                 style="width: 100%">
-                <el-option v-for="tag in tags" :key="tag.value" :label="tag.name"
-                    :value="tag.id" />
-            </el-select>
+                <el-option v-for="tag in tags" :key="tag.value" :label="tag.name" :value="tag.id" />
+              </el-select>
             </el-form-item>
           </div>
 
@@ -75,19 +64,35 @@
           <GoogleMap />
         </el-form-item>
         <el-form-item label="Image " prop="short_description">
-         <AppFileUpload v-model:selectedFile="localList.mediaUrl" btnTitle="Add Media" />
+          <AppFileUpload v-model:selectedFile="localList.mediaUrl" btnTitle="Add Media" />
         </el-form-item>
         <el-form-item label="Short Description " prop="short_description">
           <el-input type="textarea" v-model="localList.short_description" />
         </el-form-item>
         <el-form-item label="Short Description " prop="short_description">
-        <!-- <WpEditor v-model="localList.short_description" /> -->
+          <!-- <WpEditor v-model="localList.short_description" /> -->
         </el-form-item>
+        <div class="custom_field_list_wrapper">
+          <div class="custom_field_list_item" v-for="(field, index) in customFields" :key="field.key">
+            <el-form-item label="Field Label" :prop="field.key">
+              <el-input :id="field.key" :name="field.key" v-model="customFields[index].label" />
+            </el-form-item>
+            <el-form-item label="Field Value" :prop="field.key">
+              <el-input :type="field.type" :id="field.key" :name="field.key" v-model="customFields[index].value" />
+            </el-form-item>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 20px;" class="custom_fields_button">
+          <p>Select Custom Fields</p>
+          <el-button size="large" v-for="field in form_fields" :key="field.key" @click="addCustomField(field)">
+            {{ field.field }}
+          </el-button>
+        </div>
 
         <el-form-item>
           <el-button type="primary" size="large" @click="submitListForm">
             Save List
-
           </el-button>
         </el-form-item>
       </el-form>
@@ -126,57 +131,98 @@ export default {
       categories: [],
       nonce: window.EhxDirectoristData.nonce,
       rest_api: window.EhxDirectoristData.rest_api,
+      customFields: [],
+      form_fields: [
+        {
+          label: "Text Field",
+          key: "text_field",
+          type: "input",
+          value: "",
+          field: 'Text'
+        },
+        {
+          label: "Number Field",
+          key: "number_field",
+          type: "number",
+          value: "",
+          field: 'Number'
+        },
+        {
+          label: "Email Field",
+          key: "email_field",
+          type: "input",
+          value: "",
+          field: 'Email'
+        }
+      ],
     }
   },
 
 
   methods: {
     async getAllCategories() {
-            this.loading = true;
-            try {
-                const response = await axios.get(`${this.rest_api}/getAllCategories`, {
-                    headers: {
-                        'X-WP-Nonce': this.nonce
-                    }
-                });
-                this.categories = response?.data?.categories_data;
-                this.total_category = response?.data?.total || 0;
-                this.last_page = response?.data?.last_page || 1;
-                this.loading = false;
-            } catch (error) {
-                this.loading = false;
-                console.error('Error fetching couriers:',);
-            }
-        },
+      this.loading = true;
+      try {
+        const response = await axios.get(`${this.rest_api}/getAllCategories`, {
+          headers: {
+            'X-WP-Nonce': this.nonce
+          }
+        });
+        this.categories = response?.data?.categories_data;
+        this.total_category = response?.data?.total || 0;
+        this.last_page = response?.data?.last_page || 1;
+        this.loading = false;
+      } catch (error) {
+        this.loading = false;
+        console.error('Error fetching couriers:',);
+      }
+    },
 
-        async getAllTag() {
-            this.loading = true;
-            try {
-                const response = await axios.get(`${this.rest_api}/getAllTag`, {
-                    params: {
-                        page: this.currentPage,
-                        limit: this.pageSize,
-                        search: this.search || '',
-                    },
-                    headers: {
-                        'X-WP-Nonce': this.nonce
-                    }
-                });
-                this.tags = response?.data?.tags_data;
-                this.loading = false;
-            } catch (error) {
-                this.loading = false;
-                console.error('Error fetching couriers:',);
-            }
-        },
+    async getAllTag() {
+      this.loading = true;
+      try {
+        const response = await axios.get(`${this.rest_api}/getAllTag`, {
+          params: {
+            page: this.currentPage,
+            limit: this.pageSize,
+            search: this.search || '',
+          },
+          headers: {
+            'X-WP-Nonce': this.nonce
+          }
+        });
+        this.tags = response?.data?.tags_data;
+        this.loading = false;
+      } catch (error) {
+        this.loading = false;
+        console.error('Error fetching couriers:',);
+      }
+    },
+
+    addCustomField(field) {
+      const baseKey = field.key;
+      let index = 0;
+      let uniqueKey = baseKey;
+
+      // Keep incrementing index until a unique key is found
+      while (this.customFields.find(item => item.key === uniqueKey)) {
+        index++;
+        uniqueKey = `${baseKey}_${index}`;
+      }
+
+      // Clone the field and assign the unique key
+      const newField = { ...field, key: uniqueKey };
+
+      this.customFields.push(newField);
+    }
 
   },
 
   mounted() {
-        // console.log('window', window);
-        this.getAllCategories();
-        this.getAllTag();
-    },
+    // console.log('window', window);
+    this.getAllCategories();
+    this.getAllTag();
+  },
 
 }
 </script>
@@ -186,6 +232,15 @@ export default {
   padding: 20px 35px;
   background-color: #F8F9FC;
   font-family: Inter;
+
+  .custom_field_list_item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    .el-form-item {
+      flex: 1;
+    }
+  }
 
   .ehxd-header-section {
     align-items: center;
@@ -233,10 +288,12 @@ export default {
     border-radius: 8px;
     padding: 30px;
     background: #fff;
-    .ehxd_input_warpper{
+
+    .ehxd_input_warpper {
       display: flex;
       justify-content: space-between;
       gap: 30px;
+
       .ehxd_input_item {
         width: 100%;
         max-width: 50%;
