@@ -11,6 +11,7 @@
     }
 }
 .lmt_input{
+    margin-bottom: 0px !important;
     textarea,select, input{
         border: 1px solid $ehxd-neutral-500;
         border-radius: 8px;
@@ -29,7 +30,9 @@
     @include text($size: 14px, $weight: 500);
     margin-bottom: 5px;
 }
-
+.el-form-item{
+    margin-bottom: 25px !important;
+}
 
 .el-button--primary{
     background-color: $ehx_primary_btn !important;
@@ -50,9 +53,9 @@
     color: $ehxd_background_color_white !important;
 }
 
-.el-input__wrapper, .el-textarea__inner ,  
+.el-input__wrapper, .el-textarea__inner , .el-select__wrapper , .el-select-dropdown__item,
     .is-focus:focus {
-        border: 0.5px solid  $ehx_primary_btn !important;
-        box-shadow: 0 0 0 0px $ehx_primary_btn !important;
+        border: 0.5px solid  $ehxd_input_border !important;
+        box-shadow: 0 0 0 0px $ehxd_input_border !important;
       }
 

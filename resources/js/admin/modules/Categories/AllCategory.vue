@@ -62,7 +62,7 @@
 
         </AppTable>
 
-        <AppModal :title="'Update Category'" :width="800" :showFooter="false" ref="update_category_modal">
+        <AppModal :title="'Update Category'" :width="700" :showFooter="false" ref="update_category_modal">
             <template #body>
                 <div>
                     <AddCategory ref="addCategory" :categories_data="category"
@@ -204,7 +204,7 @@ export default {
                 this.getAllCategories();
                 this.$notify({
                     title: 'Success',
-                    message: 'Category deleted successfully',
+                    message: 'Category data deleted successfully',
                     type: 'success',
                 })
             } catch (error) {

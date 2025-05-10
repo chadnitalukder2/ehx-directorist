@@ -14,8 +14,10 @@ class Route {
         API_Router::post('/deleteCategory/{id}', [CategoryController::class, 'deleteCategory']);
         API_Router::post('/updateCategory/{id}', [CategoryController::class, 'updateCategory']);
 
-        API_Router::get('/getAllTags', [TagController::class, 'getAllTags']);
+        API_Router::get('/getAllTag', [TagController::class, 'getAllTag']);
         API_Router::post('/postTag', [TagController::class, 'storeTag']);
+        API_Router::post('/updateTag/{id}', [TagController::class, 'updateTag']);
+        API_Router::post('/deleteTag/{id}', [TagController::class, 'deleteTag']);
 
         API_Router::get('/getAllListings', [ListingController::class, 'getAllListings']);
     } 

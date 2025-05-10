@@ -43,7 +43,6 @@ class CategoryResource {
         $categories = (new Category)->paginate($perPage, $page, $search);
 
         // $categories = (new Category)->all();
-        // $data = array_map(fn($cat) => $cat->toArray(), $categories);
         return  $categories;
     }
 

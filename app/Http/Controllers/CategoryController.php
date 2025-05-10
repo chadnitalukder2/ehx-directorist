@@ -32,7 +32,6 @@ class CategoryController
         ]);
     }
 
-
     public static function updateCategory(WP_REST_Request $request)
     {
         $id = $request->get_param('id');
@@ -57,7 +56,7 @@ class CategoryController
             ], 500);
         }
         return rest_ensure_response([
-            'message' => 'Category updated successfully',
+            'message' => 'Category data updated successfully',
             'category_data' => $res
         ]);
     }

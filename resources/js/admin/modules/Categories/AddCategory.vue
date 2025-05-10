@@ -35,7 +35,7 @@
           />
         </el-form-item>
   
-        <el-form-item>
+        <el-form-item style="margin-bottom: 0px !important; ">
           <el-button   type="primary" size="large" @click="submitCategoryForm">
             {{ localCategory.id ? "Update Category" : "Save Category" }} 
         
@@ -104,7 +104,7 @@
   
             this.$notify({
               title: "Success",
-              message: `Category ${isUpdate ? "updated" : "created"} successfully`,
+              message: `Category data ${isUpdate ? "updated" : "created"} successfully`,
               type: "success",
             });
   

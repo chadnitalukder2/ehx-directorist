@@ -8,7 +8,7 @@
         border-bottom: $ehxd-border;
         padding: 20px;
         .el-dialog__title {
-            @include text($size: 20px, $weight: 600);
+            @include text($size: 16px, $weight: 600);
         }
         .el-dialog__headerbtn {
             font-size: 16px;
