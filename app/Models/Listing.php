@@ -8,7 +8,7 @@ class Listing extends Model {
      *
      * @var string
      */
-    protected $table = 'ehxd_directory_listing_table';
+    protected $table = 'ehxd_directory_listing';
 
     /**
      * The primary key for the model.
@@ -24,7 +24,7 @@ class Listing extends Model {
      */
     protected $fillable = [
         'id','directory_builder_id','category_id','tag_id', 'name', 'slug',
-        'phone', 'email','website_url', 'social_links','address', 'latitude',
+        'phone', 'email', 'social_links','address', 'latitude',
         'longitude', 'postal_code','logo','short_description', 'description', 'meta',
         'created_at',
         'updated_at'

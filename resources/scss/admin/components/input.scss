@@ -50,9 +50,9 @@
     color: $ehxd_background_color_white !important;
 }
 
-// .el-input__wrapper, .el-textarea__inner ,
-//     .is-focus:focus {
-//         border: 0.5px solid  $ehx_primary_btn !important;
-//         box-shadow: 0 0 0 0px $ehx_primary_btn !important;
-//       }
+.el-input__wrapper, .el-textarea__inner ,  
+    .is-focus:focus {
+        border: 0.5px solid  $ehx_primary_btn !important;
+        box-shadow: 0 0 0 0px $ehx_primary_btn !important;
+      }
 
