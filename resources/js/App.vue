@@ -8,8 +8,8 @@
         <router-link class="ehxd-menu-item" to="/">
           Dashboard
         </router-link>
-        <router-link class="ehxd-menu-item" to="/listing-directory">
-           Listing Directory
+        <router-link class="ehxd-menu-item" to="/directory-listing">
+          Directory Listing
         </router-link>
         <router-link class="ehxd-menu-item" to="/settings">
           Settings

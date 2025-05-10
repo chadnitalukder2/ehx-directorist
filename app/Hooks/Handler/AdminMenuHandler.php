@@ -19,10 +19,10 @@ class AdminMenuHandler {
             'manage_options',
             'admin.php?page=ehx-directorist.php#/',
         );
-        $submenu['ehx-directorist.php']['listing-directory'] = array(
-            'Listing Directory',
+        $submenu['ehx-directorist.php']['directory-listing'] = array(
+            'Directory Listing',
             'manage_options',
-            'admin.php?page=ehx-directorist.php#/listing-directory',
+            'admin.php?page=ehx-directorist.php#/directory-listing',
         );
 
         $submenu['ehx-directorist.php']['tags'] = array(

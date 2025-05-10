@@ -3,7 +3,7 @@
 
         <AppModal :title="'Add New List'" :width="700" :showFooter="false" ref="add_List_modal">
             <template #body>
-                <AddListingDirectory @updateDataAfterNewAdd="handleAddedList" />
+                <AddDirectoryListing @updateDataAfterNewAdd="handleAddedList" />
             </template>
         </AppModal>
 
@@ -74,7 +74,7 @@
         <AppModal :title="'Update List'" :width="800" :showFooter="false" ref="update_List_modal">
             <template #body>
                 <div>
-                    <AddListingDirectory ref="AddListingDirectory" :listings_data="List"
+                    <AddDirectoryListing ref="AddDirectoryListing" :listings_data="List"
                         @updateDataAfterNewAdd="handleUpdatedList" />
                 </div>
             </template>
@@ -113,7 +113,7 @@ import axios from "axios";
 import AppTable from "../../components/AppTable.vue";
 import Icon from "../../components/Icons/AppIcon.vue";
 import AppModal from "../../components/AppModal.vue";
-import AddListingDirectory from "./AddListingDirectory.vue";
+import AddDirectoryListing from "./AddDirectoryListing.vue";
 
 import { id } from "element-plus/es/locale/index.mjs";
 export default {
@@ -121,7 +121,7 @@ export default {
         AppTable,
         Icon,
         AppModal,
-        AddListingDirectory
+        AddDirectoryListing
     },
     data() {
         return {
