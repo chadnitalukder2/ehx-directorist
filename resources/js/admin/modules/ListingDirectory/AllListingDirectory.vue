@@ -114,6 +114,7 @@ import AppTable from "../../components/AppTable.vue";
 import Icon from "../../components/Icons/AppIcon.vue";
 import AppModal from "../../components/AppModal.vue";
 import AddListingDirectory from "./AddListingDirectory.vue";
+
 import { id } from "element-plus/es/locale/index.mjs";
 export default {
     components: {
