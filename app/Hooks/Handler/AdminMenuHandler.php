@@ -55,7 +55,7 @@ class AdminMenuHandler {
         if (strpos($hook, 'ehx-directorist') === false) {
             return;
         }
-
+        
         wp_enqueue_style(
             'ehx-directorist-admin',
             EHX_DIRECTORIST_PLUGIN_URL . 'assets/css/admin.css',
@@ -70,7 +70,11 @@ class AdminMenuHandler {
             EHX_DIRECTORIST_VERSION,
             true
         );
-
+            wp_enqueue_script('jquery');
+            wp_enqueue_media();
+            wp_enqueue_script('wp-tinymce');
+wp_enqueue_script('wp-editor');
+        
         wp_localize_script('ehx-directorist-admin-js', 'EhxDirectoristData', [
             'rest_api' => rest_url('ehx-directorist/v1'),
             'nonce'    => wp_create_nonce('wp_rest'),

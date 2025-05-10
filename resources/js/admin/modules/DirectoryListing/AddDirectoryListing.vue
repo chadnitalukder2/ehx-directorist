@@ -66,13 +66,13 @@
           <GoogleMap />
         </el-form-item>
         <el-form-item label="Image " prop="short_description">
-         <AppFileUpload />
+         <AppFileUpload v-model:selectedFile="localList.mediaUrl" btnTitle="Add Media" />
         </el-form-item>
         <el-form-item label="Short Description " prop="short_description">
           <el-input type="textarea" v-model="localList.short_description" />
         </el-form-item>
         <el-form-item label="Short Description " prop="short_description">
-        <WpEditor v-model="localList.short_description" />
+        <!-- <WpEditor v-model="localList.short_description" /> -->
         </el-form-item>
 
         <el-form-item>
