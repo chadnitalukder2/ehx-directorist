@@ -34,18 +34,22 @@
                 </el-table-column>
                 <el-table-column label="Operations" width="120">
                     <template #default="{ row }">
-                        <el-tooltip class="box-item" effect="dark" content="Click to view listing details"
+                        <el-tooltip class="box-item" effect="dark" content="View"
                             placement="top-start">
-                            <el-button @click="openDeleteListModal(row)" class="ehxd_box_icon" link size="small">
+                            <el-button @click="$router.push({ name: 'view-directory-listing', params: { id: row.id } })"
+                                class="ehxd_box_icon" link size="small">
                                 <Icon icon="ehxd-eye" />
                             </el-button>
                         </el-tooltip>
-                        <el-tooltip class="box-item" effect="dark" content="Click to edit List" placement="top-start">
-                            <el-button @click="openUpdateListModal(row)" class="ehxd_box_icon" link size="small">
+
+                        <el-tooltip class="box-item" effect="dark" content="Edit" placement="top-start">
+                            <el-button @click="$router.push({ name: 'edit-directory-listing', params: { id: row.id } })"
+                                class="ehxd_box_icon" link size="small">
                                 <Icon icon="ehxd-edit" />
                             </el-button>
                         </el-tooltip>
-                        <el-tooltip class="box-item" effect="dark" content="Click to delete List" placement="top-start">
+
+                        <el-tooltip class="box-item" effect="dark" content="Delete" placement="top-start">
                             <el-button @click="openDeleteListModal(row)" class="ehxd_box_icon" link size="small">
                                 <Icon icon="ehxd-delete" />
                             </el-button>

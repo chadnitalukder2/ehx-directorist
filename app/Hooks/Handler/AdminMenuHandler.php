@@ -2,51 +2,59 @@
 namespace EhxDirectorist\Hooks\Handler;
 
 class AdminMenuHandler {
-      public function add_admin_menu() {
+
+    public function __construct() {
+        add_action('admin_menu', [$this, 'add_admin_menu']);
+        add_action('admin_enqueue_scripts', [$this, 'enqueue_admin_assets']);
+    }
+
+    public function add_admin_menu() {
         global $submenu;
+
         add_menu_page(
             'ehx-directorist',
             'EHX Directorist',
             'manage_options',
             'ehx-directorist.php',
-            array($this, 'render_admin_page'),
+            [$this, 'render_admin_page'],
             'dashicons-editor-code',
             25
         );
 
-        $submenu['ehx-directorist.php']['dashboard'] = array(
+        $submenu['ehx-directorist.php']['dashboard'] = [
             'Dashboard',
             'manage_options',
             'admin.php?page=ehx-directorist.php#/',
-        );
-        $submenu['ehx-directorist.php']['directory-listing'] = array(
+        ];
+
+        $submenu['ehx-directorist.php']['directory-listing'] = [
             'Directory Listing',
             'manage_options',
             'admin.php?page=ehx-directorist.php#/directory-listing',
-        );
+        ];
 
-        $submenu['ehx-directorist.php']['tags'] = array(
+        $submenu['ehx-directorist.php']['tags'] = [
             'Tags',
             'manage_options',
             'admin.php?page=ehx-directorist.php#/tags',
-        );
+        ];
 
-        $submenu['ehx-directorist.php']['categories'] = array(
+        $submenu['ehx-directorist.php']['categories'] = [
             'Categories',
             'manage_options',
             'admin.php?page=ehx-directorist.php#/categories',
-        );
-        $this->enqueue_admin_assets();
+        ];
     }
 
     public function render_admin_page() {
         echo '<div id="ehx-directorist-app"></div>';
     }
 
-    public function enqueue_admin_assets() {
-        // if (strpos($hook, 'ehx-directorist') === false) {
-        //     return;
-        // }
+    public function enqueue_admin_assets($hook) {
+        // Optional: restrict loading to only your plugin page
+        if (strpos($hook, 'ehx-directorist') === false) {
+            return;
+        }
 
         wp_enqueue_style(
             'ehx-directorist-admin',
@@ -58,14 +66,14 @@ class AdminMenuHandler {
         wp_enqueue_script(
             'ehx-directorist-admin-js',
             EHX_DIRECTORIST_PLUGIN_URL . 'assets/js/admin.js',
-            ['jquery'],
+            ['jquery', 'wp-editor', 'wp-components', 'wp-element', 'wp-data'],
             EHX_DIRECTORIST_VERSION,
             true
         );
 
         wp_localize_script('ehx-directorist-admin-js', 'EhxDirectoristData', [
             'rest_api' => rest_url('ehx-directorist/v1'),
-            'nonce' => wp_create_nonce('wp_rest')
+            'nonce'    => wp_create_nonce('wp_rest'),
         ]);
     }
 }

@@ -1,6 +1,5 @@
 .el-input__wrapper, .el-textarea__inner{
     border-radius: 8px !important;
-    
     .el-input__inner {
         height: 35px;
         border: none;
@@ -9,6 +8,9 @@
             box-shadow: none;
         }
     }
+}
+.el-form-item__content{
+    display: block !important;
 }
 .lmt_input{
     margin-bottom: 0px !important;

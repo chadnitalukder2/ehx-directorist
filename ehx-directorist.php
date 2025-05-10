@@ -46,6 +46,22 @@ add_action('rest_api_init', function () {
 function EHX_DIRECTORIST_init() {
     \EhxDirectorist\Core\Plugin::instance();
 }
+add_action('init', function () {
+    wp_enqueue_script(
+            'ehx-google-maps-api',
+            'https://maps.googleapis.com/maps/api/js?key=AIzaSyAdBAaTcZW8-4MCuVwzc7mcGS0OasoplgU&libraries=places',
+            [],
+            null,
+            true
+        );
+});
+
+/**
+ * Fires after WordPress has finished loading but before any headers are sent.
+ *
+ */
+function action_init() : void {
+}
 
 // Hook into WordPress init
 add_action('plugins_loaded', 'EHX_DIRECTORIST_init');

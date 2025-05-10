@@ -1,184 +1,190 @@
 <template>
-  <div class="ehxd_form_wrapper">
-    <el-form ref="ListForm" :model="localList" :rules="rules" label-position="top" @submit.prevent>
-      <el-form-item label="Listing Name" prop="name">
-        <el-input v-model="localList.name" placeholder="Enter Listing name" />
-      </el-form-item>
+  <div class="ehxd_wrapper">
+    <div class="ehxd-header-section">
+      <div class="ehxd_title">
+        <h1 class="table-title">Add Directory Listing</h1>
+        <p class="table-short-dsc">Create and publish a new directory listing with essential details, links, and
+          location.</p>
+      </div>
+      <div class="ehxd_header_btn">
+        <router-link to="/directory-listing">
+          <el-button size="large" type="primary" class="ltm_button">
+            All Directory Listing
+            <el-icon style="margin-left: 8px;">
+              <Right />
+            </el-icon>
+          </el-button>
+        </router-link>
+      </div>
 
-      <el-form-item label="Slug" prop="slug">
-        <el-input v-model="localList.slug" placeholder="Enter slug" />
-      </el-form-item>
+    </div>
+    <div class="ehxd_form_wrapper">
+      <el-form ref="ListForm" :model="localList" :rules="rules" label-position="top" @submit.prevent>
+        <div class="ehxd_input_warpper">
+          <div class="ehxd_input_item">
+            <el-form-item label="Name" prop="name">
+              <el-input v-model="localList.name" placeholder="Enter name" />
+            </el-form-item>
+          </div>
+          <div class="ehxd_input_item">
+            <el-form-item label="Email" prop="email">
+              <el-input v-model="localList.email" placeholder="demo@example.com" />
+            </el-form-item>
+          </div>
 
-      <el-form-item label="Email" prop="email">
-        <el-input v-model="localList.email" placeholder="Enter email" />
-      </el-form-item>
+        </div>
 
-      <el-form-item label="Phone" prop="phone">
-        <el-input v-model="localList.phone" placeholder="Enter phone number" />
-      </el-form-item>
+        <div class="ehxd_input_warpper">
+          <div class="ehxd_input_item">
+            <el-form-item label="Phone" prop="phone">
+              <el-input v-model="localList.phone" placeholder="Phone number" />
+            </el-form-item>
+          </div>
+          <div class="ehxd_input_item">
+            <el-form-item label="Website" prop="website_url">
+              <el-input v-model="localList.website_url" placeholder="https://example.com/" />
+            </el-form-item>
+          </div>
 
-      <el-form-item label="Address" prop="address">
-        <!-- <el-input v-model="localList.address" placeholder="Enter address" /> -->
-         <GoogleMap />
-      </el-form-item>
+        </div>
 
-      <el-form-item label="Website Url" prop="website_url">
-        <PairInput :pair="localList.website_url" />
-      </el-form-item>
+        <div class="ehxd_input_warpper">
+          <div class="ehxd_input_item">
+            <el-form-item label="Category Name" prop="category_id">
+              <el-input v-model="localList.category_id" placeholder="Enter Listing name" />
+            </el-form-item>
+          </div>
+          <div class="ehxd_input_item">
+            <el-form-item label="Tag Name" prop="tag_id">
+              <el-input v-model="localList.tag_id" placeholder="Enter email" />
+            </el-form-item>
+          </div>
 
-      <el-form-item label="Social Link" prop="social_links">
-        <PairInput :pair="localList.social_links" />
-      </el-form-item>
+        </div>
 
-      <el-form-item label="Longitude" prop="longitude">
-        <el-input-number v-model="localList.longitude" :step="0.000001" controls-position="right" />
-      </el-form-item>
+        <el-form-item label="Address" prop="address">
+          <GoogleMap />
+        </el-form-item>
+        <el-form-item label="Image " prop="short_description">
+         <AppFileUpload />
+        </el-form-item>
+        <el-form-item label="Short Description " prop="short_description">
+          <el-input type="textarea" v-model="localList.short_description" />
+        </el-form-item>
+        <el-form-item label="Short Description " prop="short_description">
+        <WpEditor v-model="localList.short_description" />
+        </el-form-item>
 
-      <el-form-item label="Short Description " prop="short_description">
-        <el-input type="textarea" v-model="localList.short_description" />
-      </el-form-item>
+        <el-form-item>
+          <el-button type="primary" size="large" @click="submitListForm">
+            Save List
 
-      <el-form-item>
-        <el-button type="primary" size="large" @click="submitListForm">
-          {{ localList.id ? "Update List" : "Save List" }}
-
-        </el-button>
-      </el-form-item>
-    </el-form>
+          </el-button>
+        </el-form-item>
+      </el-form>
+    </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import GoogleMap from '../../components/GoogleMap.vue';
-import PairInput from '../../components/PairInput.vue';
-import AppFileUpload from '../../components/AppFileUpload.vue';
+
+import Icon from "../../components/Icons/AppIcon.vue";
+import GoogleMap from "../../components/GoogleMap.vue";
+import AppFileUpload from "../../components/AppFileUpload.vue";
 import WpEditor from "../../components/WpEditor.vue";
+import { id } from "element-plus/es/locale/index.mjs";
 export default {
-  name: "AddList",
   components: {
-        AppFileUpload,
-        PairInput,
-        WpEditor,
-        GoogleMap
-    },
-  props: {
-    listings_data: {
-      type: Object,
-      default: () => ({}),
-    },
+    Icon,
+    GoogleMap,
+    AppFileUpload,
+    WpEditor,
   },
   data() {
     return {
       localList: {
-        name: '',
-        slug: '',
-        email: '',
-        phone: '',
-        website_url: [{ name: "small" , value: "200"}, { name: "large" , value: "400"}],
-        social_links:[{ name: "Cheese" , value: "50"}],
-        address: '',
-        postal_code: '',
-        latitude: null,
-        longitude: null,
-        logo: null,
-        short_description: '',
-        description: '',
-        meta: {},
-        directory_builder_id: 1,
-        category_id: 0,
-        tag_id: 0,
+        name: "",
+        email: "",
+        phone: "",
+        address: "",
+        social_links: [],
+        short_description: "",
+      },
+    }
+  },
 
-      },
-      rules: {
-        name: [{ required: true, message: "Listing name is required", trigger: "blur" }],
-        slug: [{ required: true, message: "Slug is required", trigger: "blur" }],
-        email: [
-          { required: true, message: "Email is required", trigger: "blur" },
-          { type: "email", message: "Invalid email", trigger: "blur" }
-        ],
-        phone: [{ required: true, message: "Phone number is required", trigger: "blur" }],
-        address: [{ required: true, message: "Address is required", trigger: "blur" }],
-        short_description: [{ required: true, message: "Short description is required", trigger: "blur" }],
-      },
-      rest_api: window.EhxDirectoristData.rest_api,
-      nonce: window.EhxDirectoristData.nonce,
-    };
-  },
-  watch: {
-    listings_data: {
-      immediate: true,
-      deep: true,
-      handler(val) {
-        this.localList = { ...val };
-      },
-    },
-  },
+
   methods: {
-    async submitListForm() {
-      this.$refs.ListForm.validate(async (valid) => {
-        if (!valid) return;
-
-        const isUpdate = !!this.localList.id;
-        const url = isUpdate
-          ? `${this.rest_api}/updateList/${this.localList.id}`
-          : `${this.rest_api}/postList`;
-
-        try {
-          const response = await axios.post(url, this.localList, {
-            headers: {
-              "Content-Type": "application/json",
-              "X-WP-Nonce": this.nonce,
-            },
-          });
-
-          this.$notify({
-            title: "Success",
-            message: `List ${isUpdate ? "updated" : "created"} successfully`,
-            type: "success",
-          });
-
-          if (!isUpdate) {
-            this.$emit("updateDataAfterNewAdd", response.data.List);
-            this.localList = {
-              name: '',
-              slug: '',
-              email: '',
-              phone: '',
-              website_url: {},
-              social_links: {},
-              address: '',
-              postal_code: '',
-              latitude: null,
-              longitude: null,
-              logo: null,
-              short_description: '',
-              description: '',
-              meta: {},
-              directory_builder_id: 1,
-              category_id: 0,
-              tag_id: 0,
-
-            };
-          } else {
-            this.$emit("updateDataAfterNewAdd", response.data.List);
-          }
-        } catch (error) {
-          console.error("Error saving List:", error);
-        }
-      });
-    },
 
   },
-};
+
+
+
+}
 </script>
 
-<style scoped>
-.ehxd_form_wrapper {
-  /* padding: 20px; */
-}
+<style lang="scss" scoped>
+.ehxd_wrapper {
+  padding: 20px 35px;
+  background-color: #F8F9FC;
+  font-family: Inter;
 
-.ehxd_input {
-  width: 100%;
+  .ehxd-header-section {
+    align-items: center;
+    background-color: #fff;
+    display: flex;
+    border-radius: 10px;
+    padding: 12px 30px;
+    justify-content: space-between;
+
+    .ehxd_title {
+      .table-title {
+        margin: 0;
+        color: #2F3448;
+        font-family: Inter;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 24px;
+      }
+
+      .table-short-dsc {
+        padding-top: 4px;
+        margin: 0px;
+        font-size: 12px;
+        color: #3c434a;
+        line-height: 1.5;
+      }
+    }
+
+    .ehxd_header_btn {
+      .ltm_button {
+        padding: 0px 10px;
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 24px;
+        border-radius: 8px;
+        height: 35px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+      }
+    }
+  }
+
+  .ehxd_form_wrapper {
+    margin: 20px 0px;
+    border-radius: 8px;
+    padding: 30px;
+    background: #fff;
+    .ehxd_input_warpper{
+      display: flex;
+      justify-content: space-between;
+      gap: 30px;
+      .ehxd_input_item {
+        width: 100%;
+        max-width: 50%;
+      }
+    }
+  }
 }
 </style>
