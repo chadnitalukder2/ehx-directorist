@@ -4,14 +4,17 @@ namespace EhxDirectorist\Http\Controllers;
 
 use WP_REST_Request;
 use EhxDirectorist\Http\Requests\StoreCategoryRequest;
+use EhxDirectorist\Http\Requests\StoreListingRequest;
 use EhxDirectorist\Resources\CategoryResource;
 use EhxDirectorist\Resources\ListingResource;
 
 class ListingController
 {
-    public static function storeCategory(WP_REST_Request  $request)
+    public static function storeListing(WP_REST_Request  $request)
     {
-        $validatedRequest = new StoreCategoryRequest($request);
+        dd($request, 'hello');
+       $validatedRequest = new StoreListingRequest($request);
+
         if ($validatedRequest->fails()) {
             return rest_ensure_response([
                 'message' => 'Validation failed',
@@ -19,8 +22,8 @@ class ListingController
             ], 400);
         }
 
-        $res = CategoryResource::store($validatedRequest->validated());
-
+        $res = ListingResource::store($request);
+        dd($res);
         if (!$res) {
             return rest_ensure_response([
                 'message' => 'Failed to create category'

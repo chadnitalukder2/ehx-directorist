@@ -4,8 +4,9 @@ use EhxDirectorist\Models\Category;
 use EhxDirectorist\Models\Listing;
 
 class ListingResource {
-    public static function store($category) {
-        return Category::create($category);
+    public static function store($data) {
+      
+        return Listing::create($data);
      
     }
 

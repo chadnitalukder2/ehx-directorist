@@ -20,5 +20,6 @@ class Route {
         API_Router::post('/deleteTag/{id}', [TagController::class, 'deleteTag']);
 
         API_Router::get('/getAllListings', [ListingController::class, 'getAllListings']);
+        API_Router::post('/postDirectoryListing', [ListingController::class, 'storeListing']);
     } 
 }

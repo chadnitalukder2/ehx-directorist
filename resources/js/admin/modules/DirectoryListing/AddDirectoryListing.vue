@@ -34,28 +34,27 @@
 
         <div class="ehxd_input_item">
           <el-form-item label="Category Name" prop="category_id">
-            <el-select multiple class="erm_input" v-model="localList.category_id" placeholder="Category Name" size="large" style="width: 100%">
-              <el-option v-for="category in categories" :key="category.id" :label="category.name" :value="category.id" />
+            <el-select multiple class="erm_input" v-model="localList.category_id" placeholder="Category Name"
+              size="large" style="width: 100%">
+              <el-option v-for="category in categories" :key="category.id" :label="category.name"
+                :value="category.id" />
             </el-select>
           </el-form-item>
         </div>
 
         <div class="ehxd_input_item">
           <el-form-item label="Tag Name" prop="tag_id">
-            <el-select multiple class="erm_input" v-model="localList.tag_id" placeholder="Tag Name" size="large" style="width: 100%">
+            <el-select multiple class="erm_input" v-model="localList.tag_id" placeholder="Tag Name" size="large"
+              style="width: 100%">
               <el-option v-for="tag in tags" :key="tag.id" :label="tag.name" :value="tag.id" />
             </el-select>
           </el-form-item>
         </div>
 
         <el-form-item label="Address" prop="address">
-          <GoogleMap
-            @update:address="localList.address = $event"
-            @update:latitude="localList.latitude = $event"
-            @update:longitude="localList.longitude = $event"
-            @update:city="localList.city = $event"
-            @update:postalCode="localList.postal_code = $event"
-          />
+          <GoogleMap @update:address="localList.address = $event" @update:latitude="localList.latitude = $event"
+            @update:longitude="localList.longitude = $event" @update:city="localList.city = $event"
+            @update:postalCode="localList.postal_code = $event" />
         </el-form-item>
 
         <div class="ehxd_image_wrapper">
@@ -88,7 +87,9 @@
               <el-input :type="field.type" :id="field.key" v-model="customFields[index].value" />
             </el-form-item>
             <div class="ehxd_delete_icon" @click="removeCustomField(index)">
-              <el-icon><Delete /></el-icon>
+              <el-icon>
+                <Delete />
+              </el-icon>
             </div>
           </div>
         </div>
@@ -144,8 +145,8 @@ export default {
         city: "",
         logo: [],
         image: [],
-        category_id: [],
-        tag_id: [],
+        category_id: {},
+        tag_id: {},
       },
       tags: [],
       categories: [],
@@ -174,7 +175,6 @@ export default {
         tag_id: [{ required: true, message: "Please select a tag", trigger: "change" }],
         address: [{ required: true, message: "Please input the address", trigger: "blur" }],
         short_description: [{ required: true, message: "Please input the brief description", trigger: "blur" }],
-        image: [{ required: true, message: "Please upload an image", trigger: "change" }],
         logo: [{ required: true, message: "Please upload a logo", trigger: "change" }],
       };
     }
@@ -216,9 +216,13 @@ export default {
       this.$refs.ListForm.validate(async (valid) => {
         if (!valid) return;
 
+       
+
         const formData = new FormData();
         for (const key in this.localList) {
-          if (Array.isArray(this.localList[key])) {
+          if (['category_id', 'tag_id'].includes(key)) {
+            formData.append(key, JSON.stringify(this.localList[key]));
+          } else if (Array.isArray(this.localList[key])) {
             this.localList[key].forEach(val => formData.append(`${key}[]`, val));
           } else {
             formData.append(key, this.localList[key]);
@@ -226,12 +230,12 @@ export default {
         }
 
         this.customFields.forEach(field => {
-          formData.append(`custom_fields[${field.key}]`, field.value);
-          formData.append(`custom_fields[${field.key}_label]`, field.label);
+          formData.append(`meta[${field.key}]`, field.value);
+          formData.append(`meta[${field.key}_label]`, field.label);
         });
 
         try {
-          const res = await axios.post(`${this.rest_api}/addDirectoryListing`, formData, {
+          const res = await axios.post(`${this.rest_api}/postDirectoryListing`, formData, {
             headers: {
               'X-WP-Nonce': this.nonce,
               'Content-Type': 'multipart/form-data'
@@ -343,13 +347,16 @@ export default {
     }
   }
 }
-.ehxd_image_wrapper{
+
+.ehxd_image_wrapper {
   display: flex;
   justify-content: space-between;
   gap: 30px;
   margin-bottom: 20px;
+
   .ehxd_image_item {
     flex: 1;
+
     .ehxd_image_item {
       margin-bottom: 0px;
     }
