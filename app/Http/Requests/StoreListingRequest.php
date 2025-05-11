@@ -14,8 +14,8 @@ class StoreListingRequest extends RequestGuard {
             'phone' => 'required|string|max:255',
             'website_url' => 'required|url|max:255',
             'address' => 'required|string|max:255',
-            'category_id' => ['required', 'string'],
-            'tag_id' => ['required', 'string'],
+            'category_id' => 'nullable|array',
+            'tag_id' => 'nullable|array',
             'logo' => 'required',
             'image' => 'nullable',
             'short_description' => 'required|string|max:255',
@@ -24,6 +24,7 @@ class StoreListingRequest extends RequestGuard {
             'longitude' => 'nullable|numeric',
             'postal_code' => 'nullable|string|max:20',
             'city' => 'nullable|string|max:100',
+            'meta' => 'nullable|array',
         ];
      
     }

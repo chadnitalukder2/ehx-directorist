@@ -5,7 +5,10 @@ use EhxDirectorist\Models\Listing;
 
 class ListingResource {
     public static function store($data) {
-      
+        $data['category_id'] = json_encode($data['category_id']);
+        $data['tag_id'] = json_encode($data['tag_id']);
+        $data['meta'] = json_encode($data['meta']);
+
         return Listing::create($data);
      
     }

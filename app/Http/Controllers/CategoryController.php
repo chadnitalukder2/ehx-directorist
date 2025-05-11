@@ -8,9 +8,8 @@ use EhxDirectorist\Resources\CategoryResource;
 
 class CategoryController
 {
-    public static function storeCategory(WP_REST_Request  $request)
+    public static function storeCategory(StoreCategoryRequest  $validatedRequest)
     {
-        $validatedRequest = new StoreCategoryRequest($request);
         if ($validatedRequest->fails()) {
             return rest_ensure_response([
                 'message' => 'Validation failed',
