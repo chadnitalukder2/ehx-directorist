@@ -1,13 +1,9 @@
 <template>
     <div class="file-upload-container">
-        <!-- Preview area when file is selected -->
         <div v-if="selectedFile" class="file-preview">
-            <!-- File type detection and appropriate preview -->
             <div class="preview-wrapper">
-                <!-- Image preview -->
                 <el-image v-if="isImageFile" :src="selectedFile" fit="cover" class="file-thumbnail"
                     :preview-src-list="[selectedFile]" />
-                <!-- Document/other file preview -->
                 <div v-else class="file-icon">
                     <el-icon :size="32">
                         <Document />
@@ -16,7 +12,6 @@
                 </div>
             </div>
 
-            <!-- Hover overlay with actions -->
             <div class="file-actions">
                 <el-tooltip content="Remove File" placement="top">
                     <el-button type="danger" circle @click="removeFile" class="action-button" size="small">
@@ -38,7 +33,6 @@
 
         <!-- Upload button when no file is selected -->
         <div v-else class="upload-button-container">
-
             <el-button @click="openMediaUploader" class="media-library-button" style="padding: 15px 9px;">
                 <el-icon>
                     <Plus />
@@ -57,7 +51,7 @@
 import { Delete, Upload, Document, Picture, Edit } from '@element-plus/icons-vue'
 
 export default {
-    name: 'FileUploader',
+    name: 'AppFileUploadLogo',
     components: {
         Delete,
         Upload,
@@ -69,10 +63,6 @@ export default {
         selectedFile: {
             type: String,
             default: ''
-        },
-        btnTitle: {
-            type: String,
-            default: 'Upload File'
         },
         acceptedTypes: {
             type: Array,
