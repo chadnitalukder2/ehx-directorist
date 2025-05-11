@@ -17,8 +17,8 @@ class CreateDirectoryListingsTable
         $sql = "CREATE TABLE IF NOT EXISTS $table (
              id INT PRIMARY KEY AUTO_INCREMENT,
             directory_builder_id INT NOT NULL,
-            category_id VARCHAR(255) NOT NULL,
-            tag_id VARCHAR(255) NOT NULL,
+            category_id JSON NOT NULL,
+            tag_id JSON NOT NULL,
             name VARCHAR(255) NOT NULL,
             phone VARCHAR(255) NOT NULL,
             email VARCHAR(255) NOT NULL, 
@@ -32,7 +32,7 @@ class CreateDirectoryListingsTable
             image VARCHAR(255),
             short_description TEXT ,
             description TEXT,
-            meta VARCHAR(255),
+            meta JSON,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         ) $charset_collate;";
