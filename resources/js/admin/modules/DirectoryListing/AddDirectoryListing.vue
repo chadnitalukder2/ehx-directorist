@@ -3,81 +3,93 @@
     <div class="">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{ path: '/directory-listing' }">Directory listing</el-breadcrumb-item>
-        <el-breadcrumb-item>
-          Add listings
-        </el-breadcrumb-item>
+        <el-breadcrumb-item>Add listings</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <div class="ehxd_form_wrapper">
       <el-form ref="ListForm" :model="localList" :rules="rules" label-position="top" @submit.prevent>
-        <div class="ehxd_input_warpper">
-          <div class="ehxd_input_item">
-            <el-form-item label="Name" prop="name">
-              <el-input v-model="localList.name" placeholder="Enter name" />
-            </el-form-item>
-          </div>
-          <div class="ehxd_input_item">
-            <el-form-item label="Email" prop="email">
-              <el-input v-model="localList.email" placeholder="demo@example.com" />
-            </el-form-item>
-          </div>
-
+        <div class="ehxd_input_item">
+          <el-form-item label="Title" prop="name">
+            <el-input v-model="localList.name" placeholder="Enter title" />
+          </el-form-item>
         </div>
 
-        <div class="ehxd_input_warpper">
-          <div class="ehxd_input_item">
-            <el-form-item label="Phone" prop="phone">
-              <el-input v-model="localList.phone" placeholder="Phone number" />
-            </el-form-item>
-          </div>
-          <div class="ehxd_input_item">
-            <el-form-item label="Website" prop="website_url">
-              <el-input v-model="localList.website_url" placeholder="https://example.com/" />
-            </el-form-item>
-          </div>
-
+        <div class="ehxd_input_item">
+          <el-form-item label="Email" prop="email">
+            <el-input v-model="localList.email" placeholder="demo@example.com" />
+          </el-form-item>
         </div>
 
-        <div class="ehxd_input_warpper">
-          <div class="ehxd_input_item">
-            <el-form-item label="Category Name" prop="category_id">
-              <el-select class="erm_input" v-model="localList.category_id" placeholder="Category Name" size="large"
-                style="width: 100%">
-                <el-option v-for="category in categories" :key="category.value" :label="category.name"
-                  :value="category.id" />
-              </el-select>
+        <div class="ehxd_input_item">
+          <el-form-item label="Phone" prop="phone">
+            <el-input v-model="localList.phone" placeholder="Phone number" />
+          </el-form-item>
+        </div>
 
-            </el-form-item>
-          </div>
-          <div class="ehxd_input_item">
-            <el-form-item label="Tag Name" prop="tag_id">
-              <el-select class="erm_input" multiple v-model="localList.tag_id" placeholder="Tag Name" size="large"
-                style="width: 100%">
-                <el-option v-for="tag in tags" :key="tag.value" :label="tag.name" :value="tag.id" />
-              </el-select>
-            </el-form-item>
-          </div>
+        <div class="ehxd_input_item">
+          <el-form-item label="Website" prop="website_url">
+            <el-input v-model="localList.website_url" placeholder="https://example.com/" />
+          </el-form-item>
+        </div>
 
+        <div class="ehxd_input_item">
+          <el-form-item label="Category Name" prop="category_id">
+            <el-select multiple class="erm_input" v-model="localList.category_id" placeholder="Category Name" size="large" style="width: 100%">
+              <el-option v-for="category in categories" :key="category.id" :label="category.name" :value="category.id" />
+            </el-select>
+          </el-form-item>
+        </div>
+
+        <div class="ehxd_input_item">
+          <el-form-item label="Tag Name" prop="tag_id">
+            <el-select multiple class="erm_input" v-model="localList.tag_id" placeholder="Tag Name" size="large" style="width: 100%">
+              <el-option v-for="tag in tags" :key="tag.id" :label="tag.name" :value="tag.id" />
+            </el-select>
+          </el-form-item>
         </div>
 
         <el-form-item label="Address" prop="address">
-          <GoogleMap />
+          <GoogleMap
+            @update:address="localList.address = $event"
+            @update:latitude="localList.latitude = $event"
+            @update:longitude="localList.longitude = $event"
+            @update:city="localList.city = $event"
+            @update:postalCode="localList.postal_code = $event"
+          />
         </el-form-item>
-        <el-form-item label="Image " prop="short_description">
-          <AppFileUpload v-model:selectedFile="localList.mediaUrl" btnTitle="Add Media" />
+
+        <div class="ehxd_image_wrapper">
+          <div class="ehxd_image_item">
+            <el-form-item label="Feature Image" prop="image">
+              <AppFileUpload v-model:selectedFile="localList.image" btnTitle="Add Media" />
+            </el-form-item>
+          </div>
+          <div class="ehxd_image_item">
+            <el-form-item label="Logo" prop="logo">
+              <AppFileUploadLogo v-model:selectedFile="localList.logo" btnTitle="Add Media" />
+            </el-form-item>
+          </div>
+        </div>
+
+        <el-form-item label="Brief Description" prop="short_description">
+          <el-input v-model="localList.short_description" type="textarea" placeholder="Enter brief description" />
         </el-form-item>
-        {{ localList }}
-        <el-form-item label="Short Description " prop="short_description">
-          <WpEditor @input-update="localList.short_description = $event" />
+
+        <el-form-item label="Description" prop="description">
+          <WpEditor @input-update="localList.description = $event" />
         </el-form-item>
+
         <div class="custom_field_list_wrapper">
           <div class="custom_field_list_item" v-for="(field, index) in customFields" :key="field.key">
-            <el-form-item label="Field Label" :prop="field.key">
-              <el-input :id="field.key" :name="field.key" v-model="customFields[index].label" />
+            <el-form-item label="Field Label">
+              <el-input :id="field.key + '_label'" v-model="customFields[index].label" />
             </el-form-item>
-            <el-form-item label="Field Value" :prop="field.key">
-              <el-input :type="field.type" :id="field.key" :name="field.key" v-model="customFields[index].value" />
+            <el-form-item label="Field Value">
+              <el-input :type="field.type" :id="field.key" v-model="customFields[index].value" />
             </el-form-item>
+            <div class="ehxd_delete_icon" @click="removeCustomField(index)">
+              <el-icon><Delete /></el-icon>
+            </div>
           </div>
         </div>
 
@@ -88,9 +100,9 @@
           </el-button>
         </div>
 
-        <el-form-item>
+        <el-form-item style="padding-top: 20px;">
           <el-button type="primary" size="large" @click="submitListForm">
-            Save List
+            Save Listing
           </el-button>
         </el-form-item>
       </el-form>
@@ -100,18 +112,21 @@
 
 <script>
 import axios from "axios";
-
 import Icon from "../../components/Icons/AppIcon.vue";
 import GoogleMap from "../../components/GoogleMap.vue";
 import AppFileUpload from "../../components/AppFileUpload.vue";
+import AppFileUploadLogo from "../../components/AppFileUploadLogo.vue";
 import WpEditor from "../../components/WpEditor.vue";
-import { id } from "element-plus/es/locale/index.mjs";
+import { Delete } from '@element-plus/icons-vue';
+
 export default {
   components: {
     Icon,
     GoogleMap,
     AppFileUpload,
+    AppFileUploadLogo,
     WpEditor,
+    Delete
   },
   data() {
     return {
@@ -120,109 +135,120 @@ export default {
         email: "",
         phone: "",
         address: "",
-        social_links: [],
+        website_url: "",
         short_description: "",
-        category_id: '',
-        tag_id: '',
+        description: "",
+        latitude: "",
+        longitude: "",
+        postal_code: "",
+        city: "",
+        logo: [],
+        image: [],
+        category_id: [],
+        tag_id: [],
       },
       tags: [],
       categories: [],
+      customFields: [],
       nonce: window.EhxDirectoristData.nonce,
       rest_api: window.EhxDirectoristData.rest_api,
-      customFields: [],
       form_fields: [
-        {
-          label: "Text Field",
-          key: "text_field",
-          type: "input",
-          value: "",
-          field: 'Text'
-        },
-        {
-          label: "Number Field",
-          key: "number_field",
-          type: "number",
-          value: "",
-          field: 'Number'
-        },
-        {
-          label: "Email Field",
-          key: "email_field",
-          type: "input",
-          value: "",
-          field: 'Email'
-        }
-      ],
+        { label: "Text Field", key: "text_field", type: "input", value: "", field: 'Text' },
+        { label: "Number Field", key: "number_field", type: "number", value: "", field: 'Number' },
+        { label: "Email Field", key: "email_field", type: "input", value: "", field: 'Email' },
+        { label: "Textarea Field", key: "textarea_field", type: "textarea", value: "", field: 'Textarea' },
+      ]
+    };
+  },
+  computed: {
+    rules() {
+      return {
+        name: [{ required: true, message: "Please input the title", trigger: "blur" }],
+        email: [
+          { required: true, message: "Please input the email", trigger: "blur" },
+          { type: "email", message: "Please input a valid email address", trigger: ["blur", "change"] },
+        ],
+        phone: [{ required: true, message: "Please input the phone number", trigger: "blur" }],
+        website_url: [{ required: true, message: "Please input the website URL", trigger: "blur" }],
+        category_id: [{ required: true, message: "Please select a category", trigger: "change" }],
+        tag_id: [{ required: true, message: "Please select a tag", trigger: "change" }],
+        address: [{ required: true, message: "Please input the address", trigger: "blur" }],
+        short_description: [{ required: true, message: "Please input the brief description", trigger: "blur" }],
+        image: [{ required: true, message: "Please upload an image", trigger: "change" }],
+        logo: [{ required: true, message: "Please upload a logo", trigger: "change" }],
+      };
     }
   },
-
-
   methods: {
     async getAllCategories() {
-      this.loading = true;
       try {
-        const response = await axios.get(`${this.rest_api}/getAllCategories`, {
-          headers: {
-            'X-WP-Nonce': this.nonce
-          }
+        const res = await axios.get(`${this.rest_api}/getAllCategories`, {
+          headers: { 'X-WP-Nonce': this.nonce }
         });
-        this.categories = response?.data?.categories_data;
-        this.total_category = response?.data?.total || 0;
-        this.last_page = response?.data?.last_page || 1;
-        this.loading = false;
-      } catch (error) {
-        this.loading = false;
-        console.error('Error fetching couriers:',);
+        this.categories = res?.data?.categories_data || [];
+      } catch (err) {
+        console.error('Failed to load categories:', err);
       }
     },
-
     async getAllTag() {
-      this.loading = true;
       try {
-        const response = await axios.get(`${this.rest_api}/getAllTag`, {
-          params: {
-            page: this.currentPage,
-            limit: this.pageSize,
-            search: this.search || '',
-          },
-          headers: {
-            'X-WP-Nonce': this.nonce
-          }
+        const res = await axios.get(`${this.rest_api}/getAllTag`, {
+          headers: { 'X-WP-Nonce': this.nonce }
         });
-        this.tags = response?.data?.tags_data;
-        this.loading = false;
-      } catch (error) {
-        this.loading = false;
-        console.error('Error fetching couriers:',);
+        this.tags = res?.data?.tags_data || [];
+      } catch (err) {
+        console.error('Failed to load tags:', err);
       }
     },
-
     addCustomField(field) {
       const baseKey = field.key;
       let index = 0;
       let uniqueKey = baseKey;
-
-      // Keep incrementing index until a unique key is found
-      while (this.customFields.find(item => item.key === uniqueKey)) {
-        index++;
-        uniqueKey = `${baseKey}_${index}`;
+      while (this.customFields.find(f => f.key === uniqueKey)) {
+        uniqueKey = `${baseKey}_${++index}`;
       }
+      this.customFields.push({ ...field, key: uniqueKey });
+    },
+    removeCustomField(index) {
+      this.customFields.splice(index, 1);
+    },
+    submitListForm() {
+      this.$refs.ListForm.validate(async (valid) => {
+        if (!valid) return;
 
-      // Clone the field and assign the unique key
-      const newField = { ...field, key: uniqueKey };
+        const formData = new FormData();
+        for (const key in this.localList) {
+          if (Array.isArray(this.localList[key])) {
+            this.localList[key].forEach(val => formData.append(`${key}[]`, val));
+          } else {
+            formData.append(key, this.localList[key]);
+          }
+        }
 
-      this.customFields.push(newField);
+        this.customFields.forEach(field => {
+          formData.append(`custom_fields[${field.key}]`, field.value);
+          formData.append(`custom_fields[${field.key}_label]`, field.label);
+        });
+
+        try {
+          const res = await axios.post(`${this.rest_api}/addDirectoryListing`, formData, {
+            headers: {
+              'X-WP-Nonce': this.nonce,
+              'Content-Type': 'multipart/form-data'
+            }
+          });
+          console.log('Success:', res.data);
+        } catch (err) {
+          console.error('Submission error:', err);
+        }
+      });
     }
-
   },
-
   mounted() {
-    // console.log('window', window);
     this.getAllCategories();
     this.getAllTag();
-  },
-
-}
+  }
+};
 </script>
 
 <style lang="scss" scoped>
@@ -235,6 +261,7 @@ export default {
     display: flex;
     align-items: center;
     gap: 20px;
+
     .el-form-item {
       flex: 1;
     }
@@ -282,20 +309,49 @@ export default {
   }
 
   .ehxd_form_wrapper {
-    margin: 20px 0px;
+    margin: 24px 105px;
     border-radius: 8px;
-    padding: 30px;
+    padding: 30px 60px;
     background: #fff;
 
-    .ehxd_input_warpper {
-      display: flex;
-      justify-content: space-between;
-      gap: 30px;
 
-      .ehxd_input_item {
-        width: 100%;
-        max-width: 50%;
-      }
+
+
+  }
+
+  .el-icon {
+    font-size: 16px;
+    color: #3c434a;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      color: #ff4d4f;
+    }
+  }
+
+  .custom_fields_button {
+    p {
+      font-size: 14px;
+    }
+  }
+
+  .el-button {
+    &:hover {
+      background-color: #1A1B1C;
+      color: #fff;
+    }
+  }
+}
+.ehxd_image_wrapper{
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  margin-bottom: 20px;
+  .ehxd_image_item {
+    flex: 1;
+    .ehxd_image_item {
+      margin-bottom: 0px;
     }
   }
 }

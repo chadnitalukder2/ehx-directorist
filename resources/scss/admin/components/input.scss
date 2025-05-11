@@ -57,7 +57,7 @@
 
 .el-input__wrapper, .el-textarea__inner , .el-select__wrapper , .el-select-dropdown__item,
     .is-focus:focus {
-        border: 0.5px solid  $ehxd_input_border !important;
+        border: 1px solid  $ehxd_input_border !important;
         box-shadow: 0 0 0 0px $ehxd_input_border !important;
       }
 

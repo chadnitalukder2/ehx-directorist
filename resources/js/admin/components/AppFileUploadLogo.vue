@@ -156,13 +156,13 @@ export default {
 <style scoped lang="scss">
 .file-upload-container {
     width: 100%;
-    max-width: 300px;
+    max-width: 120px;
 }
 
 .file-preview {
     position: relative;
-    width: 300px;
-    height: 200px;
+    width: 120px;
+    height: 120px;
     border-radius: 8px;
     border: 2px dashed #E8EAF1;
     overflow: hidden;
@@ -226,7 +226,7 @@ export default {
 }
 
 .upload-button-container {
-    height: 200px;
+    height: 120px;
     width: 100%;
     display: flex;
     align-items: center;
