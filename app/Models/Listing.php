@@ -23,9 +23,23 @@ class Listing extends Model {
      * @var array
      */
     protected $fillable = [
-        'id','directory_builder_id','category_id','tag_id', 'name', 'slug',
-        'phone', 'email', 'social_links','address', 'latitude',
-        'longitude', 'postal_code','logo','short_description', 'description', 'meta',
+        'id',
+        'directory_builder_id',
+        'category_id',
+        'tag_id',
+        'name',
+        'slug',
+        'phone',
+        'email',
+        'social_links',
+        'address',
+        'latitude',
+        'longitude',
+        'postal_code',
+        'logo',
+        'short_description',
+        'description',
+        'meta',
         'created_at',
         'updated_at'
     ];

@@ -38,18 +38,21 @@ abstract class RequestGuard {
      */
     protected function validate() {
         $params = $this->request->get_json_params();
+        // var_dump('pp',$params);
+        // die();
         $rules = $this->rules();
         $messages = $this->messages();
 
         foreach ($rules as $field => $rule) {
             $ruleList = explode('|', $rule);
-
+  
             foreach ($ruleList as $validation) {
                 if ($validation === 'required' && empty($params[$field])) {
                     $this->addError($field, $messages["$field.required"] ?? "$field is required.");
                 } elseif ($validation === 'string' && !is_string($params[$field])) {
                     $this->addError($field, $messages["$field.string"] ?? "$field must be a string.");
-                } elseif ($validation === 'integer' && !filter_var($params[$field], FILTER_VALIDATE_INT)) {
+                }
+                elseif ($validation === 'integer' && !filter_var($params[$field], FILTER_VALIDATE_INT)) {
                     $this->addError($field, $messages["$field.integer"] ?? "$field must be an integer.");
                 } elseif (str_starts_with($validation, 'max:')) {
                     $max = (int) str_replace('max:', '', $validation);
@@ -88,7 +91,7 @@ abstract class RequestGuard {
             return call_user_func($sanitizeMethods[$field], $value);
         }
 
-        return sanitize_text_field($value); // Default sanitization
+        return $value; // Default sanitization
     }
 
     /**

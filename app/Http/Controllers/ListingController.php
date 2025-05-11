@@ -10,10 +10,8 @@ use EhxDirectorist\Resources\ListingResource;
 
 class ListingController
 {
-    public static function storeListing(WP_REST_Request  $request)
+    public static function storeListing(StoreListingRequest  $validatedRequest)
     {
-        dd($request, 'hello');
-       $validatedRequest = new StoreListingRequest($request);
 
         if ($validatedRequest->fails()) {
             return rest_ensure_response([
@@ -22,8 +20,7 @@ class ListingController
             ], 400);
         }
 
-        $res = ListingResource::store($request);
-        dd($res);
+        $res = ListingResource::store($validatedRequest->validated());
         if (!$res) {
             return rest_ensure_response([
                 'message' => 'Failed to create category'

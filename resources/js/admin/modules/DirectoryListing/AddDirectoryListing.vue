@@ -7,7 +7,7 @@
       </el-breadcrumb>
     </div>
     <div class="ehxd_form_wrapper">
-      <el-form ref="ListForm" :model="localList" :rules="rules" label-position="top" @submit.prevent>
+      <el-form ref="ListForm" :model="localList" :rules="rules" label-position="top">
         <div class="ehxd_input_item">
           <el-form-item label="Title" prop="name">
             <el-input v-model="localList.name" placeholder="Enter title" />
@@ -218,27 +218,29 @@ export default {
 
        
 
-        const formData = new FormData();
-        for (const key in this.localList) {
-          if (['category_id', 'tag_id'].includes(key)) {
-            formData.append(key, JSON.stringify(this.localList[key]));
-          } else if (Array.isArray(this.localList[key])) {
-            this.localList[key].forEach(val => formData.append(`${key}[]`, val));
-          } else {
-            formData.append(key, this.localList[key]);
-          }
-        }
+        // const formData = new FormData();
+        // for (const key in this.localList) {
+        //   if (['category_id', 'tag_id'].includes(key)) {
+        //     formData.append(key, JSON.stringify(this.localList[key]));
+        //   } else if (Array.isArray(this.localList[key])) {
+        //     this.localList[key].forEach(val => formData.append(`${key}[]`, val));
+        //   } else {
+        //     formData.append(key, this.localList[key]);
+        //   }
+        // }
 
-        this.customFields.forEach(field => {
-          formData.append(`meta[${field.key}]`, field.value);
-          formData.append(`meta[${field.key}_label]`, field.label);
-        });
+        // this.customFields.forEach(field => {
+        //   formData.append(`meta[${field.key}]`, field.value);
+        //   formData.append(`meta[${field.key}_label]`, field.label);
+        // });
+
+        this.localList.meta = this.customFields;
 
         try {
-          const res = await axios.post(`${this.rest_api}/postDirectoryListing`, formData, {
+          const res = await axios.post(`${this.rest_api}/postDirectoryListing`, this.localList, {
             headers: {
-              'X-WP-Nonce': this.nonce,
-              'Content-Type': 'multipart/form-data'
+              "Content-Type": "application/json",
+              "X-WP-Nonce": this.nonce,
             }
           });
           console.log('Success:', res.data);
