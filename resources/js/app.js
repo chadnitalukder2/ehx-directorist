@@ -25,7 +25,7 @@ const router = createRouter({
         { path: '/tags', component: Tags },
         { path: '/directory-listing', component: AllDirectoryListing },
         { path: '/add-directory-listing', component: AddDirectoryListing },
-        { path: '/edit-directory-listing/:id', name:'edit-directory-listing', component: EditDirectoryListing },
+        { path: '/edit-directory-listing/:id', name:'edit-directory-listing', component: AddDirectoryListing },
         { path: '/view-directory-listing/:id', name: 'view-directory-listing', component: ViewDirectoryListing },
         { path: '/settings', component: Settings }
     ]

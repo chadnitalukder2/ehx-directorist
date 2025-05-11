@@ -2,6 +2,7 @@
 namespace EhxDirectorist\Resources;
 use EhxDirectorist\Models\Category;
 use EhxDirectorist\Models\Listing;
+use EhxDirectorist\Services\Arr;
 
 class ListingResource {
     public static function store($data) {
@@ -9,13 +10,19 @@ class ListingResource {
         $data['tag_id'] = json_encode($data['tag_id']);
         $data['meta'] = json_encode($data['meta']);
 
+        $id = Arr::get($data, 'id', null);
+
+        if($id) {
+            return self::update($id, $data);
+        }
+
         return Listing::create($data);
      
     }
 
-    public static function update($data, $id) {
+    public static function update($id, $data) {
         //return Category::where('id', $id)->update($category);
-        $categoryModel = new Category();
+        $categoryModel = new Listing();
         $category = $categoryModel->find($id);
       
         if ($category) {
@@ -41,7 +48,14 @@ class ListingResource {
     }
 
     public static function get($id) {
-     //   return Category::find($id);
+        $listing = (new Listing())->find($id);
+        if (!$listing) {
+            return null;
+        }
+        $listing->meta = json_decode($listing->meta);
+        $listing->category_id = json_decode($listing->category_id);
+        $listing->tag_id = json_decode($listing->tag_id);
+        return $listing->toArray();
     }
 
     public static function getAll($perPage, $page, $search) {

@@ -12,6 +12,7 @@ class ListingController
 {
     public static function storeListing(StoreListingRequest  $validatedRequest)
     {
+        var_dump($validatedRequest->validated());
 
         if ($validatedRequest->fails()) {
             return rest_ensure_response([
@@ -82,19 +83,26 @@ class ListingController
         ]);
     }
 
-    public static function getCategory($id)
+    public static function getListing(WP_REST_Request $request)
     {
-        $res = CategoryResource::get($id);
+        $id = $request->get_param('id');
+        if (!$id) {
+            return rest_ensure_response([
+                'message' => 'Listing ID is required'
+            ], 400);
+        }
+ 
+        $res = ListingResource::get($id);
 
         if (!$res) {
             return rest_ensure_response([
-                'message' => 'Failed to get category'
+                'message' => 'Failed to get listing'
             ], 500);
         }
-        return rest_ensure_response([
-            'message' => 'Category retrieved successfully',
-            'category_data' => $res
-        ]);
+        return wp_send_json_success( array(
+            'message' => 'Listing retrieved successfully',
+            'listing_data' => $res
+        ));
     }
 
     public static function getAllListings()

@@ -27,8 +27,9 @@
         </div>
 
         <div class="ehxd_input_item">
-          <el-form-item label="Website" prop="website_url">
-            <el-input v-model="localList.website_url" placeholder="https://example.com/" />
+          {{ localList }}
+          <el-form-item label="Website" prop="social_links">
+            <el-input v-model="localList.social_links" placeholder="https://example.com/" />
           </el-form-item>
         </div>
 
@@ -136,7 +137,7 @@ export default {
         email: "",
         phone: "",
         address: "",
-        website_url: "",
+        social_links: "",
         short_description: "",
         description: "",
         latitude: "",
@@ -170,7 +171,7 @@ export default {
           { type: "email", message: "Please input a valid email address", trigger: ["blur", "change"] },
         ],
         phone: [{ required: true, message: "Please input the phone number", trigger: "blur" }],
-        website_url: [{ required: true, message: "Please input the website URL", trigger: "blur" }],
+        social_links: [{ required: true, message: "Please input the website URL", trigger: "blur" }],
         category_id: [{ required: true, message: "Please select a category", trigger: "change" }],
         tag_id: [{ required: true, message: "Please select a tag", trigger: "change" }],
         address: [{ required: true, message: "Please input the address", trigger: "blur" }],
@@ -200,6 +201,19 @@ export default {
         console.error('Failed to load tags:', err);
       }
     },
+
+    async getListing() {
+      try {
+        const res = await axios.get(`${this.rest_api}/listing/${this.$route.params.id}`, {
+          headers: { 'X-WP-Nonce': this.nonce }
+        });
+        console.log(res?.data)
+        this.customFields = res?.data?.data?.listing_data?.meta || [];
+        this.localList = res?.data?.data?.listing_data || {};
+      } catch (err) {
+        console.error('Failed to load tags:', err);
+      }
+    },
     addCustomField(field) {
       const baseKey = field.key;
       let index = 0;
@@ -215,24 +229,6 @@ export default {
     submitListForm() {
       this.$refs.ListForm.validate(async (valid) => {
         if (!valid) return;
-
-       
-
-        // const formData = new FormData();
-        // for (const key in this.localList) {
-        //   if (['category_id', 'tag_id'].includes(key)) {
-        //     formData.append(key, JSON.stringify(this.localList[key]));
-        //   } else if (Array.isArray(this.localList[key])) {
-        //     this.localList[key].forEach(val => formData.append(`${key}[]`, val));
-        //   } else {
-        //     formData.append(key, this.localList[key]);
-        //   }
-        // }
-
-        // this.customFields.forEach(field => {
-        //   formData.append(`meta[${field.key}]`, field.value);
-        //   formData.append(`meta[${field.key}_label]`, field.label);
-        // });
 
         this.localList.meta = this.customFields;
 
@@ -253,6 +249,7 @@ export default {
   mounted() {
     this.getAllCategories();
     this.getAllTag();
+    this.getListing();
   }
 };
 </script>
