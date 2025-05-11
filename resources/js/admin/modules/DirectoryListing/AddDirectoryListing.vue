@@ -76,7 +76,7 @@
         </el-form-item>
 
         <el-form-item label="Description" prop="description">
-          <WpEditor @input-update="localList.description = $event" />
+          <WpEditor  ref="descriptionEditor" @input-update="localList.description = $event" />
         </el-form-item>
 
         <div class="custom_field_list_wrapper">
@@ -146,8 +146,9 @@ export default {
         city: "",
         logo: "",
         image: "",
-        category_id: {},
-        tag_id: {},
+        category_id: [],
+        tag_id: [],
+        directory_builder_id: 1,
       },
       tags: [],
       categories: [],
@@ -239,7 +240,31 @@ export default {
               "X-WP-Nonce": this.nonce,
             }
           });
-          console.log('Success:', res.data);
+          this.$notify({
+            title: "Success",
+            message: `Directory Listing data created successfully`,
+            type: "success",
+          });
+          this.localList = {
+            name: "",
+            email: "",
+            phone: "",
+            address: "",
+            website_url: "",
+            short_description: "",
+            description: "",
+            latitude: "",
+            longitude: "",
+            postal_code: "",
+            city: "",
+            logo: "",
+            image: "",
+            category_id: [],
+            tag_id: [],
+            directory_builder_id: 1,
+          };
+          this.$refs.descriptionEditor.clearEditor();
+          this.customFields = [];
         } catch (err) {
           console.error('Submission error:', err);
         }
