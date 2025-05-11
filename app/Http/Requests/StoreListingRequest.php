@@ -18,6 +18,7 @@ class StoreListingRequest extends RequestGuard {
             'tag_id' => 'nullable|array',
             'logo' => 'required',
             'image' => 'nullable',
+            'directory_builder_id' => 'nullable|integer',
             'short_description' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
             'latitude' => 'nullable|numeric',

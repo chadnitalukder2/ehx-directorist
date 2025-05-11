@@ -1,57 +1,66 @@
 <template>
-    <div>
-      <textarea :id="editorId"></textarea>
-    </div>
-  </template>
-  
-  <script>
-  export default {
-    props: {
-      value: {
-        type: String,
-        default: ''
+  <div>
+    <textarea :id="editorId"></textarea>
+  </div>
+</template>
+
+<script>
+export default {
+  props: {
+    modelValue: {
+      type: String,
+      default: ''
+    }
+  },
+  emits: ['update:modelValue', 'change'],
+  data() {
+    return {
+      editorId: 'vue-editor-' + this._uid,
+      editorInstance: null
+    };
+  },
+  mounted() {
+
+    tinymce.init({
+      selector: `#${this.editorId}`,
+      setup: (editor) => {
+        this.editorInstance = editor;
+
+        editor.on('init', () => {
+          editor.setContent(this.modelValue || '');
+        });
+
+        editor.on('Change KeyUp', () => {
+          const content = editor.getContent();
+          if (content !== this.modelValue) {
+            this.$emit('update:modelValue', content);
+            this.$emit('change');
+          }
+        });
       }
-    },
-    data() {
-      return {
-        editorId: 'vue-editor-' + this._uid,
-        editorInstance: null
-      };
-    },
-    mounted() {
-      tinymce.init({
-        selector: `#${this.editorId}`,
-        setup: (editor) => {
-          this.editorInstance = editor;
-  
-          // Set initial content
-          editor.on('init', () => {
-            editor.setContent(this.value || '');
-          });
-  
-          // Emit on change
-          editor.on('Change KeyUp', () => {
-            const content = editor.getContent();
-            if (content !== this.value) {
-              this.$emit('input-update', content);
-            }
-          });
-        }
-      });
-    },
-    watch: {
-      value(newVal) {
-        // External change — update editor
-        if (this.editorInstance && this.editorInstance.getContent() !== newVal) {
-          this.editorInstance.setContent(newVal || '');
-        }
-      }
-    },
-    beforeDestroy() {
+    });
+
+  },
+  methods: {
+    clearEditor() {
       if (this.editorInstance) {
-        this.editorInstance.remove();
+        this.editorInstance.setContent('');
+        this.$emit('update:modelValue', '');
+        this.$emit('change');
       }
     }
-  };
-  </script>
-  
+  },
+  watch: {
+    modelValue(newVal) {
+      if (this.editorInstance && this.editorInstance.getContent() !== newVal) {
+        this.editorInstance.setContent(newVal || '');
+      }
+    }
+  },
+  beforeDestroy() {
+    if (this.editorInstance) {
+      this.editorInstance.remove();
+    }
+  }
+};
+</script>

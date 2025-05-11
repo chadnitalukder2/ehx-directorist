@@ -22,7 +22,13 @@
 
             <template #columns>
                 <el-table-column prop="id" label="ID" width="60" />
-                <el-table-column prop="name" label="Logo" width="auto" />
+                <el-table-column label="Logo" width="auto">
+                    <template #default="{ row }">
+                        <img v-if="row?.logo" :src="row?.logo" alt="logo"
+                            style="width: 50px; height: 50px; object-fit: cover;">
+                        <span v-else>No Image</span>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="name" label="Name" width="auto" />
                 <el-table-column prop="phone" label="Phone" width="auto" />
                 <el-table-column prop="email" label="Email" width="auto" />

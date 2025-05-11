@@ -19,8 +19,9 @@ class ListingController
                 'errors'  => $validatedRequest->errors()
             ], 400);
         }
-
+    
         $res = ListingResource::store($validatedRequest->validated());
+
         if (!$res) {
             return rest_ensure_response([
                 'message' => 'Failed to create category'
