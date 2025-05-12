@@ -40,19 +40,20 @@
                 </el-table-column>
                 <el-table-column label="Operations" width="120">
                     <template #default="{ row }">
-                        <el-tooltip class="box-item" effect="dark" content="View"
+                        <!-- <el-tooltip class="box-item" effect="dark" content="View"
                             placement="top-start">
                             <el-button @click="$router.push({ name: 'view-directory-listing', params: { id: row.id } })"
                                 class="ehxd_box_icon" link size="small">
                                 <Icon icon="ehxd-eye" />
                             </el-button>
-                        </el-tooltip>
+                        </el-tooltip> -->
 
                         <el-tooltip class="box-item" effect="dark" content="Edit" placement="top-start">
-                            <el-button @click="$router.push({ name: 'edit-directory-listing', params: { id: row.id } })"
-                                class="ehxd_box_icon" link size="small">
+                            <router-link :to="`/edit-directory-listing/${row.id}`">
+                            <el-button class="ehxd_box_icon" link size="small">
                                 <Icon icon="ehxd-edit" />
                             </el-button>
+                        </router-link>
                         </el-tooltip>
 
                         <el-tooltip class="box-item" effect="dark" content="Delete" placement="top-start">
