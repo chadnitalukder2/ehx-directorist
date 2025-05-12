@@ -26,6 +26,8 @@ class Listing extends Model {
         'id',
         'directory_builder_id',
         'category_id',
+        'post_id',
+        'post_url',
         'tag_id',
         'name',
         'phone',
@@ -63,8 +65,8 @@ class Listing extends Model {
      *
      * @return array
      */
-    public function products() {
-        //return Product::where(['category_id' => $this->id]);
+    public function post() {
+        return $this->hasOne(Post::class, 'ID', 'post_id');
     }
 
     /**

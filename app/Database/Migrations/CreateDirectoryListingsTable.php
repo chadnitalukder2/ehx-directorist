@@ -15,10 +15,12 @@ class CreateDirectoryListingsTable
         $table = "{$wpdb->prefix}ehxd_directory_listing";
 
         $sql = "CREATE TABLE IF NOT EXISTS $table (
-             id INT PRIMARY KEY AUTO_INCREMENT,
+            id INT PRIMARY KEY AUTO_INCREMENT,
             directory_builder_id INT NOT NULL,
             category_id JSON NOT NULL,
             tag_id JSON NOT NULL,
+            post_id INT NOT NULL,
+            post_url VARCHAR(255) NOT NULL,
             name VARCHAR(255) NOT NULL,
             phone VARCHAR(255) NOT NULL,
             email VARCHAR(255) NOT NULL, 

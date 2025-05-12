@@ -19,20 +19,28 @@ class ListingController
             ], 400);
         }
         $post_id = wp_insert_post([
-            'post_title'    => $data['title'] ?? 'Untitled',
+            'post_title'    => $data['name'] ?? 'Untitled',
             'post_content'  => $data['description'] ?? '',
             'post_status'   => 'publish',
-            'post_type'     => 'directory_listing',
+            'post_type'     => 'post',
         ]);
       
         if (is_wp_error($post_id)) {
-            wp_update_post([
-                'ID'           => $post_id,
-                'post_content' => '[ehx_directorist_listings id="' . $post_id . '"]',
-            ]);
+            return rest_ensure_response([
+                'message' => 'Failed to create listing'
+            ], 500);
         };
 
-        $res = ListingResource::store($validatedRequest->validated());
+        wp_update_post([
+            'ID'           => $post_id,
+            'post_content' => '[ehx_directorist_listings id="' . $post_id . '"]',
+        ]);
+
+        $listingData = $validatedRequest->validated();
+        $listingData['post_id'] = $post_id;
+        $listingData['post_url'] = get_permalink($post_id);
+
+        $res = ListingResource::store($listingData);
 
         if (!$res) {
             return rest_ensure_response([

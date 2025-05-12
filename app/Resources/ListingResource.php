@@ -2,6 +2,7 @@
 namespace EhxDirectorist\Resources;
 use EhxDirectorist\Models\Category;
 use EhxDirectorist\Models\Listing;
+use EhxDirectorist\Models\Post;
 use EhxDirectorist\Services\Arr;
 
 class ListingResource {
