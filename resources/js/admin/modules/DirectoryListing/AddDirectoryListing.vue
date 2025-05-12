@@ -27,9 +27,8 @@
         </div>
 
         <div class="ehxd_input_item">
-          {{ localList }}
-          <el-form-item label="Website" prop="social_links">
-            <el-input v-model="localList.social_links" placeholder="https://example.com/" />
+          <el-form-item label="Website" prop="website_url">
+            <el-input v-model="localList.website_url" placeholder="https://example.com/" />
           </el-form-item>
         </div>
 
@@ -137,7 +136,7 @@ export default {
         email: "",
         phone: "",
         address: "",
-        social_links: "",
+        website_url: "",
         short_description: "",
         description: "",
         latitude: "",
@@ -172,7 +171,7 @@ export default {
           { type: "email", message: "Please input a valid email address", trigger: ["blur", "change"] },
         ],
         phone: [{ required: true, message: "Please input the phone number", trigger: "blur" }],
-        social_links: [{ required: true, message: "Please input the website URL", trigger: "blur" }],
+        website_url: [{ required: true, message: "Please input the website URL", trigger: "blur" }],
         category_id: [{ required: true, message: "Please select a category", trigger: "change" }],
         tag_id: [{ required: true, message: "Please select a tag", trigger: "change" }],
         address: [{ required: true, message: "Please input the address", trigger: "blur" }],
@@ -198,19 +197,6 @@ export default {
           headers: { 'X-WP-Nonce': this.nonce }
         });
         this.tags = res?.data?.tags_data || [];
-      } catch (err) {
-        console.error('Failed to load tags:', err);
-      }
-    },
-
-    async getListing() {
-      try {
-        const res = await axios.get(`${this.rest_api}/listing/${this.$route.params.id}`, {
-          headers: { 'X-WP-Nonce': this.nonce }
-        });
-        console.log(res?.data)
-        this.customFields = res?.data?.data?.listing_data?.meta || [];
-        this.localList = res?.data?.data?.listing_data || {};
       } catch (err) {
         console.error('Failed to load tags:', err);
       }
@@ -274,7 +260,6 @@ export default {
   mounted() {
     this.getAllCategories();
     this.getAllTag();
-    this.getListing();
   }
 };
 </script>

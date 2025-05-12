@@ -84,7 +84,7 @@ class ListingController
         ]);
     }
 
-    public static function getListing(WP_REST_Request $request)
+    public static function getAllCategoriesById(WP_REST_Request $request)
     {
         $id = $request->get_param('id');
         if (!$id) {
