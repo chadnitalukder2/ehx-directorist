@@ -44,11 +44,6 @@ class AdminMenuHandler {
             'manage_options',
             'admin.php?page=ehx-directorist.php#/categories',
         ];
-        $submenu['ehx-directorist.php']['reviews'] = [
-            'Reviews',
-            'manage_options',
-            'admin.php?page=ehx-directorist.php#/reviews',
-        ];
         $submenu['ehx-directorist.php']['settings'] = [
             'Settings',
             'manage_options',
