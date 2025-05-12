@@ -4,6 +4,7 @@ namespace EhxDirectorist\Http\Router;
 
 use EhxDirectorist\Http\Controllers\CategoryController;
 use EhxDirectorist\Http\Controllers\ListingController;
+use EhxDirectorist\Http\Controllers\ReviewController;
 use EhxDirectorist\Http\Controllers\TagController;
 use WP_REST_Request;
 
@@ -24,5 +25,8 @@ class Route {
         API_Router::get('/getAllListingByIdById/{id}', [ListingController::class, 'getAllListingByIdById']);
         API_Router::post('/updateDirectoryListing/{id}', [ListingController::class, 'updateDirectoryListing']);
         API_Router::post('/deleteList/{id}', [ListingController::class, 'deleteList']);
+
+        API_Router::get('/getAllReviews', [ReviewController::class, 'getAllReviews']);
+        API_Router::post('/deleteReview/{id}', [ReviewController::class, 'deleteReview']);
     } 
 }

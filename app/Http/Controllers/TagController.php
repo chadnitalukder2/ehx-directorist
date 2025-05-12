@@ -75,7 +75,7 @@ class TagController
         }
 
         return rest_ensure_response([
-            'message' => 'Categories retrieved successfully',
+            'message' => 'Tag retrieved successfully',
             'tags_data' => $data,
             'total' => $res['total'],
             'per_page' => $res['per_page'],

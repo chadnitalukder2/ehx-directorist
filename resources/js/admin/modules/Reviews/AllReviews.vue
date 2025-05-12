@@ -52,6 +52,18 @@
 
         </AppTable>
 
+        <AppModal :title="'Update Review'" :width="700" :showFooter="false" ref="update_review_modal">
+            <template #body>
+                <div>
+                    <UpdateReview ref="addReview" :reviews_data="Review"
+                        @updateDataAfterNewAdd="handleUpdatedreview" />
+                </div>
+            </template>
+            <template #footer>
+
+            </template>
+        </AppModal>
+
         <AppModal :title="'Delete Review'" :width="500" :showFooter="false" ref="delete_Review_modal">
             <template #body>
 
@@ -72,21 +84,20 @@
     </div>
 </template>
 
-
-
-
 <script>
 import axios from "axios";
 
 import AppTable from "../../components/AppTable.vue";
 import Icon from "../../components/Icons/AppIcon.vue";
 import AppModal from "../../components/AppModal.vue";
+import UpdateReview from "./UpdateReview.vue";
 import { id } from "element-plus/es/locale/index.mjs";
 export default {
     components: {
         AppTable,
         Icon,
         AppModal,
+        UpdateReview
     },
     data() {
         return {
@@ -106,40 +117,33 @@ export default {
     },
     watch: {
         currentPage() {
-            this.getAllreviews();
+            this.getAllReviews();
         },
         pageSize() {
             this.currentPage = 1;
-            this.getAllreviews();
+            this.getAllReviews();
         },
         search: {
             handler() {
                 this.currentPage = 1; 
-                this.getAllreviews();
+                this.getAllReviews();
             },
             immediate: false
         },
     },
 
     methods: {
-        openReviewAddModal() {
-            if (this.$refs.add_Review_modal) {
-                this.$refs.add_Review_modal.openModel();
-            } else {
-                console.log("Modal ref not found! Ensure AppModal is rendered.");
-            }
-        },
-
+       
         formatAddedDate(date) {
             if (!date) return '';
             const options = { day: 'numeric', month: 'long', year: 'numeric' };
             return new Date(date).toLocaleDateString('en-GB', options);
         },
 
-        async getAllreviews() {
+        async getAllReviews() {
             this.loading = true;
             try {
-                const response = await axios.get(`${this.rest_api}/getAllreviews`, {
+                const response = await axios.get(`${this.rest_api}/getAllReviews`, {
                     params: {
                         page: this.currentPage,
                         limit: this.pageSize,
@@ -176,7 +180,7 @@ export default {
                 });
                 this.loading = false;
                 this.$refs.delete_Review_modal.handleClose();
-                this.getAllreviews();
+                this.getAllReviews();
                 this.$notify({
                     title: 'Success',
                     message: 'Review data deleted successfully',
@@ -189,25 +193,21 @@ export default {
         },
 
         openUpdateReviewModal(row) {
-            this.Review = row;
-            this.$refs.update_Review_modal.openModel();
+            this.review = row;
+            this.$refs.update_review_modal.openModel();
         },
-
         handleUpdatedReview(updated) {
-            this.getAllreviews(); // or update the array locally
-            this.$refs.update_Review_modal.handleClose();
+            this.getAllReviews(); // or update the array locally
+            this.$refs.update_review_modal.handleClose();
         },
 
-        handleAddedReview(newReview) {
-            this.getAllreviews();
-            // this.$refs.add_Review_modal.handleClose();
-        }
+
 
     },
 
     mounted() {
         // console.log('window', window);
-        this.getAllreviews();
+        this.getAllReviews();
     },
 
 }

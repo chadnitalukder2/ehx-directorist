@@ -2,15 +2,14 @@
 namespace EhxDirectorist\Resources;
 
 use EhxDirectorist\Models\Review;
-use EhxDirectorist\Models\Tag;
 
-class TagResource {
+class ReviewResource {
     public static function store($data) {
-        return Tag::create($data);
+        return Review::create($data);
     }
 
     public static function update($data, $id) {
-        $tagModel = new Tag();
+        $tagModel = new Review();
         $tag = $tagModel->find($id);
       
         if ($tag) {
@@ -21,12 +20,12 @@ class TagResource {
     }
 
     public static function getAll($perPage, $page, $search) {
-        $data = (new Review())->paginate($perPage, $page, $search);
+        $data = (new Review)->paginate($perPage, $page, $search);
         return $data;
     }
 
     public static function delete($id) {
-        $tagModel = new Tag();
+        $tagModel = new Review();
         $tag = $tagModel->find($id);
     
         if ($tag) {
