@@ -21,7 +21,7 @@ class TagResource {
     }
 
     public static function getAll($perPage, $page, $search) {
-        $data = (new Review())->paginate($perPage, $page, $search);
+        $data = (new Tag())->paginate($perPage, $page, $search);
         return $data;
     }
 

@@ -70,7 +70,7 @@ class TagController
 
         if (!$res) {
             return rest_ensure_response([
-                'message' => 'Failed to get categories'
+                'message' => 'Failed to get tag'
             ], 500);
         }
 
