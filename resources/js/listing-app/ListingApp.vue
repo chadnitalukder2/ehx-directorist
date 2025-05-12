@@ -1,3 +1,3 @@
 <template>
-    <h1>Listing app</h1>
+    <h1>Listing app hello world</h1>
 </template>

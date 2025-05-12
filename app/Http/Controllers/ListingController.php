@@ -12,26 +12,37 @@ class ListingController
 {
     public static function storeListing(StoreListingRequest  $validatedRequest)
     {
-        var_dump($validatedRequest->validated());
-
         if ($validatedRequest->fails()) {
             return rest_ensure_response([
                 'message' => 'Validation failed',
                 'errors'  => $validatedRequest->errors()
             ], 400);
         }
-    
+        $post_id = wp_insert_post([
+            'post_title'    => $data['title'] ?? 'Untitled',
+            'post_content'  => $data['description'] ?? '',
+            'post_status'   => 'publish',
+            'post_type'     => 'directory_listing',
+        ]);
+      
+        if (is_wp_error($post_id)) {
+            wp_update_post([
+                'ID'           => $post_id,
+                'post_content' => '[ehx_directorist_listings id="' . $post_id . '"]',
+            ]);
+        };
+
         $res = ListingResource::store($validatedRequest->validated());
 
         if (!$res) {
             return rest_ensure_response([
-                'message' => 'Failed to create category'
+                'message' => 'Failed to create listing'
             ], 500);
         }
 
         return rest_ensure_response([
-            'message' => 'Category created successfully',
-            'category_data' => $res
+            'message' => 'Listing created successfully',
+            'listing_data' => $res,
         ]);
     }
 

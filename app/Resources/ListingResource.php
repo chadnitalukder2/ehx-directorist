@@ -11,7 +11,6 @@ class ListingResource {
         $data['tag_id'] = json_encode($data['tag_id']);
         $data['meta'] = json_encode($data['meta']);
 
-        // $id = Arr::get($data, 'id', null);
 
         return Listing::create($data);
      
