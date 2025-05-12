@@ -35,7 +35,6 @@ class ListingController
         ]);
     }
 
-
     public static function updateDirectoryListing(WP_REST_Request $request)
     {
         $id = $request->get_param('id');
@@ -65,26 +64,26 @@ class ListingController
         ]);
     }
 
-    public static function deleteCategory(WP_REST_Request $request)
+    public static function deleteList(WP_REST_Request $request)
     {
         $id = $request->get_param('id');
         if (!$id) {
             return rest_ensure_response([
-                'message' => 'Category ID is required'
+                'message' => 'Listing ID is required'
             ], 400);
         }
-        $res = CategoryResource::delete($id);
+        $res = ListingResource::delete($id);
         if (!$res) {
             return rest_ensure_response([
-                'message' => 'Failed to delete category'
+                'message' => 'Failed to delete listing'
             ], 500);
         }
         return rest_ensure_response([
-            'message' => 'Category deleted successfully'
+            'message' => 'listing deleted successfully'
         ]);
     }
 
-    public static function getAllCategoriesById(WP_REST_Request $request)
+    public static function getAllListingByIdById(WP_REST_Request $request)
     {
         $id = $request->get_param('id');
         if (!$id) {
@@ -117,7 +116,7 @@ class ListingController
 
         if (!$res) {
             return rest_ensure_response([
-                'message' => 'Failed to get categories'
+                'message' => 'Failed to get listings'
             ], 500);
         }
 

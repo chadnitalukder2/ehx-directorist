@@ -11,9 +11,8 @@ class ListingResource {
         $data['tag_id'] = json_encode($data['tag_id']);
         $data['meta'] = json_encode($data['meta']);
 
-        $id = Arr::get($data, 'id', null);
+        // $id = Arr::get($data, 'id', null);
 
-      
         return Listing::create($data);
      
     }
@@ -35,11 +34,11 @@ class ListingResource {
     }
 
     public static function delete($id) {
-        $categoryModel = new Category();
-        $category = $categoryModel->find($id);
+        $listingModel = new Listing();
+        $listing = $listingModel->find($id);
     
-        if ($category) {
-            $category->delete($id);
+        if ($listing) {
+            $listing->delete($id);
             return true; 
         }
     
@@ -58,11 +57,9 @@ class ListingResource {
     }
 
     public static function getAll($perPage, $page, $search) {
-        $categories = (new Listing())->paginate($perPage, $page, $search);
+        $listings = (new Listing())->paginate($perPage, $page, $search);
 
-        // $categories = (new Category)->all();
-        // $data = array_map(fn($cat) => $cat->toArray(), $categories);
-        return  $categories;
+        return  $listings;
     }
 
 }
