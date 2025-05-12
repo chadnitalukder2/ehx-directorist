@@ -36,23 +36,23 @@ class ListingController
     }
 
 
-    public static function updateCategory(WP_REST_Request $request)
+    public static function updateDirectoryListing(WP_REST_Request $request)
     {
         $id = $request->get_param('id');
         if (!$id) {
             return rest_ensure_response([
-                'message' => 'Category ID is required'
+                'message' => 'Listing ID is required'
             ], 400);
         }
 
-        $validatedRequest = new StoreCategoryRequest($request);
+        $validatedRequest = new StoreListingRequest($request);
         if ($validatedRequest->fails()) {
             return rest_ensure_response([
                 'message' => 'Validation failed',
                 'errors'  => $validatedRequest->errors()
             ], 400);
         }
-        $res = CategoryResource::update($validatedRequest->validated(), $id);
+        $res = ListingResource::update($validatedRequest->validated(), $id);
 
         if (!$res) {
             return rest_ensure_response([
@@ -60,8 +60,8 @@ class ListingController
             ], 500);
         }
         return rest_ensure_response([
-            'message' => 'Category updated successfully',
-            'category_data' => $res
+            'message' => 'Listing updated successfully',
+            'listing_data' => $res
         ]);
     }
 

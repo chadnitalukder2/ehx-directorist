@@ -22,6 +22,7 @@ class Route {
         API_Router::get('/getAllListings', [ListingController::class, 'getAllListings']);
         API_Router::post('/postDirectoryListing', [ListingController::class, 'storeListing']);
         API_Router::get('/getAllListingByIdById/{id}', [ListingController::class, 'getAllCategoriesById']);
+        API_Router::post('/updateDirectoryListing/{id}', [ListingController::class, 'updateDirectoryListing']);
        
     } 
 }

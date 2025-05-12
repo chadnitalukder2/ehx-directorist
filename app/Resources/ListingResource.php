@@ -13,24 +13,22 @@ class ListingResource {
 
         $id = Arr::get($data, 'id', null);
 
-        if($id) {
-            return self::update($id, $data);
-        }
-
+      
         return Listing::create($data);
      
     }
 
-    public static function update($id, $data) {
-        //return Category::where('id', $id)->update($category);
-        $categoryModel = new Listing();
-        $category = $categoryModel->find($id);
-      
-        if ($category) {
-           
-            $category->update($data, $id);
-       
-            return true; 
+    public static function update($data, $id) {
+        $data['category_id'] = json_encode($data['category_id']);
+        $data['tag_id'] = json_encode($data['tag_id']);
+        $data['meta'] = json_encode($data['meta']);
+
+        $listingModel = new Listing();
+
+        $listing = $listingModel->find($id);
+     
+        if ($listing) {
+            return $listing->update($data, $id);
         }
     
         return false;

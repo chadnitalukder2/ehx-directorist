@@ -108,8 +108,8 @@
                 </div>
 
                 <el-form-item style="padding-top: 20px;">
-                    <el-button type="primary" size="large" @click="submitListForm">
-                        Save Listing
+                    <el-button type="primary" size="large" @click="updateListing">
+                        Update Listing
                     </el-button>
                 </el-form-item>
             </el-form>
@@ -232,14 +232,14 @@ export default {
         removeCustomField(index) {
             this.customFields.splice(index, 1);
         },
-        submitListForm() {
+        updateListing() {
             this.$refs.ListForm.validate(async (valid) => {
                 if (!valid) return;
 
                 this.localList.meta = this.customFields;
 
                 try {
-                    const res = await axios.post(`${this.rest_api}/postDirectoryListing`, this.localList, {
+                    const res = await axios.post(`${this.rest_api}/updateDirectoryListing/${this.$route.params.id}`, this.localList, {
                         headers: {
                             "Content-Type": "application/json",
                             "X-WP-Nonce": this.nonce,
@@ -247,29 +247,10 @@ export default {
                     });
                     this.$notify({
                         title: "Success",
-                        message: `Directory Listing data created successfully`,
+                        message: `Directory Listing data updated successfully`,
                         type: "success",
                     });
-                    this.localList = {
-                        name: "",
-                        email: "",
-                        phone: "",
-                        address: "",
-                        website_url: "",
-                        short_description: "",
-                        description: "",
-                        latitude: "",
-                        longitude: "",
-                        postal_code: "",
-                        city: "",
-                        logo: "",
-                        image: "",
-                        category_id: [],
-                        tag_id: [],
-                        directory_builder_id: 1,
-                    };
-                    this.$refs.descriptionEditor.clearEditor();
-                    this.customFields = [];
+                    //this.$router.push('/directory-listing');
                 } catch (err) {
                     console.error('Submission error:', err);
                 }

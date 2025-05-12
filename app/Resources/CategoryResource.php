@@ -13,9 +13,7 @@ class CategoryResource {
         $category = $categoryModel->find($id);
       
         if ($category) {
-           
             $category->update($data, $id);
-       
             return true; 
         }
     
