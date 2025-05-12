@@ -4,12 +4,12 @@
         <AppTable :tableData="listings" v-loading="loading">
             <template #header>
                 <div class="ehxd_title">
-                    <h1 class="table-title">All List</h1>
+                    <h1 class="table-title">All Listing</h1>
                     <p class="table-short-dsc">Manage and view all your listings</p>
                 </div>
                 <router-link to="/add-directory-listing">
                     <el-button size="large" type="primary" icon="Plus" class="ltm_button">
-                        Add New List
+                        Add New Listing
                     </el-button>
                 </router-link>
 
@@ -49,11 +49,10 @@
                         </el-tooltip> -->
 
                         <el-tooltip class="box-item" effect="dark" content="Edit" placement="top-start">
-                            <router-link :to="`/edit-directory-listing/${row.id}`">
-                            <el-button class="ehxd_box_icon" link size="small">
+                            <el-button @click="$router.push({ name: 'edit-directory-listing', params: { id: row.id } })"
+                                class="ehxd_box_icon" link size="small">
                                 <Icon icon="ehxd-edit" />
                             </el-button>
-                        </router-link>
                         </el-tooltip>
 
                         <el-tooltip class="box-item" effect="dark" content="Delete" placement="top-start">
