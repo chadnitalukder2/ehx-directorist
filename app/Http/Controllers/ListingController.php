@@ -35,7 +35,7 @@ class ListingController
 
         wp_update_post([
             'ID'           => $post_id,
-            'post_content' => '[ehx_directorist_listings id="' . $post_id . '"]',
+            'post_content' => '[ehxd_listing_details id="' . $post_id . '"]',
         ]);
 
         $listingData = $validatedRequest->validated();

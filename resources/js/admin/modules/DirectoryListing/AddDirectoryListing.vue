@@ -52,8 +52,14 @@
         </div>
 
         <el-form-item label="Address" prop="address">
-          <GoogleMap @update:address="localList.address = $event" @update:latitude="localList.latitude = $event"
-            @update:longitude="localList.longitude = $event" @update:city="localList.city = $event"
+          <GoogleMap 
+          :initial-address="localList.address"
+                        :initial-latitude="localList.latitude"
+                        :initial-longitude="localList.longitude"
+            @update:address="localList.address = $event" 
+            @update:latitude="localList.latitude = $event"
+            @update:longitude="localList.longitude = $event" 
+            @update:city="localList.city = $event"
             @update:postalCode="localList.postal_code = $event" />
         </el-form-item>
 

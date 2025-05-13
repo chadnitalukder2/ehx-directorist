@@ -42,7 +42,7 @@
                     <template #default="{ row }">
                         <el-tooltip class="box-item" effect="dark" content="View"
                             placement="top-start">
-                            <a :href="row?.post_url" target="_blank" class="ehxd_box_icon" link size="small">
+                            <a :href="row?.post_url" style="margin-right: 12px;" target="_blank" class="ehxd_box_icon" link size="small">
                                 <el-button  class="ehxd_box_icon" link size="small">
                                     <Icon icon="ehxd-eye" />
                                 </el-button>
