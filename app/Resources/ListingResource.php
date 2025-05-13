@@ -57,9 +57,30 @@ class ListingResource {
     }
 
     public static function getAll($perPage, $page, $search) {
-        $listings = (new Listing())->paginate($perPage, $page, $search);
-
-        return  $listings;
+        $listingModel = new Listing();
+    
+        // This should return something like ['data' => [...], 'pagination' => [...]]
+        $listings = $listingModel->paginate($perPage, $page, $search);
+    
+        foreach ($listings['data'] as &$listing) {
+        
+            if (isset($listing->meta)) {
+                // If the meta field is a string, decode it into an array
+                $listing->meta = json_decode($listing->meta, true);
+            }
+            dd($listing->category_id);
+            if (isset($listing->category_id)) {
+              
+                $listing->category_id = json_decode($listing->category_id, true);
+            }
+    
+            if (isset($listing->tag_id)) {
+                // Ensure the value is JSON-decoded properly
+                $listing->tag_id = json_decode($listing->tag_id, true);
+            }
+        }
+    dd($listing, 'return');
+        // return $listings;
     }
 
 }

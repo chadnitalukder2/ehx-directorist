@@ -7,9 +7,9 @@
                     <span class="dashicons dashicons-search ehxd_icon"></span>
                     <input type="text" placeholder="Location" class="ehxd-location-input">
                 </div>
-
+{{ listings }}
                 <div class="ehxd-radius-slider-container">
-                    <div class="ehxd-radius-label">Within <strong> {{ radius }}</strong>  miles</div>
+                    <div class="ehxd-radius-label">Within <strong> {{ radius }}</strong> miles</div>
                     <input type="range" min="0" max="100" v-model="radius" class="ehxd-radius-slider">
                 </div>
 
@@ -102,7 +102,9 @@
 </template>
 
 <script>
+  import axios from "axios";
 export default {
+  
     data() {
         return {
             listings: [],
@@ -160,8 +162,41 @@ export default {
                 { name: 'Appointment', selected: false },
                 { name: 'Auto System', selected: false },
                 { name: 'Car Parking', selected: true },
-            ]
+            ],
+            
+            nonce: window.EhxDirectoristData.nonce,
+            rest_api: window.EhxDirectoristData.rest_api,
         };
+    },
+    methods: {
+
+        async getAllListings() {
+            this.loading = true;
+            try {
+                const response = await axios.get(`${this.rest_api}/getAllListings`, {
+                    params: {
+                        page: this.currentPage,
+                        limit: this.pageSize,
+                        search: this.search || '',
+                    },
+                    headers: {
+                        'X-WP-Nonce': this.nonce
+                    }
+                });
+                this.listings = response?.data?.listings_data;
+                this.total_List = response?.data?.total || 0;
+                this.last_page = response?.data?.last_page || 1;
+                this.loading = false;
+            } catch (error) {
+                this.loading = false;
+                console.error('Error fetching couriers:',);
+            }
+        },
+
+    },
+
+    mounted() {
+        this.getAllListings();
     }
 };
 </script>
@@ -214,7 +249,8 @@ export default {
     color: #777;
     font-size: 16px;
 }
-.ehxd-features-filter{
+
+.ehxd-features-filter {
     border-bottom: 1px solid #e0e0e0;
     padding-bottom: 20px;
     padding-top: 10px;
@@ -228,7 +264,8 @@ export default {
     border-radius: 6px;
     font-size: 16px;
     background: #FBFBFB;
-    &:focus-visible{
+
+    &:focus-visible {
         outline: none;
     }
 }
