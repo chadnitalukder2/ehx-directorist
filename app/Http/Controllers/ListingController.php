@@ -18,9 +18,11 @@ class ListingController
                 'errors'  => $validatedRequest->errors()
             ], 400);
         }
+        $name = $validatedRequest->validated()['name'];
+        $description = $validatedRequest->validated()['description'];
         $post_id = wp_insert_post([
-            'post_title'    => $data['name'] ?? 'Untitled',
-            'post_content'  => $data['description'] ?? '',
+            'post_title'    => $name ?? 'Untitled',
+            'post_content'  => $description ?? '',
             'post_status'   => 'publish',
             'post_type'     => 'post',
         ]);

@@ -9,8 +9,6 @@ import Tags from './admin/modules/Tags/AllTag.vue';
 import AllDirectoryListing from './admin/modules/DirectoryListing/AllDirectoryListing.vue';
 import AddDirectoryListing from './admin/modules/DirectoryListing/AddDirectoryListing.vue';
 import EditDirectoryListing from './admin/modules/DirectoryListing/EditDirectoryListing.vue';
-import ViewDirectoryListing from './admin/modules/DirectoryListing/ViewDirectoryListing.vue';
-import AllReview from './admin/modules/Reviews/AllReviews.vue';
 
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
@@ -27,9 +25,6 @@ const router = createRouter({
         { path: '/directory-listing', component: AllDirectoryListing },
         { path: '/add-directory-listing', component: AddDirectoryListing },
         { path: '/edit-directory-listing/:id', name:'edit-directory-listing', component: EditDirectoryListing },
-        { path: '/view-directory-listing/:id', name: 'view-directory-listing', component: ViewDirectoryListing },
-        { path: '/reviews', component: AllReview },
-        { path: '/settings', component: Settings }
     ]
 });
 
