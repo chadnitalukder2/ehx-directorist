@@ -62,25 +62,13 @@ class ListingResource {
         // This should return something like ['data' => [...], 'pagination' => [...]]
         $listings = $listingModel->paginate($perPage, $page, $search);
     
-        foreach ($listings['data'] as &$listing) {
-        
-            if (isset($listing->meta)) {
-                // If the meta field is a string, decode it into an array
-                $listing->meta = json_decode($listing->meta, true);
-            }
-            dd($listing->category_id);
-            if (isset($listing->category_id)) {
-              
-                $listing->category_id = json_decode($listing->category_id, true);
-            }
-    
-            if (isset($listing->tag_id)) {
-                // Ensure the value is JSON-decoded properly
-                $listing->tag_id = json_decode($listing->tag_id, true);
-            }
+        foreach ($listings['data'] as $listing) {
+            $listing->category_id  = is_string($listing->category_id) ? json_decode($listing->category_id, true) : $listing->category_id;
+            $listing->meta         = is_string($listing->meta) ? json_decode($listing->meta, true) : $listing->meta;
+            $listing->tag_id       = is_string($listing->tag_id) ? json_decode($listing->tag_id, true) : $listing->tag_id;
         }
-    dd($listing, 'return');
-        // return $listings;
+        
+        return $listings;
     }
 
 }
