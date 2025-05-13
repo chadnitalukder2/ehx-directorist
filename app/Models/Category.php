@@ -32,26 +32,11 @@ class Category extends Model {
     ];
 
     /**
-     * Get the branch associated with this category
-     *
-     * @return Branch|null
-     */
-    public function branch() {
-        if (!$this->branch_id) {
-            return null;
-        }
-        
-      //  return Branch::find($this->branch_id);
-    }
-
-    /**
      * Get all products belonging to this category
      *
      * @return array
      */
-    public function products() {
-        //return Product::where(['category_id' => $this->id]);
-    }
+  
 
     /**
      * Create a new category with the current timestamp

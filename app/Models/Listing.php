@@ -48,19 +48,6 @@ class Listing extends Model {
     ];
 
     /**
-     * Get the branch associated with this category
-     *
-     * @return Branch|null
-     */
-    public function branch() {
-        if (!$this->branch_id) {
-            return null;
-        }
-        
-      //  return Branch::find($this->branch_id);
-    }
-
-    /**
      * Get all products belonging to this category
      *
      * @return array
@@ -68,9 +55,12 @@ class Listing extends Model {
     public function post() {
         return $this->hasOne(Post::class, 'ID', 'post_id');
     }
+    public function category() {
+        return $this->hasMany(Post::class, 'ID', 'category_id');
+    }
 
     /**
-     * Create a new category with the current timestamp
+     * Create a new listing with the current timestamp
      *
      * @param array $attributes
      * @return static

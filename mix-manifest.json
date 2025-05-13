@@ -1,5 +1,7 @@
 {
     "/assets/js/admin.js": "/assets/js/admin.js",
     "/assets/js/listing-app.js": "/assets/js/listing-app.js",
-    "/assets/css/admin.css": "/assets/css/admin.css"
+    "/assets/css/admin.css": "/assets/css/admin.css",
+    "/assets/images/free-nature-images.jpg": "/assets/images/free-nature-images.jpg",
+    "/assets/images/no-image.jpg": "/assets/images/no-image.jpg"
 }

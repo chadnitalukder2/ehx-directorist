@@ -39,7 +39,7 @@ class Post extends Model {
     ];
 
     /**
-     * Create a new category with the current timestamp
+     * Create a new post with the current timestamp
      *
      * @param array $attributes
      * @return static

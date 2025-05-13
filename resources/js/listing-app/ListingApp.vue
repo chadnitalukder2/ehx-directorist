@@ -7,7 +7,7 @@
                     <span class="dashicons dashicons-search ehxd_icon"></span>
                     <input type="text" placeholder="Location" class="ehxd-location-input">
                 </div>
-{{ listings }}
+
                 <div class="ehxd-radius-slider-container">
                     <div class="ehxd-radius-label">Within <strong> {{ radius }}</strong> miles</div>
                     <input type="range" min="0" max="100" v-model="radius" class="ehxd-radius-slider">
@@ -41,7 +41,7 @@
         <div class="exhd_listing_wrapper">
             <div class="ehxd-results-area">
                 <div class="ehxd-results-header">
-                    <h2 class="ehxd-results-count">15 Results Found</h2>
+                    <h2 class="ehxd-results-count">{{ total_List }} Results Found</h2>
                     <div class="ehxd-sort-dropdown">
                         <select class="ehxd-sort-select">
                             <option>Sort by oldest</option>
@@ -54,41 +54,31 @@
                 </div>
             </div>
             <div class="ehxd-freelancer-grid">
-                <div v-for="(freelancer, index) in freelancers" :key="index" class="ehxd-freelancer-card">
+                
+                <div v-for="listing in listings" class="ehxd-freelancer-card">
                     <div class="ehxd-freelancer-header">
                         <div class="ehxd-profile-image-container">
-                            <img :src="freelancer.image" alt="img" class="ehxd-profile-image" />
+                            <img :src="listing.image" alt="img" class="ehxd-profile-image" />
                         </div>
                         <div class="ehxd-freelancer-info">
-                            <h3 class="ehxd-freelancer-name">{{ freelancer.name }}</h3>
-                            <p class="ehxd-freelancer-location">{{ freelancer.location }}</p>
+                            <h3 class="ehxd-freelancer-name">{{ listing.name }}</h3>
+                            <p class="ehxd-freelancer-location">{{ listing.address }}</p>
                         </div>
                     </div>
 
                     <div class="ehxd-section">
                         <p class="ehxd-section-title">DESCRIPTION</p>
-                        <p class="ehxd-description-text">{{ freelancer.description }}</p>
+                        <p class="ehxd-description-text">{{ listing.short_description }}</p>
                     </div>
 
                     <div class="ehxd-section">
                         <p class="ehxd-section-title">Categories</p>
                         <div class="ehxd-skills-container">
-                            <span v-for="(skill, skillIndex) in freelancer.skills" :key="skillIndex"
+                            <span v-for="category in listing.category_id"
                                 class="ehxd-skill-tag">
-                                {{ skill }}
+                                {{ category }}
                             </span>
-                            <span class="ehxd-skill-tag ehxd-more-tag">{{ freelancer.moreSkills }} more</span>
-                        </div>
-                    </div>
-
-                    <div class="ehxd-section">
-                        <p class="ehxd-section-title">Tags</p>
-                        <div class="ehxd-skills-container">
-                            <span v-for="(skill, skillIndex) in freelancer.skills" :key="skillIndex"
-                                class="ehxd-skill-tag">
-                                {{ skill }}
-                            </span>
-                            <span class="ehxd-skill-tag ehxd-more-tag">{{ freelancer.moreSkills }} more</span>
+                            <!-- <span class="ehxd-skill-tag ehxd-more-tag">{{ freelancer.moreSkills }} more</span> -->
                         </div>
                     </div>
 
@@ -108,53 +98,61 @@ export default {
     data() {
         return {
             listings: [],
-            freelancers: [
-                {
-                    name: "Michael Spitz",
-                    location: "Los Angeles, CA",
-                    isAvailable: true,
-                    description: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accus",
-                    skills: ["Design", "Frontend Developer"],
-                    moreSkills: 2,
-                    projects: 12,
-                    hourlyRate: 80,
-                    image: "../../../assets/images/no-image.jpg"
-                },
-                {
-                    name: "Marco Coppeto",
-                    location: "New York, NY",
-                    isAvailable: false,
-                    description: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accus",
-                    skills: ["Design", "Frontend Developer"],
-                    moreSkills: 2,
-                    projects: 12,
-                    hourlyRate: 80,
-                    image: "https://via.placeholder.com/100"
-                },
-                {
-                    name: "Gene Ross",
-                    location: "Los Angeles, CA",
-                    isAvailable: true,
-                    description: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accus",
-                    skills: ["Design", "Frontend Developer"],
-                    moreSkills: 2,
-                    projects: 12,
-                    hourlyRate: 80,
-                    image: "https://via.placeholder.com/100"
-                },
-                {
-                    name: "Michael Spitz",
-                    location: "Los Angeles, CA",
-                    isAvailable: true,
-                    description: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accus",
-                    skills: ["Design", "Frontend Developer"],
-                    moreSkills: 2,
-                    projects: 12,
-                    hourlyRate: 80,
-                    image: "https://via.placeholder.com/100"
-                },
+            search: '',
+            listings: [],
+            list: {},
+            total_List: 0,
+            loading: false,
+            currentPage: 1,
+            last_page: 1,
+            pageSize: 10,
+            // freelancers: [
+            //     {
+            //         name: "Michael Spitz",
+            //         location: "Los Angeles, CA",
+            //         isAvailable: true,
+            //         description: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accus",
+            //         skills: ["Design", "Frontend Developer"],
+            //         moreSkills: 2,
+            //         projects: 12,
+            //         hourlyRate: 80,
+            //         image: "../../../assets/images/no-image.jpg"
+            //     },
+            //     {
+            //         name: "Marco Coppeto",
+            //         location: "New York, NY",
+            //         isAvailable: false,
+            //         description: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accus",
+            //         skills: ["Design", "Frontend Developer"],
+            //         moreSkills: 2,
+            //         projects: 12,
+            //         hourlyRate: 80,
+            //         image: "https://via.placeholder.com/100"
+            //     },
+            //     {
+            //         name: "Gene Ross",
+            //         location: "Los Angeles, CA",
+            //         isAvailable: true,
+            //         description: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accus",
+            //         skills: ["Design", "Frontend Developer"],
+            //         moreSkills: 2,
+            //         projects: 12,
+            //         hourlyRate: 80,
+            //         image: "https://via.placeholder.com/100"
+            //     },
+            //     {
+            //         name: "Michael Spitz",
+            //         location: "Los Angeles, CA",
+            //         isAvailable: true,
+            //         description: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accus",
+            //         skills: ["Design", "Frontend Developer"],
+            //         moreSkills: 2,
+            //         projects: 12,
+            //         hourlyRate: 80,
+            //         image: "https://via.placeholder.com/100"
+            //     },
 
-            ],
+            // ],
             searchQuery: '',
             radius: 30,
             features: [
