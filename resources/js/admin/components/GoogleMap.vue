@@ -5,7 +5,7 @@
       type="text"
       placeholder="Enter your address"
       class="address-input"
-      :value="address"
+      :value="initialAddress"
       @input="onAddressInput"
     />
     <div ref="map" class="map"></div>

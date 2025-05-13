@@ -75,7 +75,7 @@
         </el-form-item>
 
         <el-form-item label="Description" prop="description">
-          <WpEditor  ref="descriptionEditor" @input-update="localList.description = $event" />
+          <WpEditor  ref="descriptionEditor" v-model="localList.description" />
         </el-form-item>
 
         <div class="custom_field_list_wrapper">
