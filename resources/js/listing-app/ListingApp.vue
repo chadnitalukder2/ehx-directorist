@@ -1,90 +1,97 @@
 <template>
-    <div class="ehxd-container">
-        <div class="ehxd-search-sidebar">
-            <div class="ehxd-search-container">
+    <div class="ehxd_listing_app_container">
+        <div class="ehxd-container">
+            <!-- Sidebar -->
+            <div class="ehxd-search-sidebar">
+                <div class="ehxd-search-container">
 
-                <div class="ehxd-input-wrapper">
-                    <span class="dashicons dashicons-search ehxd_icon"></span>
-                    <input type="text" placeholder="Location" class="ehxd-location-input">
-                </div>
+                    <div class="ehxd-input-wrapper">
+                        <span class="dashicons dashicons-search ehxd_icon"></span>
+                        <input type="text" placeholder="Enter address or postcode" class="ehxd-location-input"
+                            v-model="searchQuery" />
+                    </div>
 
-                <div class="ehxd-radius-slider-container">
-                    <div class="ehxd-radius-label">Within <strong> {{ radius }}</strong> miles</div>
-                    <input type="range" min="0" max="100" v-model="radius" class="ehxd-radius-slider">
-                </div>
+                    <div class="ehxd-radius-slider-container">
+                        <div class="ehxd-radius-label">Within <strong>{{ radius }}</strong> miles</div>
+                        <input type="range" min="0" max="100" v-model="radius" class="ehxd-radius-slider" />
+                    </div>
 
-                <div class="ehxd-features-filter">
-                    <h3 class="ehxd-features-heading">Filter by Category</h3>
-
-                    <div class="ehxd-feature-list">
-                        <div v-for="(feature, index) in features" :key="index" class="ehxd-feature-item">
-                            <input type="checkbox" :id="'feature-' + index" v-model="feature.selected"
-                                class="ehxd-feature-checkbox">
-                            <label :for="'feature-' + index" class="ehxd-feature-label">{{ feature.name }}</label>
+                    <!-- Category Filters -->
+                    <div class="ehxd-features-filter">
+                        <h3 class="ehxd-features-heading">Filter by Category</h3>
+                        <div class="ehxd-feature-list">
+                            <div v-for="(category, index) in categories" :key="category.id" class="ehxd-feature-item">
+                                <input type="checkbox" :id="'category-' + index" v-model="category.selected"
+                                    class="ehxd-feature-checkbox" />
+                                <label :for="'category-' + index" class="ehxd-feature-label">{{ category.name }}</label>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="ehxd-features-filter">
-                    <h3 class="ehxd-features-heading">Filter by Tag</h3>
-
-                    <div class="ehxd-feature-list">
-                        <div v-for="(feature, index) in features" :key="index" class="ehxd-feature-item">
-                            <input type="checkbox" :id="'feature-' + index" v-model="feature.selected"
-                                class="ehxd-feature-checkbox">
-                            <label :for="'feature-' + index" class="ehxd-feature-label">{{ feature.name }}</label>
+                    <!-- Tag Filters -->
+                    <div class="ehxd-features-filter">
+                        <h3 class="ehxd-features-heading">Filter by Tag</h3>
+                        <div class="ehxd-feature-list">
+                            <div v-for="(tag, index) in tags" :key="tag.id" class="ehxd-feature-item">
+                                <input type="checkbox" :id="'tag-' + index" v-model="tag.selected"
+                                    class="ehxd-feature-checkbox" />
+                                <label :for="'tag-' + index" class="ehxd-feature-label">{{ tag.name }}</label>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-        <div class="exhd_listing_wrapper">
-            <div class="ehxd-results-area">
-                <div class="ehxd-results-header">
-                    <h2 class="ehxd-results-count">{{ total_List }} Results Found</h2>
-                    <div class="ehxd-sort-dropdown">
-                        <select class="ehxd-sort-select">
-                            <option>Sort by oldest</option>
-                            <option>Sort by newest</option>
-                            <option>Sort by price: low to high</option>
-                            <option>Sort by price: high to low</option>
-                            <option>Sort by rating</option>
-                        </select>
-                    </div>
+
                 </div>
             </div>
-            <div class="ehxd-freelancer-grid">
-                
-                <div v-for="listing in listings" class="ehxd-freelancer-card">
-                    <div class="ehxd-freelancer-header">
-                        <div class="ehxd-profile-image-container">
-                            <img :src="listing.image" alt="img" class="ehxd-profile-image" />
-                        </div>
-                        <div class="ehxd-freelancer-info">
-                            <h3 class="ehxd-freelancer-name">{{ listing.name }}</h3>
-                            <p class="ehxd-freelancer-location">{{ listing.address }}</p>
-                        </div>
-                    </div>
 
-                    <div class="ehxd-section">
-                        <p class="ehxd-section-title">DESCRIPTION</p>
-                        <p class="ehxd-description-text">{{ listing.short_description }}</p>
-                    </div>
+            <!-- Listings -->
+            <div class="exhd_listing_wrapper">
+                <div class="ehxd-freelancer-grid">
+                    <div v-for="listing in listings" :key="listing.id" class="ehxd-freelancer-card">
+                        <div class="ehxd-freelancer-header">
+                            <div class="ehxd-profile-image-container">
+                                <img :src="listing.image" alt="img" class="ehxd-profile-image" />
+                            </div>
+                            <div class="ehxd-freelancer-info">
+                                <h3 class="ehxd-freelancer-name">{{ listing.name }}</h3>
+                                <div class="ehxd-section">
+                                    <p class="ehxd-description-text">{{ listing.short_description }}</p>
+                                </div>
+                                <p class="ehxd-freelancer-location">
+                                    <el-icon class="address-icon">
+                                        <Location />
+                                    </el-icon>
+                                    {{ listing.address }}
+                                </p>
+                            </div>
 
-                    <div class="ehxd-section">
-                        <p class="ehxd-section-title">Categories</p>
-                        <div class="ehxd-skills-container">
-                            <span v-for="category in listing.category_id"
-                                class="ehxd-skill-tag">
-                                {{ category }}
-                            </span>
-                            <!-- <span class="ehxd-skill-tag ehxd-more-tag">{{ freelancer.moreSkills }} more</span> -->
+                            <div class="ehxd-section">
+                                <p class="ehxd-section-title">Categories</p>
+                                <div class="ehxd-skills-container">
+                                    <span v-for="category in listing.categories" :key="category.id"
+                                        class="ehxd-skill-tag">
+                                        {{ category.name }}
+                                    </span>
+                                </div>
+                                <div class="ehxd-freelancer-footer">
+                                    <a :href="listing.post_url">
+                                        <button class="ehxd-invite-button">View Details</button>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="ehxd-freelancer-footer">
-                        <button class="ehxd-invite-button">View Details</button>
+
                     </div>
+                </div>
+
+                <!-- Pagination -->
+                <div class="ehxd_footer">
+                    <div class="ehxd_footer_page">
+                        <p>Page {{ currentPage }} of {{ lastPage }}</p>
+                    </div>
+                    <el-pagination v-model:current-page="currentPage" v-model:page-size="pageSize"
+                        :page-sizes="[10, 20, 30, 40]" large :disabled="total_list <= pageSize" background
+                        layout="total, sizes, prev, pager, next" :total="+total_list" />
                 </div>
             </div>
         </div>
@@ -92,76 +99,24 @@
 </template>
 
 <script>
-  import axios from "axios";
+import axios from "axios";
 export default {
-  
+
     data() {
         return {
             listings: [],
+            categories: [],
+            tags: [],
             search: '',
             listings: [],
             list: {},
-            total_List: 0,
+            total_list: 0,
             loading: false,
             currentPage: 1,
             last_page: 1,
             pageSize: 10,
-            // freelancers: [
-            //     {
-            //         name: "Michael Spitz",
-            //         location: "Los Angeles, CA",
-            //         isAvailable: true,
-            //         description: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accus",
-            //         skills: ["Design", "Frontend Developer"],
-            //         moreSkills: 2,
-            //         projects: 12,
-            //         hourlyRate: 80,
-            //         image: "../../../assets/images/no-image.jpg"
-            //     },
-            //     {
-            //         name: "Marco Coppeto",
-            //         location: "New York, NY",
-            //         isAvailable: false,
-            //         description: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accus",
-            //         skills: ["Design", "Frontend Developer"],
-            //         moreSkills: 2,
-            //         projects: 12,
-            //         hourlyRate: 80,
-            //         image: "https://via.placeholder.com/100"
-            //     },
-            //     {
-            //         name: "Gene Ross",
-            //         location: "Los Angeles, CA",
-            //         isAvailable: true,
-            //         description: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accus",
-            //         skills: ["Design", "Frontend Developer"],
-            //         moreSkills: 2,
-            //         projects: 12,
-            //         hourlyRate: 80,
-            //         image: "https://via.placeholder.com/100"
-            //     },
-            //     {
-            //         name: "Michael Spitz",
-            //         location: "Los Angeles, CA",
-            //         isAvailable: true,
-            //         description: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accus",
-            //         skills: ["Design", "Frontend Developer"],
-            //         moreSkills: 2,
-            //         projects: 12,
-            //         hourlyRate: 80,
-            //         image: "https://via.placeholder.com/100"
-            //     },
-
-            // ],
             searchQuery: '',
             radius: 30,
-            features: [
-                { name: 'Accepts Credit Cards', selected: false },
-                { name: 'Appointment', selected: false },
-                { name: 'Auto System', selected: false },
-                { name: 'Car Parking', selected: true },
-            ],
-            
             nonce: window.EhxDirectoristData.nonce,
             rest_api: window.EhxDirectoristData.rest_api,
         };
@@ -190,11 +145,45 @@ export default {
                 console.error('Error fetching couriers:',);
             }
         },
+        async getAllCategories() {
+            this.loading = true;
+            try {
+                const response = await axios.get(`${this.rest_api}/getAllCategories`, {
+                    params: {},
+                    headers: {
+                        'X-WP-Nonce': this.nonce
+                    }
+                });
+                this.categories = response?.data?.categories_data;
+                this.loading = false;
+            } catch (error) {
+                this.loading = false;
+                console.error('Error fetching couriers:',);
+            }
+        },
+        async getAllTag() {
+            this.loading = true;
+            try {
+                const response = await axios.get(`${this.rest_api}/getAllTag`, {
+                    params: {},
+                    headers: {
+                        'X-WP-Nonce': this.nonce
+                    }
+                });
+                this.tags = response?.data?.tags_data;
+                this.loading = false;
+            } catch (error) {
+                this.loading = false;
+                console.error('Error fetching couriers:',);
+            }
+        },
 
     },
 
     mounted() {
         this.getAllListings();
+        this.getAllCategories();
+        this.getAllTag();
     }
 };
 </script>
@@ -237,7 +226,7 @@ export default {
         position: absolute;
         color: #666666;
         font-weight: 100;
-        padding: 2px 0px 0px 8px;
+        padding: 1px 0px 0px 8px;
     }
 }
 
@@ -260,7 +249,7 @@ export default {
     padding: 12px 10px 12px 35px;
     border: 1px solid #e0e0e0;
     border-radius: 6px;
-    font-size: 16px;
+    font-size: 15px;
     background: #FBFBFB;
 
     &:focus-visible {
@@ -294,7 +283,7 @@ export default {
 }
 
 .ehxd-radius-label {
-    font-size: 14px;
+    font-size: 15px;
     margin-bottom: 10px;
     color: #666;
 }
@@ -365,7 +354,7 @@ export default {
 }
 
 .ehxd-feature-label {
-    font-size: 14px;
+    font-size: 15px;
     color: #555;
 }
 
@@ -414,12 +403,13 @@ export default {
 //=================================================
 .exhd_listing_wrapper {
     flex-basis: 67%;
+
     .ehxd-results-header {
         display: flex;
         justify-content: space-between;
         text-align: center;
         align-items: center;
-        padding: 20px 0px;
+        padding: 15px 0PX 35PX 0px;
 
         .ehxd-results-count {
             margin: 0;
@@ -447,7 +437,7 @@ export default {
 //===============================
 .ehxd-freelancer-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: 30px;
 }
 
@@ -462,20 +452,19 @@ export default {
 
 .ehxd-freelancer-header {
     display: flex;
+    gap: 20px;
     align-items: flex-start;
-    margin-bottom: 20px;
 }
 
-.ehxd-profile-image-container {
-    margin-right: 15px;
-}
+
 
 .ehxd-profile-image {
-    width: 60px;
-    height: 60px;
+    width: 130px;
+    height: 130px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid #1e3a8a;
+    border: 1px solid #666666;
+    padding: 1px;
 }
 
 .ehxd-freelancer-info {
@@ -491,26 +480,35 @@ export default {
 }
 
 .ehxd-freelancer-location {
-    font-size: 14px;
-    color: #666;
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+    color: #333;
     margin: 0;
     margin-bottom: 8px;
+
+    .address-icon {
+        font-size: 16px;
+        color: #000;
+        margin-right: 5px;
+        font-weight: 600;
+    }
 }
 
 
 .ehxd-section {
-    margin-bottom: 20px;
+    flex-basis: 25%;
 }
 
 .ehxd-section-title {
-    font-size: 12px;
-    color: #999;
-    text-transform: uppercase;
-    margin: 0 0 5px 0;
+    font-size: 16px;
+    color: #333;
+    text-transform: capitalize;
+    margin: 0 0 10px 0;
 }
 
 .ehxd-description-text {
-    font-size: 14px;
+    font-size: 15px;
     color: #666;
     line-height: 1.5;
     margin: 0;
@@ -536,9 +534,7 @@ export default {
 }
 
 .ehxd-freelancer-footer {
-    margin-top: auto;
-    padding-top: 15px;
-    border-top: 1px solid #ddd;
+    margin-top: 30px;
 }
 
 
@@ -555,28 +551,38 @@ export default {
     color: #666;
 }
 
-.ehxd-icon-project::before {
-    content: "📁";
-}
 
-.ehxd-icon-money::before {
-    content: "💰";
-}
 
 .ehxd-invite-button {
     width: 100%;
-    padding: 12px;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
     background-color: #000;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
+    color: #fff;
+    border-radius: 8px;
+    font-size: 15px;
     font-weight: 500;
     cursor: pointer;
     transition: background-color 0.2s;
 }
 
 .ehxd-invite-button:hover {
-    background-color: #00000079;
+    background-color: rgb(0 0 0 / 82%);
+}
+
+//=========================================
+.ehxd_footer {
+    display: flex;
+    padding: 30px 0px 0px 0px;
+    justify-content: space-between;
+    align-items: center;
+
+    .ehxd_footer_page {
+        p {
+            margin: 0;
+            font-size: 15px;
+            color: #666666;
+        }
+    }
 }
 </style>
