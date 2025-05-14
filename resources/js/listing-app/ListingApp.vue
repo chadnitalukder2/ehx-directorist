@@ -211,7 +211,7 @@ export default {
 
 //=================================
 .ehxd-search-sidebar {
-    width: 350px;
+    flex-basis: 30%;
     border: 1px solid #e0e0e0;
     border-radius: 6px;
     background-color: #fff;
@@ -413,6 +413,7 @@ export default {
 
 //=================================================
 .exhd_listing_wrapper {
+    flex-basis: 67%;
     .ehxd-results-header {
         display: flex;
         justify-content: space-between;
