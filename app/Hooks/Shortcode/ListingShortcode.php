@@ -30,6 +30,6 @@ class ListingShortcode {
 
     public function renderShortcode() {
         // Output the app container
-        return '<div id="ehx-directorist-app"></div>';
+        return '<div style="max-width: 100%;" id="ehx-directorist-app"></div>';
     }
 }

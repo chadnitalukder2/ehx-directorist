@@ -67,8 +67,18 @@ class ListingResource
     {
         $listingModel = new Listing();
 
-        // Get listings with filters (with fallback to all if nothing matched)
-        $listings = $listingModel->filterForListing($perPage, $page, $search, $category_ids, $tag_ids);
+        $listings = $listingModel
+            ->when(!empty($search), function ($query) use ($search) {
+                return $query->where('address', 'LIKE', '%' . $search . '%')
+                    ->orWhere('postal_code', 'LIKE', '%' . $search . '%');
+            })
+            // ->when( count($category_ids) > 0, function ($query) use ($category_ids) {
+            //     return $query->whereIn('category_id', $category_ids);
+            // })
+            // ->when(!empty($tag_ids), function ($query) use ($tag_ids) {
+            //     return $query->where('tag_id', 'LIKE', '%' . $tag_ids . '%');
+            // })
+            ->paginate($perPage, $page);
 
         foreach ($listings['data'] as $listing) {
             $listing->category_id  = is_string($listing->category_id) ? json_decode($listing->category_id, true) : $listing->category_id;

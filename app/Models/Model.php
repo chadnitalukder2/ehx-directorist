@@ -183,6 +183,25 @@ abstract class Model
         }
     }
 
+    /**
+     * Add a conditional clause to the query
+     * 
+     * @param mixed $value Value to check against
+     * @param callable $callback Callback to execute if $value is truthy
+     * @param callable|null $default Callback to execute if $value is falsy
+     * @return $this
+     */
+    public function when($value, callable $callback, callable $default = null)
+    {
+        if ($value) {
+            return $callback($this);
+        } elseif ($default) {
+            return $default($this);
+        }
+        
+        return $this;
+    }
+
     public function fill(array $data)
     {
         $this->attributes = [];
@@ -308,73 +327,105 @@ abstract class Model
     
     public function paginate($perPage = 10, $page = 1, $search = '')
     {
+        // Save the current query
+        $currentQuery = $this->query;
+        
+        // Add search conditions if provided directly to paginate
+        if (!empty($search)) {
+            $this->where('name', 'LIKE', '%' . $search . '%')
+                 ->orWhere('slug', 'LIKE', '%' . $search . '%')
+                 ->orWhere('address', 'LIKE', '%' . $search . '%');
+        }
+        
+        // Add pagination limits
         $offset = ($page - 1) * $perPage;
-        $search_sql = '';
+        $this->query['limit'] = $perPage;
+        $this->query['offset'] = $offset;
+        
+        // Get the paginated results
+        $results = $this->get();
+        
+        // Reset query and restore conditions for count query
+        $this->query = $currentQuery;
+        
+        // Prepare count query
+        $countSql = "SELECT COUNT(*) FROM {$this->table}";
         $params = [];
-
-        if (!empty($search)) {
-            $search_sql = "WHERE name LIKE %s OR slug LIKE %s OR address LIKE %s"  ;
-            $params[] = '%' . $search . '%';
-            $params[] = '%' . $search . '%';
-            $params[] = '%' . $search . '%';
+        
+        // Process where conditions for count
+        if (!empty($this->query['where'])) {
+            $countSql .= " WHERE ";
+            $firstWhere = true;
+            
+            foreach ($this->query['where'] as $condition) {
+                // Add the boolean operator (AND/OR) except for the first condition
+                if (!$firstWhere) {
+                    $countSql .= " {$condition['boolean']} ";
+                } else {
+                    $firstWhere = false;
+                }
+                
+                $countSql .= "{$condition['column']} {$condition['operator']} %s";
+                $params[] = $condition['value'];
+            }
         }
-
-        $query = "SELECT * FROM {$this->table} {$search_sql} ORDER BY id DESC LIMIT %d OFFSET %d";
-        $params[] = $perPage;
-        $params[] = $offset;
-
-        $results = $this->db->get_results($this->db->prepare($query, ...$params), ARRAY_A);
-
-        // Count total with search
-        if (!empty($search)) {
-            $count_query = "SELECT COUNT(*) FROM {$this->table} WHERE name LIKE %s OR slug LIKE %s";
-            $total = $this->db->get_var($this->db->prepare($count_query, '%' . $search . '%', '%' . $search . '%'));
-        } else {
-            $total = $this->db->get_var("SELECT COUNT(*) FROM {$this->table}");
+        
+        // Process whereIn conditions for count
+        if (!empty($this->query['whereIn'])) {
+            if (empty($this->query['where'])) {
+                $countSql .= " WHERE ";
+            } else {
+                $countSql .= " AND ";
+            }
+            
+            $whereInClauses = [];
+            foreach ($this->query['whereIn'] as $condition) {
+                if (empty($condition['values'])) {
+                    continue;
+                }
+                
+                $placeholders = implode(', ', array_fill(0, count($condition['values']), '%s'));
+                $whereInClauses[] = "{$condition['column']} IN ({$placeholders})";
+                $params = array_merge($params, $condition['values']);
+            }
+            
+            $countSql .= implode(' AND ', $whereInClauses);
         }
-
+        
+        // Prepare and execute count query
+        if (!empty($params)) {
+            $countSql = $this->db->prepare($countSql, ...$params);
+        }
+        
+        $total = (int) $this->db->get_var($countSql);
+        
+        // Reset query for next use
+        $this->resetQuery();
+        
         return [
-            'data' => array_map(fn($row) => (new static())->fill($row), $results),
-            'total' => (int)$total,
+            'data' => $results->all(),
+            'total' => $total,
             'per_page' => $perPage,
             'current_page' => $page,
             'last_page' => ceil($total / $perPage),
         ];
     }
-    public function filterForListing($perPage = 10, $page = 1, $search = '', $category_ids, $tag_ids)
+    
+    public function filterForListing($perPage = 10, $page = 1, $search = '', $category_ids = null, $tag_ids = null)
     {
-        $offset = ($page - 1) * $perPage;
-        $search_sql = '';
-        $params = [];
-
-        if (!empty($search)) {
-            $search_sql = "WHERE address LIKE %s OR city LIKE %s OR postal_code LIKE %s"  ;
-            $params[] = '%' . $search . '%';
-            $params[] = '%' . $search . '%';
-            $params[] = '%' . $search . '%';
-        }
-
-        $query = "SELECT * FROM {$this->table} {$search_sql} ORDER BY id DESC LIMIT %d OFFSET %d";
-        $params[] = $perPage;
-        $params[] = $offset;
-
-        $results = $this->db->get_results($this->db->prepare($query, ...$params), ARRAY_A);
-
-        // Count total with search
-        if (!empty($search)) {
-            $count_query = "SELECT COUNT(*) FROM {$this->table} WHERE name LIKE %s OR slug LIKE %s";
-            $total = $this->db->get_var($this->db->prepare($count_query, '%' . $search . '%', '%' . $search . '%'));
-        } else {
-            $total = $this->db->get_var("SELECT COUNT(*) FROM {$this->table}");
-        }
-
-        return [
-            'data' => array_map(fn($row) => (new static())->fill($row), $results),
-            'total' => (int)$total,
-            'per_page' => $perPage,
-            'current_page' => $page,
-            'last_page' => ceil($total / $perPage),
-        ];
+        return $this
+            ->when(!empty($search), function ($query) use ($search) {
+                return $query->where('address', 'LIKE', '%' . $search . '%')
+                           ->orWhere('city', 'LIKE', '%' . $search . '%')
+                           ->orWhere('postal_code', 'LIKE', '%' . $search . '%');
+            })
+            ->when(!empty($category_ids), function ($query) use ($category_ids) {
+                return $query->where('category_id', 'LIKE', '%' . $category_ids . '%');
+            })
+            ->when(!empty($tag_ids), function ($query) use ($tag_ids) {
+                return $query->where('tag_id', 'LIKE', '%' . $tag_ids . '%');
+            })
+            ->paginate($perPage, $page);
     }
 
     /**
@@ -413,9 +464,10 @@ abstract class Model
      */
     public function first()
     {
-     //   $results = $this->limit(1)->get();
+        $this->query['limit'] = 1;
+        $results = $this->get();
         
-       // return $results->count() > 0 ? $results->first() : null;
+        return $results->count() > 0 ? $results->first() : null;
     }
 
     /**
@@ -451,10 +503,46 @@ abstract class Model
             $operator = '=';
         }
         
+        // Convert 'like' operator to MySQL's LIKE syntax
+        if (strtolower($operator) == 'like') {
+            $operator = 'LIKE';
+        }
+        
         $this->query['where'][] = [
             'column' => $column,
             'operator' => $operator,
-            'value' => $value
+            'value' => $value,
+            'boolean' => 'AND'
+        ];
+        
+        return $this;
+    }
+
+    /**
+     * Add an "or where" clause to the query.
+     * 
+     * @param string $column
+     * @param mixed $operator
+     * @param mixed $value
+     * @return $this
+     */
+    public function orWhere($column, $operator, $value = null)
+    {
+        if (func_num_args() === 2) {
+            $value = $operator;
+            $operator = '=';
+        }
+        
+        // Convert 'like' operator to MySQL's LIKE syntax
+        if (strtolower($operator) == 'like') {
+            $operator = 'LIKE';
+        }
+        
+        $this->query['where'][] = [
+            'column' => $column,
+            'operator' => $operator,
+            'value' => $value,
+            'boolean' => 'OR'
         ];
         
         return $this;
@@ -480,6 +568,62 @@ abstract class Model
     }
     
     /**
+     * Add a "where between" clause to the query.
+     *
+     * @param string $column
+     * @param array $range Array with exactly two values
+     * @return $this
+     */
+    public function whereBetween($column, array $range)
+    {
+        if (count($range) !== 2) {
+            throw new \InvalidArgumentException("Range must contain exactly two values.");
+        }
+
+        $this->where($column, '>=', $range[0]);
+        $this->where($column, '<=', $range[1]);
+        
+        return $this;
+    }
+
+    /**
+     * Add an order by clause to the query.
+     *
+     * @param string $column
+     * @param string $direction
+     * @return $this
+     */
+    public function orderBy($column, $direction = 'ASC')
+    {
+        $this->query['orderBy'] = [$column, strtoupper($direction)];
+        return $this;
+    }
+
+    /**
+     * Set the number of rows to return.
+     *
+     * @param int $value
+     * @return $this
+     */
+    public function limit($value)
+    {
+        $this->query['limit'] = (int) $value;
+        return $this;
+    }
+
+    /**
+     * Set the offset for the query.
+     *
+     * @param int $value
+     * @return $this
+     */
+    public function offset($value)
+    {
+        $this->query['offset'] = (int) $value;
+        return $this;
+    }
+    
+    /**
      * Execute the query and get the results.
      * 
      * @return Collection
@@ -488,28 +632,45 @@ abstract class Model
     {
         $sql = "SELECT * FROM {$this->table}";
         $params = [];
-        $whereClauses = [];
         
         // Process where conditions
-        foreach ($this->query['where'] as $condition) {
-            $whereClauses[] = "{$condition['column']} {$condition['operator']} %s";
-            $params[] = $condition['value'];
+        if (!empty($this->query['where'])) {
+            $sql .= " WHERE ";
+            $firstWhere = true;
+            
+            foreach ($this->query['where'] as $condition) {
+                // Add the boolean operator (AND/OR) except for the first condition
+                if (!$firstWhere) {
+                    $sql .= " {$condition['boolean']} ";
+                } else {
+                    $firstWhere = false;
+                }
+                
+                $sql .= "{$condition['column']} {$condition['operator']} %s";
+                $params[] = $condition['value'];
+            }
         }
         
         // Process whereIn conditions
-        foreach ($this->query['whereIn'] as $condition) {
-            if (empty($condition['values'])) {
-                continue;
+        if (!empty($this->query['whereIn'])) {
+            if (empty($this->query['where'])) {
+                $sql .= " WHERE ";
+            } else {
+                $sql .= " AND ";
             }
             
-            $placeholders = implode(', ', array_fill(0, count($condition['values']), '%s'));
-            $whereClauses[] = "{$condition['column']} IN ({$placeholders})";
-            $params = array_merge($params, $condition['values']);
-        }
-        
-        // Add where clauses to SQL
-        if (!empty($whereClauses)) {
-            $sql .= " WHERE " . implode(' AND ', $whereClauses);
+            $whereInClauses = [];
+            foreach ($this->query['whereIn'] as $condition) {
+                if (empty($condition['values'])) {
+                    continue;
+                }
+                
+                $placeholders = implode(', ', array_fill(0, count($condition['values']), '%s'));
+                $whereInClauses[] = "{$condition['column']} IN ({$placeholders})";
+                $params = array_merge($params, $condition['values']);
+            }
+            
+            $sql .= implode(' AND ', $whereInClauses);
         }
         
         // Add order by if set
@@ -542,18 +703,6 @@ abstract class Model
         
         // Map results to model instances and return as Collection
         return new Collection(array_map(fn($row) => (new static())->fill($row), $results));
-    }
-
-    public function whereBetween($column, array $range)
-    {
-        if (count($range) !== 2) {
-            throw new \InvalidArgumentException("Range must contain exactly two values.");
-        }
-
-        $this->where($column, '>=', $range[0]);
-        $this->where($column, '<=', $range[1]);
-        
-        return $this;
     }
 
     public function update(array $data, $id)
