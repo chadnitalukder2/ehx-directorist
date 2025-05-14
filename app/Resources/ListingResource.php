@@ -71,27 +71,11 @@ class ListingResource
         $listings = $listingModel->filterForListing($perPage, $page, $search, $category_ids, $tag_ids);
 
         foreach ($listings['data'] as $listing) {
-            // Decode JSON fields safely
-            $listing->category_id = is_string($listing->category_id) && !empty($listing->category_id)
-                ? json_decode($listing->category_id, true)
-                : (array) $listing->category_id;
-
-            $listing->meta = is_string($listing->meta) && !empty($listing->meta)
-                ? json_decode($listing->meta, true)
-                : (array) $listing->meta;
-
-            $listing->tag_id = is_string($listing->tag_id) && !empty($listing->tag_id)
-                ? json_decode($listing->tag_id, true)
-                : (array) $listing->tag_id;
-
-            // Load related tags and categories
-            $listing->tags = !empty($listing->tag_id)
-                ? (new Tag())->whereIn('id', $listing->tag_id)->get()->toArray()
-                : [];
-
-            $listing->categories = !empty($listing->category_id)
-                ? (new Category())->whereIn('id', $listing->category_id)->get()->toArray()
-                : [];
+            $listing->category_id  = is_string($listing->category_id) ? json_decode($listing->category_id, true) : $listing->category_id;
+            $listing->meta         = is_string($listing->meta) ? json_decode($listing->meta, true) : $listing->meta;
+            $listing->tag_id       = is_string($listing->tag_id) ? json_decode($listing->tag_id, true) : $listing->tag_id;
+            $listing->tags         = (new Tag())->whereIn('id', $listing->tag_id)->get()->toArray();
+            $listing->categories   = (new Category())->whereIn('id', $listing->category_id)->get()->toArray();
         }
 
         return $listings;
