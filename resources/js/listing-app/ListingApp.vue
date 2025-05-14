@@ -8,7 +8,7 @@
                     <div class="ehxd-input-wrapper">
                         <span class="dashicons dashicons-search ehxd_icon"></span>
                         <input type="text" placeholder="Enter address or postcode" class="ehxd-location-input"
-                            v-model="searchQuery" />
+                            v-model="search" />
                     </div>
 
                     <div class="ehxd-radius-slider-container">
@@ -17,7 +17,7 @@
                     </div>
 
                     <!-- Category Filters -->
-                    <div class="ehxd-features-filter">
+                    <div class="ehxd-features-filter" style=" border-bottom: 1px solid #e0e0e0;">
                         <h3 class="ehxd-features-heading">Filter by Category</h3>
                         <div class="ehxd-feature-list">
                             <div v-for="(category, index) in categories" :key="category.id" class="ehxd-feature-item">
@@ -49,7 +49,7 @@
                     <div v-for="listing in listings" :key="listing.id" class="ehxd-freelancer-card">
                         <div class="ehxd-freelancer-header">
                             <div class="ehxd-profile-image-container">
-                                <img :src="listing.image" alt="img" class="ehxd-profile-image" />
+                                <img :src="listing.logo" alt="img" class="ehxd-profile-image" />
                             </div>
                             <div class="ehxd-freelancer-info">
                                 <h3 class="ehxd-freelancer-name">{{ listing.name }}</h3>
@@ -87,11 +87,12 @@
                 <!-- Pagination -->
                 <div class="ehxd_footer">
                     <div class="ehxd_footer_page">
-                        <p>Page {{ currentPage }} of {{ lastPage }}</p>
+                        <p>Page {{ currentPage }} of {{ last_page }}</p>
                     </div>
-                    <el-pagination v-model:current-page="currentPage" v-model:page-size="pageSize"
-                        :page-sizes="[10, 20, 30, 40]" large :disabled="total_list <= pageSize" background
-                        layout="total, sizes, prev, pager, next" :total="+total_list" />
+                    <el-pagination class="ehxd_pagination" v-model:current-page="currentPage"
+                        v-model:page-size="pageSize" :page-sizes="[10, 20, 30, 40]" large
+                        :disabled="total_list <= pageSize" background layout="total, sizes, prev, pager, next"
+                        :total="+total_list" />
                 </div>
             </div>
         </div>
@@ -108,36 +109,74 @@ export default {
             categories: [],
             tags: [],
             search: '',
-            listings: [],
             list: {},
             total_list: 0,
-            loading: false,
             currentPage: 1,
             last_page: 1,
             pageSize: 10,
-            searchQuery: '',
             radius: 30,
+            loading: false,
             nonce: window.EhxDirectoristData.nonce,
             rest_api: window.EhxDirectoristData.rest_api,
         };
+    },
+    watch: {
+        currentPage() {
+            this.getAllListings();
+        },
+        pageSize() {
+            this.currentPage = 1;
+            this.getAllListings();
+        },
+        search: {
+            handler() {
+                this.currentPage = 1;
+                this.getAllListings();
+            },
+            immediate: false
+        },
+        categories: {
+            handler() {
+                this.currentPage = 1;
+                this.getAllListings();
+            },
+            deep: true
+        },
+        tags: {
+            handler() {
+                this.currentPage = 1;
+                this.getAllListings();
+            },
+            deep: true
+        }
     },
     methods: {
 
         async getAllListings() {
             this.loading = true;
+            const selectedCategoryIds = this.categories
+                .filter(cat => cat.selected)
+                .map(cat => cat.id);
+
+            const selectedTagIds = this.tags
+                .filter(tag => tag.selected)
+                .map(tag => tag.id);
+
             try {
                 const response = await axios.get(`${this.rest_api}/getAllListings`, {
                     params: {
                         page: this.currentPage,
                         limit: this.pageSize,
                         search: this.search || '',
+                        categories: selectedCategoryIds.join(','),
+                        tags: selectedTagIds.join(','),
                     },
                     headers: {
                         'X-WP-Nonce': this.nonce
                     }
                 });
                 this.listings = response?.data?.listings_data;
-                this.total_List = response?.data?.total || 0;
+                this.total_list = response?.data?.total || 0;
                 this.last_page = response?.data?.last_page || 1;
                 this.loading = false;
             } catch (error) {
@@ -201,7 +240,6 @@ export default {
 //=================================
 .ehxd-search-sidebar {
     flex-basis: 30%;
-    border: 1px solid #e0e0e0;
     border-radius: 6px;
     background-color: #fff;
     padding: 30px;
@@ -238,7 +276,6 @@ export default {
 }
 
 .ehxd-features-filter {
-    border-bottom: 1px solid #e0e0e0;
     padding-bottom: 20px;
     padding-top: 10px;
 }
@@ -468,7 +505,7 @@ export default {
 }
 
 .ehxd-freelancer-info {
-    flex-grow: 1;
+    flex-basis: 60%;
 }
 
 .ehxd-freelancer-name {
@@ -480,12 +517,11 @@ export default {
 }
 
 .ehxd-freelancer-location {
+    margin-top: 20px;
     display: flex;
     align-items: center;
     font-size: 15px;
     color: #333;
-    margin: 0;
-    margin-bottom: 8px;
 
     .address-icon {
         font-size: 16px;
@@ -583,6 +619,9 @@ export default {
             font-size: 15px;
             color: #666666;
         }
+
     }
+
+
 }
 </style>

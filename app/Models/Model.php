@@ -378,9 +378,9 @@ abstract class Model
      */
     public function first()
     {
-        $results = $this->limit(1)->get();
+     //   $results = $this->limit(1)->get();
         
-        return $results->count() > 0 ? $results->first() : null;
+       // return $results->count() > 0 ? $results->first() : null;
     }
 
     /**

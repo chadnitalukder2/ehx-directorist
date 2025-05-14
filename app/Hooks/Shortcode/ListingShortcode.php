@@ -5,6 +5,12 @@ class ListingShortcode {
 
     public function __construct() {
         add_action('wp_enqueue_scripts', [$this, 'enqueueScripts']);
+        wp_enqueue_style(
+            'ehx-directorist-admin',
+            EHX_DIRECTORIST_PLUGIN_URL . 'assets/css/admin.css',
+            [],
+            EHX_DIRECTORIST_VERSION
+        );
     }
 
     public function enqueueScripts() {
