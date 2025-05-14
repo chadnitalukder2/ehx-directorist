@@ -3,6 +3,7 @@ namespace EhxDirectorist\Resources;
 use EhxDirectorist\Models\Category;
 use EhxDirectorist\Models\Listing;
 use EhxDirectorist\Models\Post;
+use EhxDirectorist\Models\Tag;
 use EhxDirectorist\Services\Arr;
 
 class ListingResource {
@@ -66,8 +67,10 @@ class ListingResource {
             $listing->category_id  = is_string($listing->category_id) ? json_decode($listing->category_id, true) : $listing->category_id;
             $listing->meta         = is_string($listing->meta) ? json_decode($listing->meta, true) : $listing->meta;
             $listing->tag_id       = is_string($listing->tag_id) ? json_decode($listing->tag_id, true) : $listing->tag_id;
+            $listing->tags         = (new Tag())->whereIn('id', $listing->tag_id)->get()->toArray();
+            $listing->categories   = (new Category())->whereIn('id', $listing->category_id)->get()->toArray();
         }
-        
+
         return $listings;
     }
 
