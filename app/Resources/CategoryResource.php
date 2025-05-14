@@ -9,11 +9,14 @@ class CategoryResource {
     }
 
     public static function update($data, $id) {
+        //return Category::where('id', $id)->update($category);
         $categoryModel = new Category();
         $category = $categoryModel->find($id);
       
         if ($category) {
+           
             $category->update($data, $id);
+       
             return true; 
         }
     

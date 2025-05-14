@@ -68,7 +68,7 @@ class ListingResource
         $listingModel = new Listing();
 
         // Get listings with filters (with fallback to all if nothing matched)
-        $listings = $listingModel->getAll($perPage, $page, $search, $category_ids, $tag_ids);
+        $listings = $listingModel->filterForListing($perPage, $page, $search, $category_ids, $tag_ids);
 
         foreach ($listings['data'] as $listing) {
             // Decode JSON fields safely
