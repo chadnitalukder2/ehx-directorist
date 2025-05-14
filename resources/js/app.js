@@ -25,6 +25,7 @@ const router = createRouter({
         { path: '/directory-listing', component: AllDirectoryListing },
         { path: '/add-directory-listing', component: AddDirectoryListing },
         { path: '/edit-directory-listing/:id', name:'edit-directory-listing', component: EditDirectoryListing },
+        { path: '/settings', component: Settings },
     ]
 });
 

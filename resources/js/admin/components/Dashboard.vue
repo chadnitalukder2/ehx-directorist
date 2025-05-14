@@ -1,10 +1,3 @@
 <template>
-  <h1>Dashboard</h1>
+  <h1>dashboard</h1>
 </template>
-<script >
-
-</script>
-
-<style scoped lang="scss">
-
-</style>
