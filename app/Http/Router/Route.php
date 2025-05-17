@@ -26,5 +26,7 @@ class Route {
         API_Router::post('/updateDirectoryListing/{id}', [ListingController::class, 'updateDirectoryListing']);
         API_Router::post('/deleteList/{id}', [ListingController::class, 'deleteList']);
 
+        API_Router::post('/submitFrom', [ListingController::class, 'submitFrom']);
+
     } 
 }

@@ -43,3 +43,30 @@ jQuery(document).ready(function ($) {
         console.warn('ehxdMapData is not defined');
     }
 });
+
+jQuery(document).ready(function ($) {
+    console.log(window.EhxDirectoristData.rest_api, 'window');
+    $('#ehxd-contact-form').on('submit', function (e) {
+      e.preventDefault();
+  
+      const data = {
+        admin_email: $('input[name="addmin_email"').val(),
+        name: $('input[name="name"]').val(),
+        email: $('input[name="email"]').val(),
+        message: $('textarea[name="message"]').val()
+      };
+  
+      $.ajax({
+        url: `${window.EhxDirectoristData.rest_api}/submitFrom`,
+        method: 'POST',
+        data: JSON.stringify(data),
+        contentType: 'application/json',
+        success: function (response) {
+          $('.ehxd-response-message').text(response.message).css('color', 'green');
+        },
+        error: function (xhr) {
+          $('.ehxd-response-message').text('Failed to send message.').css('color', 'red');
+        }
+      });
+    });
+  });

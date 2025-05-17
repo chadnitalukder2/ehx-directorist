@@ -26,7 +26,7 @@ class ListingController
             'post_status'   => 'publish',
             'post_type'     => 'post',
         ]);
-      
+
         if (is_wp_error($post_id)) {
             return rest_ensure_response([
                 'message' => 'Failed to create listing'
@@ -112,7 +112,7 @@ class ListingController
                 'message' => 'Listing ID is required'
             ], 400);
         }
- 
+
         $res = ListingResource::get($id);
 
         if (!$res) {
@@ -120,7 +120,7 @@ class ListingController
                 'message' => 'Failed to get listing'
             ], 500);
         }
-        return wp_send_json_success( array(
+        return wp_send_json_success(array(
             'message' => 'Listing retrieved successfully',
             'listing_data' => $res
         ));
@@ -133,7 +133,7 @@ class ListingController
         $search = isset($_GET['search']) ? sanitize_text_field($_GET['search']) : null;
         $category_ids = isset($_GET['categories']) ? explode(',', sanitize_text_field($_GET['categories'])) : null;
         $tag_ids = isset($_GET['tags']) ? explode(',', sanitize_text_field($_GET['tags'])) : null;
-       
+
         $res = ListingResource::getAll($limit, $page, $search, $category_ids, $tag_ids);
         $data = array_map(fn($cat) => $cat->toArray(), $res['data']);
 
@@ -150,8 +150,54 @@ class ListingController
             'per_page' => $res['per_page'],
             'current_page' => $res['current_page'],
             'last_page' => $res['last_page'],
-        
 
+
+        ]);
+    }
+
+    public static function submitFrom(WP_REST_Request $request)
+    {
+        $data = $request->get_json_params();
+    
+        $admin_email    = sanitize_text_field($data['admin_email'] ?? '');
+        $name    = sanitize_text_field($data['name'] ?? '');
+        $email   = sanitize_email($data['email'] ?? '');
+        $message = sanitize_textarea_field($data['message'] ?? '');
+
+        if (empty($name) || empty($email) || empty($message)) {
+            wp_send_json([
+                'success' => false,
+                'message' => 'Please fill in all required fields.',
+            ], 400); 
+        }
+    
+        if (!is_email($email)) {
+            wp_send_json([
+                'success' => false,
+                'message' => 'Invalid email address.',
+            ], 400);
+        }
+  
+        $to = $admin_email;
+        $subject = "New Contact Form Message from $name";
+        $headers = [
+            'Content-Type: text/html; charset=UTF-8',
+            'From: Your Site <no-reply@yourdomain.com>',
+            "Reply-To: $name <$email>"
+        ];
+        $body = "<strong>Name:</strong> $name<br>
+        <strong>Email:</strong> $email<br>
+        <strong>Message:</strong><br>" . nl2br($message);
+
+        $sent = wp_mail($to, $subject, $body, $headers);
+        //$sent = wp_mail('chadnitalukder2@gmail.com', 'Test Subject', 'Test Body');
+     
+        if (!$sent) {
+            error_log('wp_mail failed sending contact form email.');
+        }
+        wp_send_json([
+            'success' => $sent,
+            'message' => $sent ? 'Message sent successfully!' : 'Failed to send message.',
         ]);
     }
 }

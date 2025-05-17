@@ -13,7 +13,7 @@ $tags = $data['tags'];
 $categories = $data['categories'];
 $latitude = $data['latitude'];
 $longitude = $data['longitude'];
-
+$meta = $data['meta'];
 
 
 $fake_image = EHX_DIRECTORIST_PLUGIN_URL . 'assets/images/free-nature-images.jpg';
@@ -58,13 +58,20 @@ $fake_logo = EHX_DIRECTORIST_PLUGIN_URL . 'assets/images/logo.jpg';
                     </p>
                 </div>
             </div>
+            <?php if (!empty($meta)): ?>
+                <div class="ehxd-contact-help">
+                    <?php foreach ($meta as $data): ?>
+                        <?php if (!empty($data['label']) && !empty($data['value'])): ?>
+                            <h2 class="ehxd-section-title"><?php echo esc_html($data['label']); ?></h2>
 
-            <div class="ehxd-contact-help">
-                <h2 class="ehxd-section-title">Custom Fields</h2>
-                <p class="ehxd_section_describe">
-                    If you need more information or would like to discuss how we can work with you, please contact us with our email.
-                </p>
-            </div>
+                            <p class="ehxd_section_describe">
+                                <?php echo esc_html($data['value']); ?>
+                            </p>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+
+                </div>
+            <?php endif; ?>
 
             <div class="ehxd-category-and-tag-wrapper">
                 <div class="ehxd_category_wrapper ehxd_border">
@@ -125,20 +132,24 @@ $fake_logo = EHX_DIRECTORIST_PLUGIN_URL . 'assets/images/logo.jpg';
                 </div>
 
                 <div class="ehxd-contact-form">
-                    <div class="ehxd-form-group">
-                        <label class="ehxd-form-label">Name</label>
-                        <input type="text" class="ehxd-form-input" placeholder="Your name">
-                    </div>
-                    <div class="ehxd-form-group">
-                        <label class="ehxd-form-label">Email</label>
-                        <input type="email" class="ehxd-form-input" placeholder="Your email">
-                    </div>
-                    <div class="ehxd-form-group">
-                        <label class="ehxd-form-label">Message</label>
-                        <textarea class="ehxd-form-input" rows="4" placeholder="Type your message"></textarea>
-                    </div>
+                    <form id="ehxd-contact-form">
+                        <div class="ehxd-form-group">
+                            <input type="hidden" name="addmin_email"  value="<?php echo esc_html($email); ?>">
+                            <label class="ehxd-form-label">Name</label>
+                            <input name="name" type="text" class="ehxd-form-input" placeholder="Your name">
+                        </div>
+                        <div class="ehxd-form-group">
+                            <label class="ehxd-form-label">Email</label>
+                            <input name="email" type="email" class="ehxd-form-input" placeholder="Your email">
+                        </div>
+                        <div class="ehxd-form-group">
+                            <label class="ehxd-form-label">Message</label>
+                            <textarea name="message" class="ehxd-form-input" rows="4" placeholder="Type your message"></textarea>
+                        </div>
 
-                    <button class="ehxd-submit-btn">Submit Now</button>
+                        <button type="submit" class="ehxd-submit-btn">Submit Now</button>
+                        <p class="ehxd-response-message"></p>
+                    </form>
                 </div>
             </div>
         </div>
