@@ -189,7 +189,7 @@ class ListingController
         <strong>Email:</strong> $email<br>
         <strong>Message:</strong><br>" . nl2br($message);
 
-        $sent = wp_mail($to, $subject, $body, $headers);
+         $sent = wp_mail($to, $subject, $body, $headers);
         //$sent = wp_mail('chadnitalukder2@gmail.com', 'Test Subject', 'Test Body');
      
         if (!$sent) {
