@@ -102,6 +102,7 @@ textarea {
   min-height: 200px;
 }
 #tinymce{
-  color: #606266;
+  color: #606266 !important;
 }
+
 </style>

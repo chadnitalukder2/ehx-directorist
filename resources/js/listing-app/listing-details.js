@@ -64,10 +64,14 @@ jQuery(document).ready(function ($) {
             success: function (response) {
                 if (response.success === true) {
                     $('.ehxd-response-message').text(response.message).css('color', 'green');
+
+                    $('#ehxd-contact-form').find('input[type="text"], input[type="email"], textarea').val('');
                 } else {
                     $('.ehxd-response-message').text(response.message).css('color', '#e96a6a');
+                    $('#ehxd-contact-form').find('input[type="text"], input[type="email"], textarea').val('');
                 }
             },
+            
             error: function (xhr) {
                 let errorMsg = 'Failed to send message.';
                 if (xhr.responseJSON && xhr.responseJSON.message) {

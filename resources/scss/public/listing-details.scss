@@ -363,7 +363,7 @@
     padding: 0px !important;
 }
 
-.post-navigation-link-previous {
+.post-navigation-link-previous, .post-navigation-link-next {
     display: none;
     padding: 0px !important;
 }
@@ -447,6 +447,9 @@
     label{
         font-size: 16px;
         color: #333;
+    }
+    #comment{
+        font-size: 14px;
     }
     textarea{
         border: 1px solid #ddd;
