@@ -90,4 +90,26 @@ class ListingResource
 
         return $listings;
     }
+
+    public static function getPost($id)
+    {
+        $post = (new Post())->find($id);
+        if (!$post) {
+            return null;
+        }
+    
+        $listing = (new Listing())->where('post_id', $id)->first();
+        if (!$listing) {
+            return null;
+        }
+  
+        // Decode JSON fields safely
+        $listing->meta = is_string($listing->meta) ? json_decode($listing->meta, true) : $listing->meta;
+        $listing->category_id = is_string($listing->category_id) ? json_decode($listing->category_id, true) : $listing->category_id;
+        $listing->tag_id = is_string($listing->tag_id) ? json_decode($listing->tag_id, true) : $listing->tag_id;
+        $listing->tags         = (new Tag())->whereIn('id', $listing->tag_id)->get()->toArray();
+        $listing->categories   = (new Category())->whereIn('id', $listing->category_id)->get()->toArray();
+    
+        return $listing->toArray();
+    }
 }

@@ -54,6 +54,7 @@
                             <div class="ehxd-freelancer-info">
                                 <h3 class="ehxd-freelancer-name">{{ listing.name }}</h3>
                                 <div class="ehxd-section">
+                                   
                                     <p class="ehxd-description-text">{{ listing.short_description }}</p>
                                 </div>
                                 <p class="ehxd-freelancer-location">
@@ -286,7 +287,7 @@ export default {
     padding: 12px 10px 12px 35px;
     border: 1px solid #e0e0e0;
     border-radius: 6px;
-    font-size: 15px;
+    font-size: 14px;
     background: #FBFBFB;
 
     &:focus-visible {
@@ -391,7 +392,7 @@ export default {
 }
 
 .ehxd-feature-label {
-    font-size: 15px;
+    font-size: 14px;
     color: #555;
 }
 
@@ -520,11 +521,11 @@ export default {
     margin-top: 20px;
     display: flex;
     align-items: center;
-    font-size: 15px;
+    font-size: 14px;
     color: #333;
 
     .address-icon {
-        font-size: 16px;
+        font-size: 15px;
         color: #000;
         margin-right: 5px;
         font-weight: 600;
@@ -544,7 +545,7 @@ export default {
 }
 
 .ehxd-description-text {
-    font-size: 15px;
+    font-size: 14px;
     color: #666;
     line-height: 1.5;
     margin: 0;
@@ -596,7 +597,7 @@ export default {
     background-color: #000;
     color: #fff;
     border-radius: 8px;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 500;
     cursor: pointer;
     transition: background-color 0.2s;
