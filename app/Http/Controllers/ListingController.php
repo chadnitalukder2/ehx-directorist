@@ -158,8 +158,8 @@ class ListingController
     public static function submitFrom(WP_REST_Request $request)
     {
         $data = $request->get_json_params();
-    
-        $admin_email    = sanitize_text_field($data['admin_email'] ?? '');
+    dd($listing_email );
+        $listing_email    = sanitize_text_field($data['listing_email'] ?? '');
         $name    = sanitize_text_field($data['name'] ?? '');
         $email   = sanitize_email($data['email'] ?? '');
         $message = sanitize_textarea_field($data['message'] ?? '');
@@ -178,18 +178,18 @@ class ListingController
             ], 400);
         }
   
-        $to = $admin_email;
+        $to = $listing_email;
         $subject = "New Contact Form Message from $name";
         $headers = [
             'Content-Type: text/html; charset=UTF-8',
             'From: Your Site <no-reply@yourdomain.com>',
-            "Reply-To: $name <$admin_email>"
+            "Reply-To: $name <$listing_email>"
         ];
         $body = "<strong>Name:</strong> $name<br>
         <strong>Email:</strong> $email<br>
         <strong>Message:</strong><br>" . nl2br($message);
 
-        $sent = wp_mail($email, $subject, $body, $headers);
+         $sent = wp_mail($to, $subject, $body, $headers);
         //$sent = wp_mail('chadnitalukder2@gmail.com', 'Test Subject', 'Test Body');
      
         if (!$sent) {
