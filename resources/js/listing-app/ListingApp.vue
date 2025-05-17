@@ -44,7 +44,7 @@
             </div>
 
             <!-- Listings -->
-            <div class="exhd_listing_wrapper">
+            <div class="exhd_listing_wrapper" v-loading="loading">
                 <div class="ehxd-freelancer-grid">
                     <div v-for="listing in listings" :key="listing.id" class="ehxd-freelancer-card">
                         <div class="ehxd-freelancer-header">
@@ -91,7 +91,7 @@
                         <p>Page {{ currentPage }} of {{ last_page }}</p>
                     </div>
                     <el-pagination class="ehxd_pagination" v-model:current-page="currentPage"
-                        v-model:page-size="pageSize" :page-sizes="[10, 20, 30, 40]" large
+                        v-model:page-size="pageSize" :page-sizes="[1, 10, 20, 30, 40]" large
                         :disabled="total_list <= pageSize" background layout="total, sizes, prev, pager, next"
                         :total="+total_list" />
                 </div>
