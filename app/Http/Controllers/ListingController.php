@@ -131,11 +131,11 @@ class ListingController
         $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
         $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 10;
         $search = isset($_GET['search']) ? sanitize_text_field($_GET['search']) : null;
-        $category_ids = isset($_GET['categories']) ? explode(',', sanitize_text_field($_GET['categories'])) : null;
-        $tag_ids = isset($_GET['tags']) ? explode(',', sanitize_text_field($_GET['tags'])) : null;
+        $category_ids = isset($_GET['categories']) && !empty($_GET['categories']) ? explode(',', sanitize_text_field($_GET['categories'])) : null;
+        $tag_ids = isset($_GET['tags']) && !empty($_GET['tags']) ? explode(',', sanitize_text_field($_GET['tags'])) : null;
 
         $res = ListingResource::getAll($limit, $page, $search, $category_ids, $tag_ids);
-        $data = array_map(fn($cat) => $cat->toArray(), $res['data']);
+        $data = $res['data'];
 
         if (!$res) {
             return rest_ensure_response([
