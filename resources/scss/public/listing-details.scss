@@ -27,7 +27,7 @@
         position: absolute;
         width: 154px;
         height: 154px;
-        top: 215px ;
+        top: 215px;
         left: 80px;
         border-radius: 100%;
         overflow: hidden;
@@ -48,8 +48,9 @@
 .ehxd-main {
     display: flex;
     flex-wrap: wrap;
-    padding: 45px 40px;
+    padding: 45px 40px 10px;
     gap: 40px;
+
     .ehxd-left-section {
         flex-basis: 60%;
         padding: 40px 0px 0px 0px;
@@ -85,15 +86,17 @@
                 color: #555;
                 letter-spacing: 0.5px;
                 font-size: 14px;
-                p{
+
+                p {
                     // margin: 0;
                 }
             }
         }
 
-        .ehxd-contact-help{
+        .ehxd-contact-help {
             margin-bottom: 20px;
-            .ehxd_section_describe{
+
+            .ehxd_section_describe {
                 margin-bottom: 30px;
                 margin-top: 10px;
                 line-height: 1.5;
@@ -107,33 +110,39 @@
             margin-bottom: 20px;
             border: 2px solid #E7f0FA;
             border-radius: 10px;
-            .ehxd_category_wrapper{
-                padding-bottom:20px ;
+
+            .ehxd_category_wrapper {
+                padding-bottom: 20px;
                 padding: 20px;
             }
-            .ehxd_border{
+
+            .ehxd_border {
                 border-bottom: 2px solid #E7f0FA;
             }
         }
-        
+
     }
 }
+
 .ehxd-section-title {
     font-size: 16px;
     font-weight: 500;
     color: #333;
     margin: 0;
-  
+
 }
+
 //==================
 
 .ehxd-right-section {
     flex-basis: 35%;
     width: 300px;
-    .ehxd-details-wrapper{
+
+    .ehxd-details-wrapper {
         border: 2px solid #E7f0FA;
         border-radius: 10px;
         padding: 20px;
+
         .ehxd-map-placeholder {
             width: 100%;
             height: 300px;
@@ -144,25 +153,30 @@
             justify-content: center;
             position: relative;
         }
-        .ehxd-contact-info{
+
+        .ehxd-contact-info {
             padding-top: 20px;
-            .ehxd-info-item{
+
+            .ehxd-info-item {
                 display: flex;
                 align-items: center;
                 margin-bottom: 12px;
                 color: #555;
-                .ehxd-info-icon{
+
+                .ehxd-info-icon {
                     color: #555;
                     margin-right: 10px;
                     display: flex;
                     align-items: flex-start;
                     justify-content: center;
                     font-size: 15px;
-                   i{
-                    font-weight: 600;
-                   }
+
+                    i {
+                        font-weight: 600;
+                    }
                 }
-                .ehxd-info{
+
+                .ehxd-info {
                     margin: 0px;
                     font-size: 14px;
                     color: #555;
@@ -176,42 +190,51 @@
         border-radius: 10px;
         padding: 20px;
         margin-top: 20px;
+
         .ehxd-owner-info {
             display: flex;
             align-items: center;
             margin-bottom: 25px;
+
             .ehxd-img-wrapper {
                 width: 48px;
                 border-radius: 100%;
                 height: 48px;
-                border: 1px solid green;
+                border: 1px solid #888;
                 overflow: hidden;
                 margin-right: 10px;
-                img{
+
+                img {
                     width: 100%;
                     height: 100%;
                 }
             }
-            .ehxd-owner-name {    
+
+            .ehxd-owner-name {
                 font-size: 16px;
                 font-weight: 500;
                 color: #444;
             }
+
             .ehxd-owner-title {
                 font-size: 12px;
                 color: #888;
                 line-height: 1;
             }
         }
+
         .ehxd-contact-form {
             margin-top: 15px;
+
             .ehxd-form-group {
                 margin-bottom: 12px;
+
                 .ehxd-form-label {
                     display: block;
                     color: #666;
                     font-size: 14px;
                 }
+
                 .ehxd-form-input {
                     width: 100%;
                     padding: 8px;
@@ -219,7 +242,8 @@
                     border: 1px solid #ddd;
                     border-radius: 4px;
                     font-size: 12px;
-                    &:focus-visible{
+
+                    &:focus-visible {
                         outline: none;
                     }
                 }
@@ -249,6 +273,7 @@
     flex-wrap: wrap;
     gap: 8px;
     margin-top: 15px;
+
     .ehxd-category {
         padding: 1px 10px;
         border-radius: 20px;
@@ -257,6 +282,7 @@
         background-color: #CEECDF;
         color: #256a4c;
     }
+
     .ehxd-tag {
         padding: 1px 10px;
         border-radius: 20px;
@@ -288,14 +314,16 @@
         flex-direction: column;
         padding: 45px 15px !important;
     }
-    .ehxd-cover-img{
+
+    .ehxd-cover-img {
         height: 200px !important;
     }
-    .ehxd-logo{
+
+    .ehxd-logo {
         height: 120px !important;
         width: 120px !important;
-        left: 50px !important;   
-        top: 122px !important; 
+        left: 50px !important;
+        top: 122px !important;
     }
 
     .ehxd-right-section {
@@ -305,6 +333,7 @@
         padding-right: 0px;
     }
 }
+
 @media (max-width: 1110px) {
     .ehxd-main {
         flex-direction: column;
@@ -314,21 +343,26 @@
         width: 100%;
         border-left: none;
         border-top: 1px solid #eee;
-       
+
     }
-    .ehxd-left-section{
+
+    .ehxd-left-section {
         width: 100%;
         padding-right: 0px;
     }
 }
+
 //==================================
 .wp-block-template-part {
     display: none;
+    padding: 0px !important;
 }
 
 .wp-block-columns {
     display: block !important;
+    padding: 0px !important;
 }
+
 .post-navigation-link-previous {
      display: none;
 }
