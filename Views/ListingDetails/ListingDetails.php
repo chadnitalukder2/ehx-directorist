@@ -16,7 +16,7 @@ $longitude = $data['longitude'];
 $meta = $data['meta'];
 
 
-$fake_image = EHX_DIRECTORIST_PLUGIN_URL . 'assets/images/free-nature-images.jpg';
+$fake_image = EHX_DIRECTORIST_PLUGIN_URL . 'assets/images/cover.jpg';
 $fake_logo = EHX_DIRECTORIST_PLUGIN_URL . 'assets/images/logo.jpg';
 
 ?>
@@ -148,7 +148,7 @@ $fake_logo = EHX_DIRECTORIST_PLUGIN_URL . 'assets/images/logo.jpg';
                         </div>
 
                         <button type="submit" class="ehxd-submit-btn">Submit Now</button>
-                        <p class="ehxd-response-message"></p>
+                        <p class="ehxd-response-message" style="margin-bottom: 0; font-size: 12px" ></p>
                     </form>
                 </div>
             </div>
