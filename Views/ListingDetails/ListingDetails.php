@@ -136,15 +136,15 @@ $fake_logo = EHX_DIRECTORIST_PLUGIN_URL . 'assets/images/logo.jpg';
                         <div class="ehxd-form-group">
                             <input type="hidden" name="listing_email"  value="<?php echo esc_html($email); ?>">
                             <label class="ehxd-form-label">Name</label>
-                            <input name="name" type="text" class="ehxd-form-input" placeholder="Your name">
+                            <input name="name" type="text" class="ehxd-form-input" placeholder="Your name" require>
                         </div>
                         <div class="ehxd-form-group">
                             <label class="ehxd-form-label">Email</label>
-                            <input name="email" type="email" class="ehxd-form-input" placeholder="Your email">
+                            <input name="email" type="email" class="ehxd-form-input" placeholder="Your email" require>
                         </div>
                         <div class="ehxd-form-group">
                             <label class="ehxd-form-label">Message</label>
-                            <textarea name="message" class="ehxd-form-input" rows="4" placeholder="Type your message"></textarea>
+                            <textarea name="message" class="ehxd-form-input" rows="4" placeholder="Type your message" require></textarea>
                         </div>
 
                         <button type="submit" class="ehxd-submit-btn">Submit Now</button>
