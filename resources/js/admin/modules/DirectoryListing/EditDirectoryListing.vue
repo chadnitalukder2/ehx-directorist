@@ -82,7 +82,8 @@
                 </el-form-item>
 
                 <el-form-item label="Description" prop="description">
-                    <WpEditor ref="descriptionEditor" v-model="localList.description" />
+                    <el-input v-model="localList.description" type="textarea" placeholder="Enter description" rows="8"/>
+                    <!-- <WpEditor ref="descriptionEditor" v-model="localList.description" /> -->
                 </el-form-item>
 
                 <div class="custom_field_list_wrapper">

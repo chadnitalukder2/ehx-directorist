@@ -21,12 +21,12 @@ function initMapWhenReady() {
 document.addEventListener("DOMContentLoaded", initMapWhenReady);
 
 jQuery(document).ready(function ($) {
-    console.log(window.EhxDirectoristData.rest_api, 'window');
+  //  console.log(window.EhxDirectoristData.rest_api, 'window');
     $('#ehxd-contact-form').on('submit', function (e) {
         e.preventDefault();
 
         const data = {
-            admin_email: $('input[name="addmin_email"').val(),
+            listing_email: $('input[name="listing_email"').val(),
             name: $('input[name="name"]').val(),
             email: $('input[name="email"]').val(),
             message: $('textarea[name="message"]').val()

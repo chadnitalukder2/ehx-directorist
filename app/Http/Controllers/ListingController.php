@@ -161,7 +161,7 @@ class ListingController
     public static function submitFrom(WP_REST_Request $request)
     {
         $data = $request->get_json_params();
-    dd($listing_email );
+    
         $listing_email    = sanitize_text_field($data['listing_email'] ?? '');
         $name    = sanitize_text_field($data['name'] ?? '');
         $email   = sanitize_email($data['email'] ?? '');

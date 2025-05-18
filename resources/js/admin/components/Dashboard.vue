@@ -5,7 +5,7 @@
         <span class="dashicons dashicons-list-view ehxd_icon"></span>
         <div class="ehxd_menu_card_details ">
           <h5 class="ehxd_title">Total Directory Listing</h5>
-          <p class="ehxd_total">6</p>
+          <p class="ehxd_total">{{ total_listing }}</p>
           <router-link to="/directory-listing" class="ehxd_view_all">directory listing</router-link>
         </div>
       </div>
@@ -14,7 +14,7 @@
         <span class="dashicons dashicons-category ehxd_icon"></span>
         <div class="ehxd_menu_card_details ">
           <h5 class="ehxd_title">Total Category</h5>
-          <p class="ehxd_total">6</p>
+          <p class="ehxd_total">{{ total_category }}</p>
           <router-link to="/categories" class="ehxd_view_all">Total category</router-link>
         </div>
       </div>
@@ -22,70 +22,44 @@
         <span class="dashicons dashicons-tag ehxd_icon"></span>
         <div class="ehxd_menu_card_details ">
           <h5 class="ehxd_title">Total Tag</h5>
-          <p class="ehxd_total">{{ total_reservation_table }}</p>
-          <router-link to="/tags" class="ehxd_view_all">Total Tag Table</router-link>
+          <p class="ehxd_total">{{ total_tag }}</p>
+          <router-link to="/tags" class="ehxd_view_all">Total Tag</router-link>
         </div>
       </div>
 
     </div>
 
     <AppTable :tableData="listings" v-loading="loading">
-            <template #header>
-                <div class="ehxd_title">
-                    <h1 class="table-title">Recent directory Listing</h1>
-                </div>
-             
+      <template #header>
+        <div class="ehxd_title">
+          <h1 class="table-title">Latest 10 Directory Listings</h1>
+        </div>
 
-            </template>
 
-            <template #columns>
-                <el-table-column prop="id" label="ID" width="60" />
-                <el-table-column label="Logo" width="auto">
-                    <template #default="{ row }">
-                        <img v-if="row?.logo" :src="row?.logo" alt="logo"
-                            style="width: 50px; height: 50px; object-fit: cover;">
-                        <span v-else>No Image</span>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="name" label="Name" width="auto" />
-                <el-table-column prop="phone" label="Phone" width="auto" />
-                <el-table-column prop="email" label="Email" width="auto" />
-                <el-table-column prop="address" label="Address" width="auto" />
-                <el-table-column prop="added_date" label="Add Date" width="auto">
-                    <template #default="{ row }">
-                        {{ formatAddedDate(row.created_at) }}
-                    </template>
-                </el-table-column>
-                <el-table-column label="Operations" width="120">
-                    <template #default="{ row }">
-                        <el-tooltip class="box-item" effect="dark" content="View"
-                            placement="top-start">
-                            <a :href="row?.post_url" style="margin-right: 12px;" target="_blank" class="ehxd_box_icon" link size="small">
-                                <el-button  class="ehxd_box_icon" link size="small">
-                                    <Icon icon="ehxd-eye" />
-                                </el-button>
-                            </a>
-                        </el-tooltip>
+      </template>
 
-                        <el-tooltip class="box-item" effect="dark" content="Edit" placement="top-start">
-                            <el-button @click="$router.push({ name: 'edit-directory-listing', params: { id: row.id } })"
-                                class="ehxd_box_icon" link size="small">
-                                <Icon icon="ehxd-edit" />
-                            </el-button>
-                        </el-tooltip>
+      <template #columns>
+        <el-table-column prop="id" label="ID" width="60" />
+        <el-table-column label="Logo" width="auto">
+          <template #default="{ row }">
+            <img v-if="row?.logo" :src="row?.logo" alt="logo" style="width: 50px; height: 50px; object-fit: cover;">
+            <span v-else>No Image</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="name" label="Name" width="auto" />
+        <el-table-column prop="phone" label="Phone" width="auto" />
+        <el-table-column prop="email" label="Email" width="auto" />
+        <el-table-column prop="address" label="Address" width="auto" />
+        <el-table-column prop="added_date" label="Add Date" width="auto">
+          <template #default="{ row }">
+            {{ formatAddedDate(row.created_at) }}
+          </template>
+        </el-table-column>
+      </template>
 
-                        <el-tooltip class="box-item" effect="dark" content="Delete" placement="top-start">
-                            <el-button @click="openDeleteListModal(row)" class="ehxd_box_icon" link size="small">
-                                <Icon icon="ehxd-delete" />
-                            </el-button>
-                        </el-tooltip>
-                    </template>
-                </el-table-column>
-            </template>
 
-          
 
-        </AppTable>
+    </AppTable>
 
 
 
@@ -102,11 +76,12 @@ export default {
   data() {
     return {
       loading: false,
-      menus: [],
-      total_menus: 0,
+      listings: [],
+      total_listing: 0,
       total_category: 0,
-      total_reservation_table: 0,
-     
+      total_tag: 0,
+      nonce: window.EhxDirectoristData.nonce,
+      rest_api: window.EhxDirectoristData.rest_api,
     }
   },
   methods: {
@@ -115,15 +90,73 @@ export default {
       const options = { day: 'numeric', month: 'long', year: 'numeric' };
       return new Date(date).toLocaleDateString('en-GB', options);
     },
+    async getAllListings() {
+      this.loading = true;
+      try {
+        const response = await axios.get(`${this.rest_api}/getAllListings`, {
+          params: {
+            page: this.currentPage,
+            limit: this.pageSize,
+            search: this.search || '',
+          },
+          headers: {
+            'X-WP-Nonce': this.nonce
+          }
+        });
+        this.listings = response?.data?.listings_data;
+        this.total_listing = response?.data?.total || 0;
+        this.last_page = response?.data?.last_page || 1;
+        this.loading = false;
+      } catch (error) {
+        this.loading = false;
+        console.error('Error fetching couriers:',);
+      }
+    },
 
-  
+    async getAllCategories() {
+      this.loading = true;
+      try {
+        const response = await axios.get(`${this.rest_api}/getAllCategories`, {
+          params: {
+            page: this.currentPage,
+            limit: this.pageSize,
+            search: this.search || '',
+          },
+          headers: {
+            'X-WP-Nonce': this.nonce
+          }
+        });
+        this.total_category = response?.data?.total || 0;
+      } catch (error) {
+        this.loading = false;
+        console.error('Error fetching couriers:',);
+      }
+    },
+
+    async getAllTag() {
+      try {
+        const response = await axios.get(`${this.rest_api}/getAllTag`, {
+          params: {
+            page: this.currentPage,
+            limit: this.pageSize,
+            search: this.search || '',
+          },
+          headers: {
+            'X-WP-Nonce': this.nonce
+          }
+        });
+        this.total_tag = response?.data?.total || 0;
+      } catch (error) {
+        this.loading = false;
+        console.error('Error fetching couriers:',);
+      }
+    },
+
   },
   mounted() {
-
-    // this.getMenu();
-    // this.getCategory();
-    // this.getReservation();
-
+    this.getAllListings();
+    this.getAllCategories();
+    this.getAllTag();
   }
 }
 </script>
@@ -134,12 +167,14 @@ export default {
     font-size: 15px !important;
     font-weight: 500 !important;
   }
-  .ehxd_total{
+
+  .ehxd_total {
     font-size: 22px !important;
     font-weight: 600 !important;
   }
 }
-.ehxd-admin-page{
+
+.ehxd-admin-page {
   background: #F8F9FC;
 }
 </style>

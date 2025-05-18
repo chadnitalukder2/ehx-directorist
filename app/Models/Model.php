@@ -411,22 +411,22 @@ abstract class Model
         ];
     }
     
-    public function filterForListing($perPage = 10, $page = 1, $search = '', $category_ids = null, $tag_ids = null)
-    {
-        return $this
-            ->when(!empty($search), function ($query) use ($search) {
-                return $query->where('address', 'LIKE', '%' . $search . '%')
-                           ->orWhere('city', 'LIKE', '%' . $search . '%')
-                           ->orWhere('postal_code', 'LIKE', '%' . $search . '%');
-            })
-            ->when(!empty($category_ids), function ($query) use ($category_ids) {
-                return $query->where('category_id', 'LIKE', '%' . $category_ids . '%');
-            })
-            ->when(!empty($tag_ids), function ($query) use ($tag_ids) {
-                return $query->where('tag_id', 'LIKE', '%' . $tag_ids . '%');
-            })
-            ->paginate($perPage, $page);
-    }
+    // public function filterForListing($perPage = 10, $page = 1, $search = '', $category_ids = null, $tag_ids = null)
+    // {
+    //     return $this
+    //         ->when(!empty($search), function ($query) use ($search) {
+    //             return $query->where('address', 'LIKE', '%' . $search . '%')
+    //                        ->orWhere('city', 'LIKE', '%' . $search . '%')
+    //                        ->orWhere('postal_code', 'LIKE', '%' . $search . '%');
+    //         })
+    //         ->when(!empty($category_ids), function ($query) use ($category_ids) {
+    //             return $query->where('category_id', 'LIKE', '%' . $category_ids . '%');
+    //         })
+    //         ->when(!empty($tag_ids), function ($query) use ($tag_ids) {
+    //             return $query->where('tag_id', 'LIKE', '%' . $tag_ids . '%');
+    //         })
+    //         ->paginate($perPage, $page);
+    // }
 
     /**
      * Find a record by its primary key.
