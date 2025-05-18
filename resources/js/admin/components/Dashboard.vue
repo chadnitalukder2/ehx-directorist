@@ -22,8 +22,8 @@
         <span class="dashicons dashicons-tag ehxd_icon"></span>
         <div class="ehxd_menu_card_details ">
           <h5 class="ehxd_title">Total Tag</h5>
-          <p class="ehxd_total">{{ total_Tag }}</p>
-          <router-link to="/tags" class="ehxd_view_all">Total Tag Table</router-link>
+          <p class="ehxd_total">{{ total_tag }}</p>
+          <router-link to="/tags" class="ehxd_view_all">Total Tag</router-link>
         </div>
       </div>
 
@@ -32,7 +32,7 @@
     <AppTable :tableData="listings" v-loading="loading">
       <template #header>
         <div class="ehxd_title">
-          <h1 class="table-title">Recent directory Listing</h1>
+          <h1 class="table-title">Latest 10 Directory Listings</h1>
         </div>
 
 
@@ -134,7 +134,6 @@ export default {
     },
 
     async getAllTag() {
-      this.loading = true;
       try {
         const response = await axios.get(`${this.rest_api}/getAllTag`, {
           params: {
@@ -146,8 +145,7 @@ export default {
             'X-WP-Nonce': this.nonce
           }
         });
-        this.total_Tag = response?.data?.total || 0;
-        this.loading = false;
+        this.total_tag = response?.data?.total || 0;
       } catch (error) {
         this.loading = false;
         console.error('Error fetching couriers:',);

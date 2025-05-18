@@ -54,7 +54,6 @@
                             <div class="ehxd-freelancer-info">
                                 <h3 class="ehxd-freelancer-name">{{ listing.name }}</h3>
                                 <div class="ehxd-section">
-                                   
                                     <p class="ehxd-description-text">{{ listing.short_description }}</p>
                                 </div>
                                 <p class="ehxd-freelancer-location">
@@ -63,16 +62,20 @@
                                     </el-icon>
                                     {{ listing.address }}
                                 </p>
-                            </div>
 
-                            <div class="ehxd-section">
-                                <p class="ehxd-section-title">Categories</p>
+                                <div class="ehxd_category">
+                                    <p class="ehxd-section-title">Categories</p>
                                 <div class="ehxd-skills-container">
                                     <span v-for="category in listing.categories" :key="category.id"
                                         class="ehxd-skill-tag">
                                         {{ category.name }}
                                     </span>
                                 </div>
+                                </div>
+                            </div>
+
+                            <div class="ehxd-section">
+                              
                                 <div class="ehxd-freelancer-footer">
                                     <a :href="listing.post_url">
                                         <button class="ehxd-invite-button">View Details</button>

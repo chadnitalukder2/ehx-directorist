@@ -120,7 +120,8 @@ class ListingResource
         }
         
         // Add pagination
-        $sql .= " LIMIT %d OFFSET %d";
+        //$sql .= " LIMIT %d OFFSET %d";
+        $sql .= " ORDER BY id DESC LIMIT %d OFFSET %d";
         
         // Add pagination arguments to our query
         $query_args = array_merge($where_args, [$perPage, $offset]);
