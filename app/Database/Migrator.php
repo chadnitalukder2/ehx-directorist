@@ -13,7 +13,6 @@ class Migrator {
         CreateTagTable::class,
         CreateDirectoryListingsTable::class,
         CreateDirectoryBuilderTable::class,
-        CreateReviewsTable::class,
     ];
 
     public function migrate() {

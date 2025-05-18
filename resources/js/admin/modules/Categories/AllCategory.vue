@@ -26,7 +26,7 @@
             <template #columns>
                 <el-table-column prop="id" label="ID" width="60" />
                 <el-table-column prop="name" label="Name" width="auto" />
-                <el-table-column prop="slug" label="Slug" width="auto" />
+                <!-- <el-table-column prop="slug" label="Slug" width="auto" /> -->
                 <el-table-column prop="added_date" label="Add Date" width="auto">
                     <template #default="{ row }">
                         {{ formatAddedDate(row.created_at) }}

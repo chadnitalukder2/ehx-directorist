@@ -1,4 +1,4 @@
-<template>
+<template>  
     <div class="file-upload-container">
         <!-- Preview area when file is selected -->
         <div v-if="selectedFile" class="file-preview">

@@ -20,7 +20,7 @@
           <el-input
             class="ehxd_input"
             v-model="localTag.slug"
-            placeholder="Please Input Tag Slug"
+            placeholder="Auto-generated from name"
             size="large"
           />
         </el-form-item>
