@@ -133,8 +133,11 @@ class ListingController
         $search = isset($_GET['search']) ? sanitize_text_field($_GET['search']) : null;
         $category_ids = isset($_GET['categories']) && !empty($_GET['categories']) ? explode(',', sanitize_text_field($_GET['categories'])) : null;
         $tag_ids = isset($_GET['tags']) && !empty($_GET['tags']) ? explode(',', sanitize_text_field($_GET['tags'])) : null;
+        $radius = isset($_GET['radius']) ? intval($_GET['radius']) : null;
+        $lat = isset($_GET['latitude']) ? floatval($_GET['latitude']) : null;
+        $lng = isset($_GET['longitude']) ? floatval($_GET['longitude']) : null;
 
-        $res = ListingResource::getAll($limit, $page, $search, $category_ids, $tag_ids);
+        $res = ListingResource::getAll($limit, $page, $search, $category_ids, $tag_ids, $lat, $lng, $radius);
         $data = $res['data'];
 
         if (!$res) {

@@ -8,7 +8,7 @@
       :value="initialAddress"
       @input="onAddressInput"
     />
-    <div ref="map" class="map"></div>
+    <!-- <div ref="map" class="map"></div> -->
   </div>
 </template>
 
@@ -18,6 +18,10 @@ export default {
     initialAddress: String,
     initialLatitude: [String, Number],
     initialLongitude: [String, Number],
+    showMap: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {

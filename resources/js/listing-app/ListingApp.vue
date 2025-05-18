@@ -4,16 +4,28 @@
             <!-- Sidebar -->
             <div class="ehxd-search-sidebar">
                 <div class="ehxd-search-container">
+                    <h3 style="margin-bottom: 0px;" class="ehxd-features-heading">Filter by Address</h3>
+                    <GoogleMap 
+                        :initial-address="address.address"
+                        :initial-latitude="address.latitude"
+                        :initial-longitude="address.longitude"
+                        :showMap="false"
+                        @update:address="address.address = $event" 
+                        @update:latitude="address.latitude = $event"
+                        @update:longitude="address.longitude = $event" 
+                        @update:city="address.city = $event"
+                        @update:postalCode="address.postal_code = $event"
+                    />
+
+                    <div class="ehxd-radius-slider-container" v-if="address.latitude && address.longitude">
+                        <div class="ehxd-radius-label">Within <strong>{{ radius }}</strong> miles</div>
+                        <input type="range" min="0" max="100" v-model="radius" class="ehxd-radius-slider" />
+                    </div>
 
                     <div class="ehxd-input-wrapper">
                         <span class="dashicons dashicons-search ehxd_icon"></span>
-                        <input type="text" placeholder="Enter address or postcode" class="ehxd-location-input"
+                        <input type="text" placeholder="Enter title or postcode" class="ehxd-location-input"
                             v-model="search" />
-                    </div>
-
-                    <div class="ehxd-radius-slider-container">
-                        <div class="ehxd-radius-label">Within <strong>{{ radius }}</strong> miles</div>
-                        <input type="range" min="0" max="100" v-model="radius" class="ehxd-radius-slider" />
                     </div>
 
                     <!-- Category Filters -->
@@ -101,11 +113,21 @@
 </template>
 
 <script>
+import GoogleMap from "../admin/components/GoogleMapInput.vue";
 import axios from "axios";
 export default {
-
+    components: {
+        GoogleMap
+    },
     data() {
         return {
+            address: {
+                address: '',
+                latitude: '',
+                longitude: '',
+                city: '',
+                postal_code: ''
+            },
             listings: [],
             categories: [],
             tags: [],
@@ -122,6 +144,17 @@ export default {
         };
     },
     watch: {
+        radius() {
+            this.currentPage = 1;
+            this.getAllListings();
+        },
+        address: {
+            handler() {
+                this.currentPage = 1;
+                this.getAllListings();
+            },
+            deep: true
+        },
         currentPage() {
             this.getAllListings();
         },
@@ -171,6 +204,9 @@ export default {
                         search: this.search || '',
                         categories: selectedCategoryIds.join(','),
                         tags: selectedTagIds.join(','),
+                        radius: this.radius,
+                        latitude: this.address.latitude,
+                        longitude: this.address.longitude
                     },
                     headers: {
                         'X-WP-Nonce': this.nonce
