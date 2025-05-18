@@ -122,7 +122,8 @@ class ListingResource
         // Search condition for name or postal code
         if (!empty($search)) {
             $search_placeholder = '%' . $wpdb->esc_like($search) . '%';
-            $where_conditions[] = "(name LIKE %s OR postal_code LIKE %s)";
+            $where_conditions[] = "(name LIKE %s OR postal_code LIKE %s OR address LIKE %s)";
+            $where_args[] = $search_placeholder;
             $where_args[] = $search_placeholder;
             $where_args[] = $search_placeholder;
         }

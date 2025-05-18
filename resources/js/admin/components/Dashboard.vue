@@ -47,7 +47,6 @@
           </template>
         </el-table-column>
         <el-table-column prop="name" label="Title" width="auto" />
-        <el-table-column prop="phone" label="Phone" width="auto" />
         <el-table-column prop="email" label="Email" width="auto" />
         <el-table-column prop="address" label="Address" width="auto" />
         <el-table-column prop="postal_code" label="Postcode" width="auto" />

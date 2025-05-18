@@ -333,8 +333,7 @@ abstract class Model
         // Add search conditions if provided directly to paginate
         if (!empty($search)) {
             $this->where('name', 'LIKE', '%' . $search . '%')
-                 ->orWhere('slug', 'LIKE', '%' . $search . '%')
-                 ->orWhere('address', 'LIKE', '%' . $search . '%');
+                 ->orWhere('slug', 'LIKE', '%' . $search . '%');
         }
         
         // Add pagination limits
