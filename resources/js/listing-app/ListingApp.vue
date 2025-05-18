@@ -7,7 +7,7 @@
 
                     <div class="ehxd-input-wrapper">
                         <span class="dashicons dashicons-search ehxd_icon"></span>
-                        <input type="text" placeholder="Enter address or postcode" class="ehxd-location-input"
+                        <input type="text" placeholder="Enter town or postcode" class="ehxd-location-input"
                             v-model="search" />
                     </div>
 
@@ -262,7 +262,8 @@ export default {
     position: relative;
     display: flex;
     align-items: center;
-
+    padding-bottom: 25px;
+    border-bottom: 1px solid rgb(224, 224, 224);
     .ehxd_icon {
         position: absolute;
         position: absolute;
@@ -280,7 +281,7 @@ export default {
 }
 
 .ehxd-features-filter {
-    padding-bottom: 20px;
+    padding-bottom: 25px;
     padding-top: 10px;
 }
 
@@ -321,6 +322,8 @@ export default {
 
 .ehxd-radius-slider-container {
     margin-top: 5px;
+    padding-bottom: 25px;
+    border-bottom: 1px solid rgb(224, 224, 224);
 }
 
 .ehxd-radius-label {
