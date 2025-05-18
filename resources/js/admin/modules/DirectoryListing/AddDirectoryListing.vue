@@ -52,7 +52,7 @@
         </div>
 
         <el-form-item label="Address" prop="address">
-          <GoogleMap 
+          <GoogleMapForAddListing 
           :initial-address="localList.address"
                         :initial-latitude="localList.latitude"
                         :initial-longitude="localList.longitude"
@@ -121,7 +121,7 @@
 <script>
 import axios from "axios";
 import Icon from "../../components/Icons/AppIcon.vue";
-import GoogleMap from "../../components/GoogleMap.vue";
+import GoogleMapForAddListing from "../../components/GoogleMapForAddListing.vue";
 import AppFileUpload from "../../components/AppFileUpload.vue";
 import AppFileUploadLogo from "../../components/AppFileUploadLogo.vue";
 import WpEditor from "../../components/WpEditor.vue";
@@ -130,7 +130,7 @@ import { Delete } from '@element-plus/icons-vue';
 export default {
   components: {
     Icon,
-    GoogleMap,
+    GoogleMapForAddListing,
     AppFileUpload,
     AppFileUploadLogo,
     WpEditor,

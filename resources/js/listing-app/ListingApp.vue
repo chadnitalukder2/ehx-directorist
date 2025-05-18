@@ -18,15 +18,11 @@
                     />
 
                     <div class="ehxd-radius-slider-container" v-if="address.latitude && address.longitude">
-                        <div class="ehxd-radius-label">Within <strong>{{ radius }}</strong> miles</div>
+                        <div class="ehxd-radius-label">Within <strong>{{ radius }}</strong> km </div>
                         <input type="range" min="0" max="100" v-model="radius" class="ehxd-radius-slider" />
                     </div>
 
-                    <div class="ehxd-input-wrapper">
-                        <span class="dashicons dashicons-search ehxd_icon"></span>
-                        <input type="text" placeholder="Enter title or postcode" class="ehxd-location-input"
-                            v-model="search" />
-                    </div>
+                    
 
                     <!-- Category Filters -->
                     <div class="ehxd-features-filter" style=" border-bottom: 1px solid #e0e0e0;">
