@@ -256,8 +256,9 @@ export default {
             tag_id: [],
             directory_builder_id: 1,
           };
-          this.$refs.descriptionEditor.clearEditor();
+          // this.$refs.descriptionEditor.clearEditor();
           this.customFields = [];
+          
         } catch (err) {
           console.error('Submission error:', err);
         }
