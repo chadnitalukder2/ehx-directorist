@@ -81,24 +81,28 @@
         </el-form-item>
 
         <!-- social link section start -->
-        <div class="social_links_wrapper">
-          <p>Social Media Links</p>
-          <div class="social_link_item" v-for="(link, index) in socialLinks" :key="index"
-            style="display: flex; gap: 20px; align-items: center;">
-            <el-form-item label="Label">
-              <el-input v-model="link.label" placeholder="e.g. Facebook" />
-            </el-form-item>
-            <el-form-item label="URL">
-              <el-input v-model="link.url" placeholder="e.g. https://facebook.com/xyz" />
-            </el-form-item>
-            <el-icon @click="removeSocialLink(index)" style="cursor: pointer;">
-              <Delete />
-            </el-icon>
-          </div>
+        <div class="ehxd_input_item">
+          <el-form-item label="Social Media Links">
+            <div v-for="(link, index) in socialLinks" :key="index" class="social-link-row">
+              <el-select v-model="link.icon" placeholder="Icon" style="width: 150px; margin-right: 8px;">
+                <el-option v-for="icon in availableIcons" :key="icon.value" :label="icon.label" :value="icon.value">
+                  <i :class="`fab fa-${icon.value}`" style="margin-right: 5px;"></i> {{ icon.label }}
+                </el-option>
+              </el-select>
 
-          <el-button type="primary" size="small" @click="addSocialLink">
-            Add Social Link
-          </el-button>
+              <el-input v-model="link.url" placeholder="https://..." style="width: 300px; margin-right: 8px;" />
+
+              <div class="ehxd_delete_icon" @click="removeSocialLink(index)">
+                <el-icon>
+                  <Delete />
+                </el-icon>
+              </div>
+            </div>
+
+            <el-button icon="Plus" @click="addSocialLink" style="margin-top: 10px;">
+              Add Social Link
+            </el-button>
+          </el-form-item>
         </div>
         <!-- social link section end -->
 
@@ -177,7 +181,28 @@ export default {
       tags: [],
       categories: [],
       socialLinks: [
-        { label: "", url: "" }
+        { icon: 'facebook', url: '' },
+      ],
+      availableIcons: [
+        { label: "Facebook", value: "facebook" },
+        { label: "Twitter", value: "twitter" },
+        { label: "Instagram", value: "instagram" },
+        { label: "LinkedIn", value: "linkedin" },
+        { label: "YouTube", value: "youtube" },
+        { label: "TikTok", value: "tiktok" },
+        { label: "Pinterest", value: "pinterest" },
+        { label: "Snapchat", value: "snapchat" },
+        { label: "WhatsApp", value: "whatsapp" },
+        { label: "Telegram", value: "telegram" },
+        { label: "Reddit", value: "reddit" },
+        { label: "Discord", value: "discord" },
+        { label: "GitHub", value: "github" },
+        { label: "Dribbble", value: "dribbble" },
+        { label: "Behance", value: "behance" },
+        { label: "Medium", value: "medium" },
+        { label: "Twitch", value: "twitch" },
+        { label: "Spotify", value: "spotify" },
+        { label: "Stack Overflow", value: "stack-overflow" },
       ],
       customFields: [],
       nonce: window.EhxDirectoristData.nonce,
@@ -254,7 +279,7 @@ export default {
       }
     },
     addSocialLink() {
-      this.socialLinks.push({ label: "", url: "" });
+      this.socialLinks.push({ label: '', icon: '', url: '' });
     },
     removeSocialLink(index) {
       this.socialLinks.splice(index, 1);
@@ -275,7 +300,6 @@ export default {
       this.$refs.ListForm.validate(async (valid) => {
         if (!valid) return;
         this.localList.social_links = this.socialLinks;
-        this.localList.meta = [...this.customFields, { key: "social_links", value: this.socialLinks }];
         this.localList.meta = this.customFields;
 
         try {
@@ -311,6 +335,7 @@ export default {
           };
           // this.$refs.descriptionEditor.clearEditor();
           this.customFields = [];
+          this.social_links = [];
 
         } catch (err) {
           console.error('Submission error:', err);
@@ -431,5 +456,19 @@ export default {
       margin-bottom: 0px;
     }
   }
+}
+
+.social-link-row {
+  padding: 20px 0px 20px;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.ehxd_social_ink_button {
+  border: 1px solid #E4E7EC;
+  background-color: #fff !important;
+  color: #3c434a;
 }
 </style>
