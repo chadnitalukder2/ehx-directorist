@@ -27,6 +27,7 @@ class StoreListingRequest extends RequestGuard {
             'postal_code' => 'nullable|string|max:20',
             'city' => 'nullable|string|max:100',
             'meta' => 'nullable|array',
+            'social_links' => 'nullable|array',
         ];
      
     }

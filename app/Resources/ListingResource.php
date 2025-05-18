@@ -16,7 +16,7 @@ class ListingResource
         $data['category_id'] = json_encode($data['category_id']);
         $data['tag_id'] = json_encode($data['tag_id']);
         $data['meta'] = json_encode($data['meta']);
-
+        $data['social_links'] = json_encode($data['social_links']);
 
         return Listing::create($data);
     }
@@ -158,6 +158,9 @@ class ListingResource
         // Add ordering by distance if applicable
         if ($latitude && $longitude && is_numeric($latitude) && is_numeric($longitude)) {
             $sql .= " ORDER BY distance ASC";
+        } else {
+            // Order by ID descending if no distance sorting is applied
+            $sql .= " ORDER BY id DESC";
         }
         
         // Add pagination
@@ -230,6 +233,7 @@ class ListingResource
   
         // Decode JSON fields safely
         $listing->meta = is_string($listing->meta) ? json_decode($listing->meta, true) : $listing->meta;
+        $listing->social_links = is_string($listing->social_links) ? json_decode($listing->social_links, true) : $listing->social_links;
         $listing->category_id = is_string($listing->category_id) ? json_decode($listing->category_id, true) : $listing->category_id;
         $listing->tag_id = is_string($listing->tag_id) ? json_decode($listing->tag_id, true) : $listing->tag_id;
         $listing->tags         = (new Tag())->whereIn('id', $listing->tag_id)->get()->toArray();

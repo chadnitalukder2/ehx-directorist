@@ -1,21 +1,9 @@
-
 <template>
     <div class="ehxd_listing_app_container">
         <div class="ehxd-container">
-            <!-- Mobile filter toggle button -->
-            <button class="ehxd-filter-toggle" @click="showMobileFilters = !showMobileFilters">
-                <span v-if="!showMobileFilters">Show Filters</span>
-                <span v-else>Hide Filters</span>
-            </button>
-            
             <!-- Sidebar -->
-            <div class="ehxd-search-sidebar" :class="{ 'ehxd-mobile-filters-active': showMobileFilters }">
+            <div class="ehxd-search-sidebar">
                 <div class="ehxd-search-container">
-                    <!-- Mobile close button -->
-                    <div class="ehxd-mobile-close" @click="showMobileFilters = false">
-                        <span>×</span>
-                    </div>
-                    
                     <h3 style="margin-bottom: 0px;" class="ehxd-features-heading">Filter by Address</h3>
                     <GoogleMap :initial-address="address.address" :initial-latitude="address.latitude"
                         :initial-longitude="address.longitude" :showMap="false"
@@ -28,8 +16,10 @@
                         <input type="range" min="0" max="100" v-model="radius" class="ehxd-radius-slider" />
                     </div>
 
+
+
                     <!-- Category Filters -->
-                    <div class="ehxd-features-filter" style="border-bottom: 1px solid #e0e0e0;">
+                    <div class="ehxd-features-filter" style=" border-bottom: 1px solid #e0e0e0;">
                         <h3 class="ehxd-features-heading">Filter by Category</h3>
                         <div class="ehxd-feature-list">
                             <div v-for="(category, index) in categories" :key="category.id" class="ehxd-feature-item">
@@ -52,10 +42,6 @@
                         </div>
                     </div>
 
-                    <!-- Apply filters button for mobile -->
-                    <button class="ehxd-apply-filters" @click="showMobileFilters = false">
-                        Apply Filters
-                    </button>
                 </div>
             </div>
 
@@ -70,8 +56,10 @@
                             <div class="ehxd-listing-info">
                                 <h3 class="ehxd-listing-name">{{ listing.name }}</h3>
                                 <div class="ehxd-section">
-                                    <p class="ehxd-description-text">{{ truncateWords(listing.short_description, 24) }}</p>
+                                    <p class="ehxd-description-text"> {{ truncateWords(listing.short_description, 24)
+                                    }}</p>
                                 </div>
+
 
                                 <div class="ehxd_category">
                                     <p class="ehxd-section-title">Categories: </p>
@@ -96,8 +84,12 @@
                                         </a>
                                     </div>
                                 </div>
+
+
                             </div>
                         </div>
+
+
                     </div>
                 </div>
 
@@ -112,9 +104,6 @@
                         :total="+total_list" />
                 </div>
             </div>
-            
-            <!-- Overlay for mobile filters -->
-            <div class="ehxd-overlay" v-if="showMobileFilters" @click="showMobileFilters = false"></div>
         </div>
     </div>
 </template>
@@ -148,7 +137,6 @@ export default {
             loading: false,
             nonce: window.EhxDirectoristData.nonce,
             rest_api: window.EhxDirectoristData.rest_api,
-            showMobileFilters: false
         };
     },
     watch: {
@@ -233,7 +221,7 @@ export default {
                 this.loading = false;
             } catch (error) {
                 this.loading = false;
-                console.error('Error fetching listings:', error);
+                console.error('Error fetching couriers:',);
             }
         },
         async getAllCategories() {
@@ -249,7 +237,7 @@ export default {
                 this.loading = false;
             } catch (error) {
                 this.loading = false;
-                console.error('Error fetching categories:', error);
+                console.error('Error fetching couriers:',);
             }
         },
         async getAllTag() {
@@ -265,10 +253,12 @@ export default {
                 this.loading = false;
             } catch (error) {
                 this.loading = false;
-                console.error('Error fetching tags:', error);
+                console.error('Error fetching couriers:',);
             }
         },
+
     },
+
 
     mounted() {
         this.getAllListings();
@@ -278,7 +268,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" scoped >
 .ehxd-container {
     display: flex;
     font-family: Arial, sans-serif;
@@ -286,58 +276,6 @@ export default {
     margin: 0 auto;
     gap: 30px;
     padding: 20px;
-    position: relative;
-}
-
-/* Mobile filter toggle button */
-.ehxd-filter-toggle {
-    display: none;
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    background-color: #000;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-/* Overlay for mobile filters */
-.ehxd-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 998;
-}
-
-/* Mobile close button */
-.ehxd-mobile-close {
-    display: none;
-    text-align: right;
-    font-size: 24px;
-    font-weight: bold;
-    cursor: pointer;
-    margin-bottom: 10px;
-}
-
-/* Apply filters button for mobile */
-.ehxd-apply-filters {
-    display: none;
-    width: 100%;
-    padding: 12px;
-    background-color: #000;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 20px;
 }
 
 //=================================
@@ -586,6 +524,7 @@ export default {
     border: 1px solid #ddd;
     background-color: white;
     border-radius: 10px;
+    // box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -742,118 +681,10 @@ export default {
             font-size: 15px;
             color: #666666;
         }
-    }
-}
 
-/* Media Queries for Responsive Design */
-@media screen and (max-width: 990px) {
-    .ehxd-container {
-        flex-direction: column;
-        padding: 15px;
-        gap: 20px;
-    }
-    
-    .ehxd-search-sidebar {
-        flex-basis: 100%;
-        padding: 20px;
-    }
-    
-    .exhd_listing_wrapper {
-        flex-basis: 100%;
-    }
-}
 
-@media screen and (max-width: 768px) {
-    .ehxd-filter-toggle {
-        display: block;
-    }
-    
-    .ehxd-search-sidebar {
-        position: fixed;
-        top: 0;
-        left: -100%;
-        width: 80%;
-        height: 100vh;
-        max-width: 350px;
-        z-index: 999;
-        transition: left 0.3s ease;
-        overflow-y: auto;
-        padding: 20px;
-        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-    }
-    
-    .ehxd-mobile-filters-active {
-        left: 0;
-    }
-    
-    .ehxd-mobile-close {
-        display: block;
-    }
-    
-    .ehxd-apply-filters {
-        display: block;
-    }
-    
-    .showMobileFilters .ehxd-overlay {
-        display: block;
-    }
-    
-    .ehxd-listing-header {
-        flex-direction: column;
-    }
-    
-    .ehxd-profile-image-container {
-        text-align: center;
-        margin: 0 auto;
-        margin-bottom: 15px;
-    }
-    
-    .ehxd-profile-image {
-        width: 120px;
-        height: 120px;
-    }
-    
-    .ehxd_category {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 5px;
-    }
-    
-    .ehxd_listing_footer {
-        flex-direction: column;
-        gap: 15px;
-    }
-    
-    .ehxd-listing-location, 
-    .ehxd-listing-view-btn {
-        flex-basis: 100%;
-    }
-    
-    .ehxd_footer {
-        flex-direction: column;
-        gap: 15px;
-        align-items: center;
-    }
-    
-    .ehxd_pagination {
-        .el-pagination__sizes {
-            display: none !important;
-        }
     }
 }
+//=================================================
 
-@media screen and (max-width: 480px) {
-    .ehxd-container {
-        padding: 10px;
-    }
-    
-    .ehxd-listing-card {
-        padding: 15px;
-    }
-    
-    .ehxd-search-sidebar {
-        width: 90%;
-        padding: 15px;
-    }
-}
 </style>

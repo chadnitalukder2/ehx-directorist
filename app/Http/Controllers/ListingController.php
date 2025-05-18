@@ -12,6 +12,7 @@ class ListingController
 {
     public static function storeListing(StoreListingRequest  $validatedRequest)
     {
+        
         if ($validatedRequest->fails()) {
             return rest_ensure_response([
                 'message' => 'Validation failed',

@@ -34,6 +34,7 @@ class CreateDirectoryListingsTable
             image VARCHAR(255),
             short_description TEXT ,
             description TEXT,
+            social_links JSON,
             meta JSON,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

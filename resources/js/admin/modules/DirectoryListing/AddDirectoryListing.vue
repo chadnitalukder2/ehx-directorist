@@ -52,15 +52,10 @@
         </div>
 
         <el-form-item label="Address" prop="address">
-          <GoogleMapForAddListing 
-          :initial-address="localList.address"
-                        :initial-latitude="localList.latitude"
-                        :initial-longitude="localList.longitude"
-            @update:address="localList.address = $event" 
-            @update:latitude="localList.latitude = $event"
-            @update:longitude="localList.longitude = $event" 
-            @update:city="localList.city = $event"
-            @update:postalCode="localList.postal_code = $event" />
+          <GoogleMapForAddListing :initial-address="localList.address" :initial-latitude="localList.latitude"
+            :initial-longitude="localList.longitude" @update:address="localList.address = $event"
+            @update:latitude="localList.latitude = $event" @update:longitude="localList.longitude = $event"
+            @update:city="localList.city = $event" @update:postalCode="localList.postal_code = $event" />
         </el-form-item>
 
         <div class="ehxd_image_wrapper">
@@ -81,10 +76,33 @@
         </el-form-item>
 
         <el-form-item label="Description" prop="description">
-          <el-input v-model="localList.description" type="textarea" placeholder="Enter description" rows="8"/>
+          <el-input v-model="localList.description" type="textarea" placeholder="Enter description" rows="8" />
           <!-- <WpEditor  ref="descriptionEditor" v-model="localList.description" /> -->
         </el-form-item>
 
+        <!-- social link section start -->
+        <div class="social_links_wrapper">
+          <p>Social Media Links</p>
+          <div class="social_link_item" v-for="(link, index) in socialLinks" :key="index"
+            style="display: flex; gap: 20px; align-items: center;">
+            <el-form-item label="Label">
+              <el-input v-model="link.label" placeholder="e.g. Facebook" />
+            </el-form-item>
+            <el-form-item label="URL">
+              <el-input v-model="link.url" placeholder="e.g. https://facebook.com/xyz" />
+            </el-form-item>
+            <el-icon @click="removeSocialLink(index)" style="cursor: pointer;">
+              <Delete />
+            </el-icon>
+          </div>
+
+          <el-button type="primary" size="small" @click="addSocialLink">
+            Add Social Link
+          </el-button>
+        </div>
+        <!-- social link section end -->
+
+        <!-- custom fields section -->
         <div class="custom_field_list_wrapper">
           <div class="custom_field_list_item" v-for="(field, index) in customFields" :key="field.key">
             <el-form-item label="Field Label">
@@ -158,6 +176,9 @@ export default {
       },
       tags: [],
       categories: [],
+      socialLinks: [
+        { label: "", url: "" }
+      ],
       customFields: [],
       nonce: window.EhxDirectoristData.nonce,
       rest_api: window.EhxDirectoristData.rest_api,
@@ -182,8 +203,32 @@ export default {
         category_id: [{ required: true, message: "Please select a category", trigger: "change" }],
         tag_id: [{ required: true, message: "Please select a tag", trigger: "change" }],
         address: [{ required: true, message: "Please input the address", trigger: "blur" }],
-        short_description: [{ required: true, message: "Please input the brief description", trigger: "blur" }],
         logo: [{ required: true, message: "Please upload a logo", trigger: "change" }],
+        short_description: [
+          { required: true, message: "Please input the brief description", trigger: "blur" },
+          {
+            validator: (rule, value, callback) => {
+              if (value.length > 255) {
+                callback(new Error("Brief description must not exceed 255 characters."));
+              } else {
+                callback();
+              }
+            },
+            trigger: "blur"
+          }
+        ],
+        description: [
+          {
+            validator: (rule, value, callback) => {
+              if (value && value.length > 1000) {
+                callback(new Error("Description must not exceed 1000 characters."));
+              } else {
+                callback();
+              }
+            },
+            trigger: "blur"
+          }
+        ],
       };
     }
   },
@@ -208,6 +253,12 @@ export default {
         console.error('Failed to load tags:', err);
       }
     },
+    addSocialLink() {
+      this.socialLinks.push({ label: "", url: "" });
+    },
+    removeSocialLink(index) {
+      this.socialLinks.splice(index, 1);
+    },
     addCustomField(field) {
       const baseKey = field.key;
       let index = 0;
@@ -223,7 +274,8 @@ export default {
     submitListForm() {
       this.$refs.ListForm.validate(async (valid) => {
         if (!valid) return;
-
+        this.localList.social_links = this.socialLinks;
+        this.localList.meta = [...this.customFields, { key: "social_links", value: this.socialLinks }];
         this.localList.meta = this.customFields;
 
         try {
@@ -238,6 +290,7 @@ export default {
             message: `Directory Listing data created successfully`,
             type: "success",
           });
+          //this.$router.push('/directory-listing');
           this.localList = {
             name: "",
             email: "",
@@ -258,7 +311,7 @@ export default {
           };
           // this.$refs.descriptionEditor.clearEditor();
           this.customFields = [];
-          
+
         } catch (err) {
           console.error('Submission error:', err);
         }
