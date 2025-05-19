@@ -281,7 +281,7 @@ export default {
 <style lang="scss" scoped>
 .ehxd-container {
     display: flex;
-    font-family: Arial, sans-serif;
+     font-family:  Arial, Helvetica, sans-serif !important;
     max-width: 1200px;
     margin: 0 auto;
     gap: 30px;
@@ -349,7 +349,6 @@ export default {
     border-radius: 6px;
     background-color: #fff;
     padding: 30px;
-    font-family: Arial, sans-serif;
 }
 
 .ehxd-search-container {
@@ -459,6 +458,7 @@ export default {
     font-weight: bold;
     margin: 0 0 15px 0;
     color: #333;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .ehxd-feature-list {
@@ -620,6 +620,7 @@ export default {
     color: #333;
     margin: 0;
     margin-bottom: 4px;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .ehxd-listing-location {
