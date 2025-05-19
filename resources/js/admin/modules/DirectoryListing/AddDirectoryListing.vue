@@ -84,13 +84,13 @@
         <div class="ehxd_input_item">
           <el-form-item label="Social Media Links">
             <div v-for="(link, index) in socialLinks" :key="index" class="social-link-row">
-              <el-select v-model="link.icon" placeholder="Icon" style="width: 150px; margin-right: 8px;">
-                <el-option v-for="icon in availableIcons" :key="icon.value" :label="icon.label" :value="icon.value">
-                  <i :class="`fab fa-${icon.value}`" style="margin-right: 5px;"></i> {{ icon.label }}
-                </el-option>
+              <el-select v-model="link.icon" placeholder="Icon" style="width: 200px;">
+                  <el-option v-for="icon in availableIcons" :key="icon.value" :label="icon.label" :value="icon.value" >
+                    <i :class="`fab fa-${icon.value}`" style="margin-right: 5px;"></i> {{ icon.label }}
+                  </el-option>
               </el-select>
 
-              <el-input v-model="link.url" placeholder="https://..." style="width: 300px; margin-right: 8px;" />
+              <el-input v-model="link.url" placeholder="https://..." style="margin-right: 8px;"  />
 
               <div class="ehxd_delete_icon" @click="removeSocialLink(index)">
                 <el-icon>
@@ -459,16 +459,12 @@ export default {
 }
 
 .social-link-row {
-  padding: 20px 0px 20px;
+  padding: 0px 0px 12px;
   display: flex;
   text-align: center;
   align-items: center;
   gap: 10px;
 }
 
-.ehxd_social_ink_button {
-  border: 1px solid #E4E7EC;
-  background-color: #fff !important;
-  color: #3c434a;
-}
+
 </style>

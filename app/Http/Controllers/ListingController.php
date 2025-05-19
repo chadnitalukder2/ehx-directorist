@@ -77,7 +77,7 @@ class ListingController
 
         if (!$res) {
             return rest_ensure_response([
-                'message' => 'Failed to update category'
+                'message' => 'Failed to update listing'
             ], 500);
         }
         return rest_ensure_response([

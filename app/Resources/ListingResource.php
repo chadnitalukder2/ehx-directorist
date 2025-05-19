@@ -23,9 +23,11 @@ class ListingResource
 
     public static function update($data, $id)
     {
+ 
         $data['category_id'] = json_encode($data['category_id']);
         $data['tag_id'] = json_encode($data['tag_id']);
         $data['meta'] = json_encode($data['meta']);
+        $data['social_links'] = json_encode($data['social_links']);
 
         $listingModel = new Listing();
 
@@ -58,6 +60,7 @@ class ListingResource
             return null;
         }
         $listing->meta = json_decode($listing->meta);
+        $listing->social_links = json_decode($listing->social_links);
         $listing->category_id = json_decode($listing->category_id);
         $listing->tag_id = json_decode($listing->tag_id);
         return $listing->toArray();

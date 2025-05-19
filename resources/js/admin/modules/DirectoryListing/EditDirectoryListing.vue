@@ -52,15 +52,10 @@
                 </div>
 
                 <el-form-item label="Address" prop="address">
-                    <GoogleMapForAddListing 
-                        :initial-address="localList.address"
-                        :initial-latitude="localList.latitude"
-                        :initial-longitude="localList.longitude"
-                        @update:address="localList.address = $event"
-                        @update:latitude="localList.latitude = $event" 
-                        @update:longitude="localList.longitude = $event"
-                        @update:city="localList.city = $event" 
-                        @update:postalCode="localList.postal_code = $event" />
+                    <GoogleMapForAddListing :initial-address="localList.address" :initial-latitude="localList.latitude"
+                        :initial-longitude="localList.longitude" @update:address="localList.address = $event"
+                        @update:latitude="localList.latitude = $event" @update:longitude="localList.longitude = $event"
+                        @update:city="localList.city = $event" @update:postalCode="localList.postal_code = $event" />
                 </el-form-item>
 
                 <div class="ehxd_image_wrapper">
@@ -82,9 +77,37 @@
                 </el-form-item>
 
                 <el-form-item label="Description" prop="description">
-                    <el-input v-model="localList.description" type="textarea" placeholder="Enter description" rows="8"/>
+                    <el-input v-model="localList.description" type="textarea" placeholder="Enter description"
+                        rows="8" />
                     <!-- <WpEditor ref="descriptionEditor" v-model="localList.description" /> -->
                 </el-form-item>
+
+                <!-- social link section start -->
+                <div class="ehxd_input_item">
+                    <el-form-item label="Social Media Links">
+                        <div v-for="(link, index) in socialLinks" :key="index" class="social-link-row">
+                            <el-select v-model="link.icon" placeholder="Icon" style="width: 200px;">
+                                <el-option v-for="icon in availableIcons" :key="icon.value" :label="icon.label"
+                                    :value="icon.value">
+                                    <i :class="`fab fa-${icon.value}`" style="margin-right: 5px;"></i> {{ icon.label }}
+                                </el-option>
+                            </el-select>
+
+                            <el-input v-model="link.url" placeholder="https://..." style="margin-right: 8px;" />
+
+                            <div class="ehxd_delete_icon" @click="removeSocialLink(index)">
+                                <el-icon>
+                                    <Delete />
+                                </el-icon>
+                            </div>
+                        </div>
+
+                        <el-button icon="Plus" @click="addSocialLink" style="margin-top: 10px;">
+                            Add Social Link
+                        </el-button>
+                    </el-form-item>
+                </div>
+                <!-- social link section end -->
 
                 <div class="custom_field_list_wrapper">
                     <div class="custom_field_list_item" v-for="(field, index) in customFields" :key="field.key">
@@ -161,6 +184,30 @@ export default {
             tags: [],
             categories: [],
             customFields: [],
+            socialLinks: [
+                { icon: 'facebook', url: '' },
+            ],
+            availableIcons: [
+                { label: "Facebook", value: "facebook" },
+                { label: "Twitter", value: "twitter" },
+                { label: "Instagram", value: "instagram" },
+                { label: "LinkedIn", value: "linkedin" },
+                { label: "YouTube", value: "youtube" },
+                { label: "TikTok", value: "tiktok" },
+                { label: "Pinterest", value: "pinterest" },
+                { label: "Snapchat", value: "snapchat" },
+                { label: "WhatsApp", value: "whatsapp" },
+                { label: "Telegram", value: "telegram" },
+                { label: "Reddit", value: "reddit" },
+                { label: "Discord", value: "discord" },
+                { label: "GitHub", value: "github" },
+                { label: "Dribbble", value: "dribbble" },
+                { label: "Behance", value: "behance" },
+                { label: "Medium", value: "medium" },
+                { label: "Twitch", value: "twitch" },
+                { label: "Spotify", value: "spotify" },
+                { label: "Stack Overflow", value: "stack-overflow" },
+            ],
             nonce: window.EhxDirectoristData.nonce,
             rest_api: window.EhxDirectoristData.rest_api,
             form_fields: [
@@ -216,7 +263,8 @@ export default {
                 const res = await axios.get(`${this.rest_api}/getAllListingByIdById/${this.$route.params.id}`, {
                     headers: { 'X-WP-Nonce': this.nonce }
                 });
-                console.log(res?.data)
+              
+                this.socialLinks = res?.data?.data?.listing_data?.social_links || [];
                 this.customFields = res?.data?.data?.listing_data?.meta || [];
                 this.localList = res?.data?.data?.listing_data || {};
             } catch (err) {
@@ -235,10 +283,16 @@ export default {
         removeCustomField(index) {
             this.customFields.splice(index, 1);
         },
+        addSocialLink() {
+            this.socialLinks.push({ label: '', icon: '', url: '' });
+        },
+        removeSocialLink(index) {
+            this.socialLinks.splice(index, 1);
+        },
         updateListing() {
             this.$refs.ListForm.validate(async (valid) => {
                 if (!valid) return;
-
+                this.localList.social_links = this.socialLinks;
                 this.localList.meta = this.customFields;
 
                 try {
@@ -374,5 +428,12 @@ export default {
             margin-bottom: 0px;
         }
     }
+}
+.social-link-row {
+  padding: 0px 0px 12px;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  gap: 10px;
 }
 </style>

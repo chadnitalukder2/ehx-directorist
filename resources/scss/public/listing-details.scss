@@ -181,6 +181,13 @@
                     font-size: 14px;
                     color: #555;
                 }
+                .ehxd-info-website{
+                    a{
+                        color: #555555;
+                        text-decoration: none;
+                      
+                    }
+                }
             }
         }
     }
@@ -536,5 +543,20 @@
         font-size: 16px;
         margin: 0px;
         border-radius: 8px;
+    }
+}
+
+.ehxd-social-links{
+    display: flex;
+    gap: 18px;
+    padding-top: 6px;
+    .ehxd_social_icon{
+        a{
+            background: #F5F5F5;
+            padding: 8px 10px;
+            font-size: 22px;
+            color: #333;
+            border-radius: 8px;
+        }
     }
 }

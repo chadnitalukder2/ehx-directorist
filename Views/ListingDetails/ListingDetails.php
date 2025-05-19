@@ -14,6 +14,7 @@ $categories = $data['categories'];
 $latitude = $data['latitude'];
 $longitude = $data['longitude'];
 $meta = $data['meta'];
+$socialLinks = $data['social_links'];
 
 
 $fake_image = EHX_DIRECTORIST_PLUGIN_URL . 'assets/images/cover.jpg';
@@ -113,10 +114,31 @@ $fake_logo = EHX_DIRECTORIST_PLUGIN_URL . 'assets/images/logo.jpg';
                         <div class="ehxd-info-icon"><i class="fa-solid fa-phone"></i></div>
                         <p class="ehxd-info"><?php echo esc_html($phone); ?></p>
                     </div>
-                    <div class="ehxd-info-item">
-                        <div class="ehxd-info-icon"><i class="fa-solid fa-globe"></i></div>
-                        <p class="ehxd-info"><?php echo esc_html($website_url); ?></p>
-                    </div>
+                    <?php if (!empty($website_url)) : ?>
+                        <div class="ehxd-info-item">
+                            <div class="ehxd-info-icon"><i class="fa-solid fa-globe"></i></div>
+                            <p class="ehxd-info-website ehxd-info">
+                                <a href="<?php echo esc_url($website_url); ?>" target="_blank" rel="noopener">
+                                    <?php echo esc_html($website_url); ?>
+                                </a>
+                            </p>
+                        </div>
+                    <?php endif; ?>
+                    <?php if (!empty($socialLinks) && is_array($socialLinks)) : ?>
+                        <div class="ehxd-social-links">
+                            <?php foreach ($socialLinks as $social) :
+                                $icon = isset($social['icon']) ? esc_attr($social['icon']) : '';
+                                $url = !empty($social['url']) ? esc_url($social['url']) : '#';
+                            ?>
+                                <div class="ehxd_social_icon">
+                                    <a href="<?php echo $url; ?>" target="_blank" rel="noopener" class="ehxd-social-icon">
+                                        <i class="fab fa-<?php echo $icon; ?>"></i>
+                                    </a>
+                                </div>
+
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
 
@@ -134,7 +156,7 @@ $fake_logo = EHX_DIRECTORIST_PLUGIN_URL . 'assets/images/logo.jpg';
                 <div class="ehxd-contact-form">
                     <form id="ehxd-contact-form">
                         <div class="ehxd-form-group">
-                            <input type="hidden" name="listing_email"  value="<?php echo esc_html($email); ?>">
+                            <input type="hidden" name="listing_email" value="<?php echo esc_html($email); ?>">
                             <label class="ehxd-form-label">Name <span style="color: #e96a6a;">*</span></label>
                             <input name="name" type="text" class="ehxd-form-input" placeholder="Your name" require>
                         </div>
@@ -148,7 +170,7 @@ $fake_logo = EHX_DIRECTORIST_PLUGIN_URL . 'assets/images/logo.jpg';
                         </div>
 
                         <button type="submit" class="ehxd-submit-btn">Submit Now</button>
-                        <p class="ehxd-response-message" style="margin-bottom: 0; font-size: 12px" ></p>
+                        <p class="ehxd-response-message" style="margin-bottom: 0; font-size: 12px"></p>
                     </form>
                 </div>
             </div>
