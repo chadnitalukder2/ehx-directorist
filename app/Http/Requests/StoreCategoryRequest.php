@@ -9,7 +9,7 @@ class StoreCategoryRequest extends RequestGuard {
     public function rules() {
         return [
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string|max:500',
+            'description' => 'nullable|string',
             'slug' => 'nullable|string',
         ];
     }
@@ -22,8 +22,6 @@ class StoreCategoryRequest extends RequestGuard {
             'name.required' => esc_html__('Category name is required.', 'ehx-directorist'),
             'name.string' => esc_html__('Category name must be a string.', 'ehx-directorist'),
             'name.max' => esc_html__('Category name must not exceed 255 characters.', 'ehx-directorist'),
-            'description.string' => esc_html__('Description must be a string.', 'ehx-directorist'),
-            'description.max' => esc_html__('Description must not exceed 500 characters.', 'ehx-directorist'),
         ];
     }
 

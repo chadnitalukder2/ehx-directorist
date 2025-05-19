@@ -84,23 +84,36 @@ export default {
             },
           });
 
-          this.$notify({
-            title: "Success",
-            message: `Tag data ${isUpdate ? "updated" : "created"} successfully`,
-            type: "success",
-          });
+          if (response.data.success === true) {
+            this.$notify({
+              title: "Success",
+              message: `Tag ${isUpdate ? "updated" : "created"} successfully`,
+              type: "success",
+            });
 
-          if (!isUpdate) {
             this.$emit("updateDataAfterNewAdd", response.data.Tag);
-            this.localTag = {
-              name: "",
-              slug: "",
-            };
+
+            if (!isUpdate) {
+              this.localTag = {
+                name: "",
+                slug: "",
+              };
+            }
           } else {
-            this.$emit("updateDataAfterNewAdd", response.data.Tag);
+            this.$notify({
+              title: "Error",
+              message: "Failed to save tag data",
+              type: "error",
+            });
           }
+
         } catch (error) {
-          console.error("Error saving Tag:", error);
+          console.error("Error saving tag:", error);
+          this.$notify({
+            title: "Error",
+            message: "An unexpected error occurred while saving the tag.",
+            type: "error",
+          });
         }
       });
     },

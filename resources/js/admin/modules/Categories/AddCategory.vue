@@ -7,8 +7,8 @@
       </el-form-item>
 
       <!-- <el-form-item label="Category Slug *" prop="slug"> -->
-        <el-input type="hidden" class="ehxd_input" v-model="localCategory.slug" placeholder="Auto-generated from name" size="large"
-          readonly />
+      <el-input type="hidden" class="ehxd_input" v-model="localCategory.slug" placeholder="Auto-generated from name"
+        size="large" readonly />
       <!-- </el-form-item> -->
 
       <el-form-item label="Description">
@@ -94,24 +94,36 @@ export default {
             },
           });
 
-          this.$notify({
-            title: "Success",
-            message: `Category data ${isUpdate ? "updated" : "created"} successfully`,
-            type: "success",
-          });
+          if (response.data.success === true) {
+            this.$notify({
+              title: "Success",
+              message: `Category ${isUpdate ? "updated" : "created"} successfully`,
+              type: "success",
+            });
 
-          if (!isUpdate) {
             this.$emit("updateDataAfterNewAdd", response.data.category);
-            this.localCategory = {
-              name: "",
-              slug: "",
-              description: "",
-            };
+
+            if (!isUpdate) {
+              this.localCategory = {
+                name: "",
+                slug: "",
+                description: "",
+              };
+            }
           } else {
-            this.$emit("updateDataAfterNewAdd", response.data.category);
+            this.$notify({
+              title: "Error",
+              message: `Failed to ${isUpdate ? "update" : "create"} category`,
+              type: "error",
+            });
           }
         } catch (error) {
           console.error("Error saving category:", error);
+          this.$notify({
+            title: "Error",
+            message: "An unexpected error occurred while saving the category.",
+            type: "error",
+          });
         }
       });
     },

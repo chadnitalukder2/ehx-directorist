@@ -21,7 +21,7 @@ class StoreListingRequest extends RequestGuard {
             'image' => 'nullable',
             'directory_builder_id' => 'nullable|integer',
             'short_description' => 'required|string|max:255',
-            'description' => 'nullable|string|max:1000',
+            'description' => 'nullable|string',
             'latitude' => 'nullable|numeric',
             'longitude' => 'nullable|numeric',
             'postal_code' => 'nullable|string|max:20',

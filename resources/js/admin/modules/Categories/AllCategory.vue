@@ -52,9 +52,9 @@
 
             <template #footer>
                 <div class="ehxd_footer_page">
-                    <p>Page {{ currentPage }} of {{ last_page}}</p>
+                    <p>Page {{ currentPage }} of {{ last_page }}</p>
                 </div>
-              
+
                 <el-pagination v-model:current-page="currentPage" v-model:page-size="pageSize"
                     :page-sizes="[10, 20, 30, 40]" large :disabled="total_category <= pageSize" background
                     layout="total, sizes, prev, pager, next" :total="+total_category" />
@@ -139,7 +139,7 @@ export default {
         },
         search: {
             handler() {
-                this.currentPage = 1; 
+                this.currentPage = 1;
                 this.getAllCategories();
             },
             immediate: false
@@ -191,25 +191,40 @@ export default {
         async deleteCategory() {
             this.loading = true;
             const id = this.active_id;
+
             try {
-                const response = await axios.post(`${this.rest_api}/deleteCategory/${id}`, {
-                }, {
+                const response = await axios.post(`${this.rest_api}/deleteCategory/${id}`, {}, {
                     headers: {
                         'Content-Type': 'application/json',
                         'X-WP-Nonce': this.nonce
                     }
                 });
-                this.loading = false;
-                this.$refs.delete_category_modal.handleClose();
-                this.getAllCategories();
-                this.$notify({
-                    title: 'Success',
-                    message: 'Category data deleted successfully',
-                    type: 'success',
-                })
+
+                if (response.data.success === true) {
+                    this.$notify({
+                        title: 'Success',
+                        message: 'Category deleted successfully',
+                        type: 'success',
+                    });
+                    this.getAllCategories();
+                    this.$refs.delete_category_modal.handleClose();
+                } else {
+                    this.$notify({
+                        title: 'Error',
+                        message: 'Failed to delete category',
+                        type: 'error',
+                    });
+                }
+
             } catch (error) {
-                this.loading = false;
                 console.error('Error deleting category:', error);
+                this.$notify({
+                    title: 'Error',
+                    message: 'An unexpected error occurred while deleting the category.',
+                    type: 'error',
+                });
+            } finally {
+                this.loading = false;
             }
         },
 
@@ -238,6 +253,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

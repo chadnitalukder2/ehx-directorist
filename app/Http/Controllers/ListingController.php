@@ -15,6 +15,7 @@ class ListingController
         
         if ($validatedRequest->fails()) {
             return rest_ensure_response([
+                'success' => false,
                 'message' => 'Validation failed',
                 'errors'  => $validatedRequest->errors()
             ], 400);
@@ -30,7 +31,8 @@ class ListingController
 
         if (is_wp_error($post_id)) {
             return rest_ensure_response([
-                'message' => 'Failed to create listing'
+                'success' => false,
+                'message' => 'Failed to create directory listing'
             ], 500);
         };
 
@@ -47,12 +49,14 @@ class ListingController
 
         if (!$res) {
             return rest_ensure_response([
-                'message' => 'Failed to create listing'
+                'success' => false,
+                'message' => 'Failed to create directory listing'
             ], 500);
         }
 
         return rest_ensure_response([
-            'message' => 'Listing created successfully',
+            'success' => true,
+            'message' => 'Directory listing created successfully',
             'listing_data' => $res,
         ]);
     }
@@ -60,48 +64,59 @@ class ListingController
     public static function updateDirectoryListing(WP_REST_Request $request)
     {
         $id = $request->get_param('id');
+    
         if (!$id) {
             return rest_ensure_response([
-                'message' => 'Listing ID is required'
-            ], 400);
+                'success' => false,
+                'message' => 'Directory listing ID is required'
+            ]);
         }
-
+    
         $validatedRequest = new StoreListingRequest($request);
         if ($validatedRequest->fails()) {
             return rest_ensure_response([
+                'success' => false,
                 'message' => 'Validation failed',
                 'errors'  => $validatedRequest->errors()
-            ], 400);
+            ]);
         }
+    
         $res = ListingResource::update($validatedRequest->validated(), $id);
-
+    
         if (!$res) {
             return rest_ensure_response([
-                'message' => 'Failed to update listing'
-            ], 500);
+                'success' => false,
+                'message' => 'Failed to update directory listing'
+            ]);
         }
+    
         return rest_ensure_response([
-            'message' => 'Listing updated successfully',
+            'success' => true,
+            'message' => 'Directory Listing updated successfully',
             'listing_data' => $res
         ]);
     }
+    
 
     public static function deleteList(WP_REST_Request $request)
     {
         $id = $request->get_param('id');
         if (!$id) {
             return rest_ensure_response([
-                'message' => 'Listing ID is required'
+                'success' => false,
+                'message' => 'Directory listing ID is required'
             ], 400);
         }
         $res = ListingResource::delete($id);
         if (!$res) {
             return rest_ensure_response([
-                'message' => 'Failed to delete listing'
+                'success' => false,
+                'message' => 'Failed to delete directory listing'
             ], 500);
         }
         return rest_ensure_response([
-            'message' => 'listing deleted successfully'
+            'success' => true,
+            'message' => 'Directory listing deleted successfully'
         ]);
     }
 
@@ -110,7 +125,8 @@ class ListingController
         $id = $request->get_param('id');
         if (!$id) {
             return rest_ensure_response([
-                'message' => 'Listing ID is required'
+                'success' => false,
+                'message' => 'Directory listing ID is required'
             ], 400);
         }
 
@@ -118,11 +134,13 @@ class ListingController
 
         if (!$res) {
             return rest_ensure_response([
-                'message' => 'Failed to get listing'
+                'success' => false,
+                'message' => 'Failed to get directory listing'
             ], 500);
         }
         return wp_send_json_success(array(
-            'message' => 'Listing retrieved successfully',
+            'success' => true,
+            'message' => 'Directory listing retrieved successfully',
             'listing_data' => $res
         ));
     }
@@ -143,12 +161,14 @@ class ListingController
 
         if (!$res) {
             return rest_ensure_response([
-                'message' => 'Failed to get listings'
+                'success' => false,
+                'message' => 'Failed to get directory listings'
             ], 500);
         }
 
         return rest_ensure_response([
-            'message' => 'List retrieved successfully',
+            'success' => true,
+            'message' => 'Directory listing retrieved successfully',
             'listings_data' => $data,
             'total' => $res['total'],
             'per_page' => $res['per_page'],
@@ -200,6 +220,7 @@ class ListingController
             error_log('wp_mail failed sending contact form email.');
         }
         wp_send_json([
+            'success' => true,
             'success' => $sent,
             'message' => $sent ? 'Message sent successfully!' : 'Failed to send message.',
         ]);

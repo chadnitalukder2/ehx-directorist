@@ -40,10 +40,10 @@
                 </el-table-column>
                 <el-table-column label="Operations" width="120">
                     <template #default="{ row }">
-                        <el-tooltip class="box-item" effect="dark" content="View"
-                            placement="top-start">
-                            <a :href="row?.post_url" style="margin-right: 12px;" target="_blank" class="ehxd_box_icon" link size="small">
-                                <el-button  class="ehxd_box_icon" link size="small">
+                        <el-tooltip class="box-item" effect="dark" content="View" placement="top-start">
+                            <a :href="row?.post_url" style="margin-right: 12px;" target="_blank" class="ehxd_box_icon"
+                                link size="small">
+                                <el-button class="ehxd_box_icon" link size="small">
                                     <Icon icon="ehxd-eye" />
                                 </el-button>
                             </a>
@@ -182,27 +182,42 @@ export default {
         async deleteList() {
             this.loading = true;
             const id = this.active_id;
+
             try {
-                const response = await axios.post(`${this.rest_api}/deleteList/${id}`, {
-                }, {
+                const response = await axios.post(`${this.rest_api}/deleteList/${id}`, {}, {
                     headers: {
                         'Content-Type': 'application/json',
                         'X-WP-Nonce': this.nonce
                     }
                 });
-                this.loading = false;
-                this.$refs.delete_List_modal.handleClose();
-                this.getAllListings();
-                this.$notify({
-                    title: 'Success',
-                    message: 'Listing data deleted successfully',
-                    type: 'success',
-                })
+
+                if (response.data.success === true) {
+                    this.$notify({
+                        title: 'Success',
+                        message: 'Listing deleted successfully',
+                        type: 'success',
+                    });
+                    this.$refs.delete_List_modal.handleClose();
+                    this.getAllListings();
+                } else {
+                    this.$notify({
+                        title: 'Error',
+                        message: 'Failed to delete the listing',
+                        type: 'error',
+                    });
+                }
+
             } catch (error) {
-                this.loading = false;
                 console.error('Error deleting List:', error);
+                this.$notify({
+                    title: 'Error',
+                    message: 'An unexpected error occurred while deleting the listing.',
+                    type: 'error',
+                });
+            } finally {
+                this.loading = false;
             }
-        },
+        }
 
     },
 

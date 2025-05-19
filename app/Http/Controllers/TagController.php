@@ -13,6 +13,7 @@ class TagController
         $validatedRequest = new StoreTagRequest($request);
         if ($validatedRequest->fails()) {
             return rest_ensure_response([
+                'success' => false,
                 'message' => 'Validation failed',
                 'errors'  => $validatedRequest->errors()
             ], 400);
@@ -20,11 +21,13 @@ class TagController
         $res = TagResource::store($validatedRequest->validated());
         if (!$res) {
             return rest_ensure_response([
+                'success' => false,
                 'message' => 'Failed to create category'
             ], 500);
         }
 
         return rest_ensure_response([
+            'success' => true,
             'message' => 'Category created successfully',
             'category_data' => $res
         ]);
@@ -35,6 +38,7 @@ class TagController
         $id = $request->get_param('id');
         if (!$id) {
             return rest_ensure_response([
+                'success' => false,
                 'message' => 'Tag ID is required'
             ], 400);
         }
@@ -42,6 +46,7 @@ class TagController
         $validatedRequest = new StoreTagRequest($request);
         if ($validatedRequest->fails()) {
             return rest_ensure_response([
+                'success' => false,
                 'message' => 'Validation failed',
                 'errors'  => $validatedRequest->errors()
             ], 400);
@@ -50,10 +55,12 @@ class TagController
 
         if (!$res) {
             return rest_ensure_response([
+                'success' => false,
                 'message' => 'Failed to update tag data'
             ], 500);
         }
         return rest_ensure_response([
+            'success' => true,
             'message' => 'Tag data updated successfully',
             'tags_data' => $res
         ]);
@@ -70,11 +77,13 @@ class TagController
 
         if (!$res) {
             return rest_ensure_response([
+                'success' => false,
                 'message' => 'Failed to get tag'
             ], 500);
         }
 
         return rest_ensure_response([
+            'success' => true,
             'message' => 'Tag retrieved successfully',
             'tags_data' => $data,
             'total' => $res['total'],
@@ -90,16 +99,19 @@ class TagController
         $id = $request->get_param('id');
         if (!$id) {
             return rest_ensure_response([
+                'success' => false,
                 'message' => 'Tag ID is required'
             ], 400);
         }
         $res = TagResource::delete($id);
         if (!$res) {
             return rest_ensure_response([
+                'success' => false,
                 'message' => 'Failed to delete tag'
             ], 500);
         }
         return rest_ensure_response([
+            'success' => true,
             'message' => 'Tag data deleted successfully'
         ]);
     }

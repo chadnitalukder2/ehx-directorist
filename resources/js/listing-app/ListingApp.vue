@@ -4,7 +4,7 @@
         <div class="ehxd-container">
             <!-- Mobile filter toggle button -->
             <button class="ehxd-filter-toggle" @click="showMobileFilters = !showMobileFilters">
-                <span v-if="!showMobileFilters">Show Filters</span>
+                <span v-if="!showMobileFilters">Filters</span>
                 <span v-else>Hide Filters</span>
             </button>
             
@@ -292,15 +292,18 @@ export default {
 /* Mobile filter toggle button */
 .ehxd-filter-toggle {
     display: none;
-    width: 100%;
-    padding: 10px;
     margin-bottom: 15px;
     background-color: #000;
     color: white;
     border: none;
-    border-radius: 6px;
+    border-radius: 0px 6px 6px 0px;
     font-size: 16px;
     cursor: pointer;
+    left: 0;
+    z-index: 9;
+    margin: -54px 0px;
+    padding: 12px 30px;
+    position: fixed;
 }
 
 /* Overlay for mobile filters */
@@ -607,6 +610,7 @@ export default {
 }
 
 .ehxd-listing-info {
+    width: 100%;
     flex-basis: 100%;
 }
 
@@ -763,7 +767,7 @@ export default {
     }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1089px) {
     .ehxd-filter-toggle {
         display: block;
     }
@@ -820,13 +824,22 @@ export default {
     }
     
     .ehxd_listing_footer {
+        display: block;
         flex-direction: column;
         gap: 15px;
     }
     
-    .ehxd-listing-location, 
+    .ehxd-listing-location{
+        padding-top: 0px;
+    }
+
     .ehxd-listing-view-btn {
-        flex-basis: 100%;
+        padding-top: 18px;
+        width: 135px;
+        margin: 0 auto;
+        .ehxd-invite-button{
+     
+        }
     }
     
     .ehxd_footer {

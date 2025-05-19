@@ -34,14 +34,12 @@
                 </el-table-column>
                 <el-table-column label="Operations" width="120">
                     <template #default="{ row }">
-                        <el-tooltip class="box-item" effect="dark" content="Click to edit Tag"
-                            placement="top-start">
+                        <el-tooltip class="box-item" effect="dark" content="Click to edit Tag" placement="top-start">
                             <el-button @click="openUpdateTagModal(row)" class="ehxd_box_icon" link size="small">
                                 <Icon icon="ehxd-edit" />
                             </el-button>
                         </el-tooltip>
-                        <el-tooltip class="box-item" effect="dark" content="Click to delete Tag"
-                            placement="top-start">
+                        <el-tooltip class="box-item" effect="dark" content="Click to delete Tag" placement="top-start">
                             <el-button @click="openDeleteTagModal(row)" class="ehxd_box_icon" link size="small">
                                 <Icon icon="ehxd-delete" />
                             </el-button>
@@ -52,9 +50,9 @@
 
             <template #footer>
                 <div class="ehxd_footer_page">
-                    <p>Page {{ currentPage }} of {{ last_page}}</p>
+                    <p>Page {{ currentPage }} of {{ last_page }}</p>
                 </div>
-              
+
                 <el-pagination v-model:current-page="currentPage" v-model:page-size="pageSize"
                     :page-sizes="[10, 20, 30, 40]" large :disabled="total_Tag <= pageSize" background
                     layout="total, sizes, prev, pager, next" :total="+total_Tag" />
@@ -65,8 +63,7 @@
         <AppModal :title="'Update Tag'" :width="700" :showFooter="false" ref="update_Tag_modal">
             <template #body>
                 <div>
-                    <AddTag ref="AddTag" :tags_data="Tag"
-                        @updateDataAfterNewAdd="handleUpdatedTag" />
+                    <AddTag ref="AddTag" :tags_data="Tag" @updateDataAfterNewAdd="handleUpdatedTag" />
                 </div>
             </template>
             <template #footer>
@@ -138,7 +135,7 @@ export default {
         },
         search: {
             handler() {
-                this.currentPage = 1; 
+                this.currentPage = 1;
                 this.getAllTag();
             },
             immediate: false
@@ -190,25 +187,41 @@ export default {
         async deleteTag() {
             this.loading = true;
             const id = this.active_id;
+
             try {
-                const response = await axios.post(`${this.rest_api}/deleteTag/${id}`, {
-                }, {
+                const response = await axios.post(`${this.rest_api}/deleteTag/${id}`, {}, {
                     headers: {
                         'Content-Type': 'application/json',
                         'X-WP-Nonce': this.nonce
                     }
                 });
+
                 this.loading = false;
                 this.$refs.delete_Tag_modal.handleClose();
-                this.getAllTag();
-                this.$notify({
-                    title: 'Success',
-                    message: 'Tag data deleted successfully',
-                    type: 'success',
-                })
+
+                if (response.data.success === true) {
+                    this.getAllTag();
+                    this.$notify({
+                        title: 'Success',
+                        message:  'Tag data deleted successfully',
+                        type: 'success',
+                    });
+                } else {
+                    this.$notify({
+                        title: 'Error',
+                        message: 'Failed to delete tag data',
+                        type: 'error',
+                    });
+                }
+
             } catch (error) {
                 this.loading = false;
                 console.error('Error deleting Tag:', error);
+                this.$notify({
+                    title: 'Error',
+                    message: 'An unexpected error occurred while deleting the tag.',
+                    type: 'error',
+                });
             }
         },
 
@@ -237,6 +250,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

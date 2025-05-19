@@ -10,8 +10,10 @@ class CategoryController
 {
     public static function storeCategory(StoreCategoryRequest  $validatedRequest)
     {
+     
         if ($validatedRequest->fails()) {
             return rest_ensure_response([
+                'success' => false,
                 'message' => 'Validation failed',
                 'errors'  => $validatedRequest->errors()
             ], 400);
@@ -21,11 +23,13 @@ class CategoryController
 
         if (!$res) {
             return rest_ensure_response([
+                'success' => false,
                 'message' => 'Failed to create category'
             ], 500);
         }
 
         return rest_ensure_response([
+            'success' => true,
             'message' => 'Category created successfully',
             'category_data' => $res
         ]);
@@ -36,6 +40,7 @@ class CategoryController
         $id = $request->get_param('id');
         if (!$id) {
             return rest_ensure_response([
+                'success' => false,
                 'message' => 'Category ID is required'
             ], 400);
         }
@@ -43,6 +48,7 @@ class CategoryController
         $validatedRequest = new StoreCategoryRequest($request);
         if ($validatedRequest->fails()) {
             return rest_ensure_response([
+                'success' => false,
                 'message' => 'Validation failed',
                 'errors'  => $validatedRequest->errors()
             ], 400);
@@ -51,10 +57,12 @@ class CategoryController
 
         if (!$res) {
             return rest_ensure_response([
+                'success' => false,
                 'message' => 'Failed to update category'
             ], 500);
         }
         return rest_ensure_response([
+            'success' => true,
             'message' => 'Category data updated successfully',
             'category_data' => $res
         ]);
@@ -65,16 +73,19 @@ class CategoryController
         $id = $request->get_param('id');
         if (!$id) {
             return rest_ensure_response([
+                'success' => false,
                 'message' => 'Category ID is required'
             ], 400);
         }
         $res = CategoryResource::delete($id);
         if (!$res) {
             return rest_ensure_response([
+                'success' => false,
                 'message' => 'Failed to delete category'
             ], 500);
         }
         return rest_ensure_response([
+            'success' => true,
             'message' => 'Category deleted successfully'
         ]);
     }
@@ -85,10 +96,12 @@ class CategoryController
 
         if (!$res) {
             return rest_ensure_response([
+                'success' => false,
                 'message' => 'Failed to get category'
             ], 500);
         }
         return rest_ensure_response([
+            'success' => true,
             'message' => 'Category retrieved successfully',
             'category_data' => $res
         ]);
@@ -105,11 +118,13 @@ class CategoryController
 
         if (!$res) {
             return rest_ensure_response([
+                'success' => false,
                 'message' => 'Failed to get categories'
             ], 500);
         }
 
         return rest_ensure_response([
+            'success' => true,
             'message' => 'Categories retrieved successfully',
             'categories_data' => $data,
             'total' => $res['total'],

@@ -233,6 +233,19 @@ export default {
                 address: [{ required: true, message: "Please input the address", trigger: "blur" }],
                 short_description: [{ required: true, message: "Please input the brief description", trigger: "blur" }],
                 logo: [{ required: true, message: "Please upload a logo", trigger: "change" }],
+                short_description: [
+                    { required: true, message: "Please input the brief description", trigger: "blur" },
+                    {
+                        validator: (rule, value, callback) => {
+                            if (value.length > 255) {
+                                callback(new Error("Brief description must not exceed 255 characters."));
+                            } else {
+                                callback();
+                            }
+                        },
+                        trigger: "blur"
+                    }
+                ],
             };
         }
     },
@@ -263,7 +276,7 @@ export default {
                 const res = await axios.get(`${this.rest_api}/getAllListingByIdById/${this.$route.params.id}`, {
                     headers: { 'X-WP-Nonce': this.nonce }
                 });
-              
+
                 this.socialLinks = res?.data?.data?.listing_data?.social_links || [];
                 this.customFields = res?.data?.data?.listing_data?.meta || [];
                 this.localList = res?.data?.data?.listing_data || {};
@@ -289,27 +302,47 @@ export default {
         removeSocialLink(index) {
             this.socialLinks.splice(index, 1);
         },
-        updateListing() {
+        async updateListing() {
             this.$refs.ListForm.validate(async (valid) => {
                 if (!valid) return;
+
                 this.localList.social_links = this.socialLinks;
                 this.localList.meta = this.customFields;
 
                 try {
-                    const res = await axios.post(`${this.rest_api}/updateDirectoryListing/${this.$route.params.id}`, this.localList, {
-                        headers: {
-                            "Content-Type": "application/json",
-                            "X-WP-Nonce": this.nonce,
+                    const res = await axios.post(
+                        `${this.rest_api}/updateDirectoryListing/${this.$route.params.id}`,
+                        this.localList,
+                        {
+                            headers: {
+                                "Content-Type": "application/json",
+                                "X-WP-Nonce": this.nonce,
+                            },
                         }
-                    });
-                    this.$notify({
-                        title: "Success",
-                        message: `Directory Listing data updated successfully`,
-                        type: "success",
-                    });
-                    // this.$router.push('/directory-listing');
+                    );
+
+                    if (res.data.success === true) {
+                        this.$notify({
+                            title: "Success",
+                            message: "Directory Listing updated successfully",
+                            type: "success",
+                        });
+                        // Optionally redirect:
+                        // this.$router.push('/directory-listing');
+                    } else {
+                        this.$notify({
+                            title: "Error",
+                            message: "Failed to update the directory listing",
+                            type: "error",
+                        });
+                    }
                 } catch (err) {
-                    console.error('Submission error:', err);
+                    console.error("Submission error:", err);
+                    this.$notify({
+                        title: "Error",
+                        message: "An unexpected error occurred",
+                        type: "error",
+                    });
                 }
             });
         }
@@ -429,11 +462,12 @@ export default {
         }
     }
 }
+
 .social-link-row {
-  padding: 0px 0px 12px;
-  display: flex;
-  text-align: center;
-  align-items: center;
-  gap: 10px;
+    padding: 0px 0px 12px;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    gap: 10px;
 }
 </style>

@@ -14,8 +14,8 @@ class CreateCategoriesTable {
         $sql = "CREATE TABLE IF NOT EXISTS $table (
             id INT PRIMARY KEY AUTO_INCREMENT,
             name VARCHAR(255) NOT NULL,
-            slug VARCHAR(255),
-            description TEXT,
+            slug VARCHAR(255) DEFAULT NULL,
+            description TEXT DEFAULT NULL,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         ) $charset_collate;";

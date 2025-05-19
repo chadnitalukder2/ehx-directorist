@@ -85,12 +85,12 @@
           <el-form-item label="Social Media Links">
             <div v-for="(link, index) in socialLinks" :key="index" class="social-link-row">
               <el-select v-model="link.icon" placeholder="Icon" style="width: 200px;">
-                  <el-option v-for="icon in availableIcons" :key="icon.value" :label="icon.label" :value="icon.value" >
-                    <i :class="`fab fa-${icon.value}`" style="margin-right: 5px;"></i> {{ icon.label }}
-                  </el-option>
+                <el-option v-for="icon in availableIcons" :key="icon.value" :label="icon.label" :value="icon.value">
+                  <i :class="`fab fa-${icon.value}`" style="margin-right: 5px;"></i> {{ icon.label }}
+                </el-option>
               </el-select>
 
-              <el-input v-model="link.url" placeholder="https://..." style="margin-right: 8px;"  />
+              <el-input v-model="link.url" placeholder="https://..." style="margin-right: 8px;" />
 
               <div class="ehxd_delete_icon" @click="removeSocialLink(index)">
                 <el-icon>
@@ -242,18 +242,6 @@ export default {
             trigger: "blur"
           }
         ],
-        description: [
-          {
-            validator: (rule, value, callback) => {
-              if (value && value.length > 1000) {
-                callback(new Error("Description must not exceed 1000 characters."));
-              } else {
-                callback();
-              }
-            },
-            trigger: "blur"
-          }
-        ],
       };
     }
   },
@@ -296,9 +284,10 @@ export default {
     removeCustomField(index) {
       this.customFields.splice(index, 1);
     },
-    submitListForm() {
+    async submitListForm() {
       this.$refs.ListForm.validate(async (valid) => {
         if (!valid) return;
+
         this.localList.social_links = this.socialLinks;
         this.localList.meta = this.customFields;
 
@@ -307,38 +296,54 @@ export default {
             headers: {
               "Content-Type": "application/json",
               "X-WP-Nonce": this.nonce,
-            }
+            },
           });
-          this.$notify({
-            title: "Success",
-            message: `Directory Listing data created successfully`,
-            type: "success",
-          });
-          //this.$router.push('/directory-listing');
-          this.localList = {
-            name: "",
-            email: "",
-            phone: "",
-            address: "",
-            website_url: "",
-            short_description: "",
-            description: "",
-            latitude: "",
-            longitude: "",
-            postal_code: "",
-            city: "",
-            logo: "",
-            image: "",
-            category_id: [],
-            tag_id: [],
-            directory_builder_id: 1,
-          };
-          // this.$refs.descriptionEditor.clearEditor();
-          this.customFields = [];
-          this.social_links = [];
 
+          if (res.data.success === true) {
+            this.$notify({
+              title: "Success",
+              message: "Directory Listing created successfully",
+              type: "success",
+            });
+
+            // Reset form
+            this.localList = {
+              name: "",
+              email: "",
+              phone: "",
+              address: "",
+              website_url: "",
+              short_description: "",
+              description: "",
+              latitude: "",
+              longitude: "",
+              postal_code: "",
+              city: "",
+              logo: "",
+              image: "",
+              category_id: [],
+              tag_id: [],
+              directory_builder_id: 1,
+            };
+            this.customFields = [];
+            this.socialLinks = [];
+
+            // Optional: redirect
+            // this.$router.push('/directory-listing');
+          } else {
+            this.$notify({
+              title: "Error",
+              message: "Failed to create directory listing",
+              type: "error",
+            });
+          }
         } catch (err) {
-          console.error('Submission error:', err);
+          console.error("Submission error:", err);
+          this.$notify({
+            title: "Error",
+            message: "An unexpected error occurred. Please try again.",
+            type: "error",
+          });
         }
       });
     }
@@ -465,6 +470,4 @@ export default {
   align-items: center;
   gap: 10px;
 }
-
-
 </style>
