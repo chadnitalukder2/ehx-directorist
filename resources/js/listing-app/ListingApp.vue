@@ -837,7 +837,6 @@ export default {
     .ehxd-listing-view-btn {
         padding-top: 18px;
         width: 135px;
-        margin: 0 auto;
         .ehxd-invite-button{
      
         }
