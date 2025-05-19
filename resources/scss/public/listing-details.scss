@@ -11,7 +11,6 @@
 
 .ehxd-header {
     .ehxd-cover-img {
-        position: relative;
         height: 312px;
         width: 100%;
         max-width: 1440px;
@@ -25,7 +24,7 @@
     }
 
     .ehxd-logo {
-        position: absolute;
+         transform: translate(70px, -80px);
         width: 154px;
         height: 154px;
         top: 215px;
@@ -48,14 +47,14 @@
 
 
 .ehxd-main {
+        transform: translate(0px, -40px);
     display: flex;
     flex-wrap: wrap;
-    padding: 45px 40px 10px;
+    padding: 0px 40px 10px;
     gap: 40px;
 
     .ehxd-left-section {
         flex-basis: 60%;
-        padding: 40px 0px 0px 0px;
 
         .ehxd_title {
             h1 {
@@ -325,7 +324,7 @@
 @media (max-width: 768px) {
     .ehxd-main {
         flex-direction: column;
-        padding: 45px 15px !important;
+        padding: 0px 15px !important;
     }
 
     .ehxd-cover-img {
@@ -444,117 +443,117 @@
     padding: 0px !important;
 }
 
-.post-navigation-link-previous,
-.post-navigation-link-next {
-    display: none;
-    padding: 0px !important;
-}
+// .post-navigation-link-previous,
+// .post-navigation-link-next {
+//     display: none;
+//     padding: 0px !important;
+// }
 
-.alignwide {
-    padding-top: 0px !important;
-    padding-bottom: 0px !important;
-}
+// .alignwide {
+//     padding-top: 0px !important;
+//     padding-bottom: 0px !important;
+// }
 
-#comments {
-    margin: 0px;
-    color: #333;
-    font-size: 20px;
-    padding-bottom: 25px;
-    font-weight: 500;
-}
+// #comments {
+//     margin: 0px;
+//     color: #333;
+//     font-size: 20px;
+//     padding-bottom: 25px;
+//     font-weight: 500;
+// }
 
-.comment-author {
-    color: #444;
-    font-size: 16px;
+// .comment-author {
+//     color: #444;
+//     font-size: 16px;
 
-    .url {
-        text-decoration: none !important;
-    }
-}
+//     .url {
+//         text-decoration: none !important;
+//     }
+// }
 
-.comment-metadata {
-    font-size: 14px;
-    color: #888888;
+// .comment-metadata {
+//     font-size: 14px;
+//     color: #888888;
 
-    a {
-        color: #888888;
-        text-decoration: none !important;
-    }
-}
+//     a {
+//         color: #888888;
+//         text-decoration: none !important;
+//     }
+// }
 
-.comment-content {
-    padding: 30px;
-    font-size: 14px;
-    color: #444;
+// .comment-content {
+//     padding: 30px;
+//     font-size: 14px;
+//     color: #444;
 
-    p {
-        margin: 0px;
-    }
-}
+//     p {
+//         margin: 0px;
+//     }
+// }
 
-.reply {
-    a {
-        font-size: 16px;
-        text-decoration: none;
-        color: #333;
-        transition: all .3s;
+// .reply {
+//     a {
+//         font-size: 16px;
+//         text-decoration: none;
+//         color: #333;
+//         transition: all .3s;
 
-        &:hover {
-            color: #0d62cb;
-        }
-    }
-}
+//         &:hover {
+//             color: #0d62cb;
+//         }
+//     }
+// }
 
-#reply-title {
-    display: none;
-}
+// #reply-title {
+//     display: none;
+// }
 
-.logged-in-as {
-    color: #444444;
-    margin: 0px;
-    font-size: 16px;
-    color: #444444;
-    margin: 0px;
-    font-size: 16px;
+// .logged-in-as {
+//     color: #444444;
+//     margin: 0px;
+//     font-size: 16px;
+//     color: #444444;
+//     margin: 0px;
+//     font-size: 16px;
 
-    a {
-        text-decoration: none;
-    }
-}
+//     a {
+//         text-decoration: none;
+//     }
+// }
 
-.comment-form-comment {
-    label {
-        font-size: 16px;
-        color: #333;
-    }
+// .comment-form-comment {
+//     label {
+//         font-size: 16px;
+//         color: #333;
+//     }
 
-    textarea {
-        border: 1px solid #ddd;
-        color: #444444;
-        font-weight: 300;
-        border-radius: 8px;
-        font-size: 14px;
+//     textarea {
+//         border: 1px solid #ddd;
+//         color: #444444;
+//         font-weight: 300;
+//         border-radius: 8px;
+//         font-size: 14px;
 
-        &:focus-visible {
-            outline: none;
-        }
-    }
-}
+//         &:focus-visible {
+//             outline: none;
+//         }
+//     }
+// }
 
-.wp-block-button {
-    .submit {
-        background: #000 !important;
-    }
+// .wp-block-button {
+//     .submit {
+//         background: #000 !important;
+//     }
 
-    input {
+//     input {
 
-        padding: 6px 15px;
-        font-size: 16px;
-        margin: 0px;
-        border-radius: 8px;
-    }
-}
-
+//         padding: 6px 15px;
+//         font-size: 16px;
+//         margin: 0px;
+//         border-radius: 8px;
+//     }
+// }
+//==================================================================
 .ehxd-social-links {
     display: flex;
     gap: 18px;
