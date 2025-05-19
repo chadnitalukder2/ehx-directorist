@@ -50,15 +50,16 @@ $fake_logo = EHX_DIRECTORIST_PLUGIN_URL . 'assets/images/logo.jpg';
                     <?php echo esc_html($short_description); ?>
                 </p>
             </div>
-
-            <div class="ehxd-description">
-                <h2 class="ehxd-section-title">Description</h2>
-                <div class="ehxd-full-description">
-                    <p>
-                        <?php echo esc_html($description); ?>
-                    </p>
+            <?php if (!empty($description)): ?>
+                <div class="ehxd-description">
+                    <h2 class="ehxd-section-title">Description</h2>
+                    <div class="ehxd-full-description">
+                        <p>
+                            <?php echo esc_html($description); ?>
+                        </p>
+                    </div>
                 </div>
-            </div>
+            <?php endif; ?>
             <?php if (!empty($meta)): ?>
                 <div class="ehxd-contact-help">
                     <?php foreach ($meta as $data): ?>
