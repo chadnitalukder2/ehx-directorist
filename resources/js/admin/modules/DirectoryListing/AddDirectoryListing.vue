@@ -453,6 +453,7 @@ export default {
   }
 
   .el-button {
+  transition: all 0.3s ease-in-out;
     &:hover {
       background-color: #1A1B1C;
       color: #fff;
