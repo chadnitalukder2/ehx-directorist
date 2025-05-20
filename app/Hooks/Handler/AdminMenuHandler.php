@@ -83,7 +83,6 @@ class AdminMenuHandler
             EHX_DIRECTORIST_VERSION,
             true
         );
-        wp_enqueue_style('font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css');
         wp_enqueue_script('jquery');
         wp_enqueue_media();
         wp_enqueue_script('wp-tinymce');
