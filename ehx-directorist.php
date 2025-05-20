@@ -52,9 +52,9 @@ add_action('init', function () {
             'https://maps.googleapis.com/maps/api/js?key=AIzaSyAdBAaTcZW8-4MCuVwzc7mcGS0OasoplgU&libraries=places',
             [],
             null,
-            true
+            true 
         );
-
+        wp_enqueue_style('font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css');
        
 });
 
