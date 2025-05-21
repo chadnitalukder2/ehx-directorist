@@ -1,6 +1,6 @@
 <template>
   <div class="ehxd_wrapper">
-    <div class="">
+    <div class=""> 
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{ path: '/directory-listing' }">Directory listing</el-breadcrumb-item>
         <el-breadcrumb-item>Add listings</el-breadcrumb-item>
