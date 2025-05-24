@@ -19,6 +19,8 @@ class Plugin {
 
     private function init_hooks() {
         // Admin menu
-        new Actions();
+        add_action('init', function () {
+            new Actions();
+        });
     }
 }
